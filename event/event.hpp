@@ -7,4 +7,10 @@ class Event {
         uint32_t type;
 };
 
+class MouseClick {
+    public:
+       Position pos; 
+       Button mouse_button;
+}
+
 #endif

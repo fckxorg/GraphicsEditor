@@ -1,37 +1,33 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include <SFML/Graphics/Texture.hpp>
+#include <bits/stdint-uintn.h>
 #include <cstdint>
 #include <list>
 #include <memory>
 
-#include "../event/event.hpp"
-#include "../render_data/render_data.hpp"
 #include "../sfml_engine/sfml_engine.hpp"
 
-// TODO adding window types via preprocessing
 class Window {
    protected:
     uint32_t event_mask;
-    bool opened;
+    mutable bool opened;
 
    public:
     std::list<std::unique_ptr<Window>> subwindows;
 
-    Window() = default;
-    Window(uint32_t event_mask);
-    virtual ~Window(){};
+    Window();
+    virtual ~Window();
 
     virtual void open() = 0;
     virtual void close() = 0;
 
-    bool is_opened() {
-        return opened;
-    }
+    bool is_opened() const;
 
+    void set_event_mask(uint32_t mask);
     void add_child_window(std::unique_ptr<Window> child);
-
-    void handle_event(Event event);
+    //virtual void handle_event(Event event) = 0;
 };
 
 class RenderWindow : public Window {
@@ -41,25 +37,25 @@ class RenderWindow : public Window {
     float rotation;
 
    public:
-    RenderWindow() = default;
+    RenderWindow();
 
-    virtual ~RenderWindow(){};
+    virtual ~RenderWindow();
 
     RenderWindow(const RenderWindow& other) = delete;
 
-    RenderWindow(Size size, Position pos) : size(size), pos(pos) {}
+    RenderWindow(Size size, Position pos);
 
-    void open() { opened = true; }
+    void open();
 
-    void close() { opened = false; }
+    void close();
 
-    void set_pos(Position pos) { this->pos = pos; }
+    void set_pos(Position pos);
 
-    virtual Position get_position() const { return pos; }
+    virtual Position get_position() const;
 
-    void set_rotation(const float rotation) { this->rotation = rotation; } 
+    void set_rotation(const float rotation);
 
-    float get_rotation() const { return rotation; }
+    float get_rotation() const;
 
     virtual void render(Renderer& target) = 0;
 };
@@ -67,24 +63,13 @@ class RenderWindow : public Window {
 class RectWindow : public RenderWindow {
    protected:
        Color color;
+
    public:
-    RectWindow() = default;
-    ~RectWindow() = default;
-    RectWindow(Size size, Position pos, Color color) : RenderWindow(size, pos), color(color) {}
+    RectWindow();
+    ~RectWindow();
+    RectWindow(Size size, Position pos, Color color);
 
-    void open() override {
-        RenderWindow::open();
-    }
-
-    void close() override {
-        RenderWindow::close();
-    }
-
-    virtual void render(Renderer& target) override {
-        if (this->opened) {
-            target.draw_rectangle(size, pos, color);
-        }
-    }
+    virtual void render(Renderer& target) override;
 };
 
 #endif
