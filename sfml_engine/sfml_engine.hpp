@@ -16,20 +16,11 @@ class Renderer {
     sf::RenderWindow window;
 
    public:
-    Renderer(Size window_size)
-        : window(sf::VideoMode(window_size.width, window_size.height),
-                 "Test window") {
-        window.clear(sf::Color::White);
-    }
+    Renderer(Size window_size);
 
-    void draw_rectangle(Size size, Position pos, Color color) {
-        sf::RectangleShape rect = sf::RectangleShape(size);
-        rect.setPosition(pos);
-        rect.setFillColor(color);
-        window.draw(rect);
-    }
+    void draw_rectangle(Size size, Position pos, Color color); 
 
-    void show() { window.display(); }
+    void show();
 };
 
 #endif
