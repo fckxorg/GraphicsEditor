@@ -5,7 +5,7 @@
 
 
 int main() {
-    Renderer renderer (Size(300, 300));
+    Renderer renderer (Size(1920, 1080));
 
     RectWindow window(Size(50, 20), Position(10, 10), Color(255, 0, 0));
    

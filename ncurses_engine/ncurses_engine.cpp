@@ -3,9 +3,10 @@
 
 Renderer::Renderer(Size window_size) {
     initscr();
-    resizeterm(window_size.height, window_size.width); // how to set right scale?
     refresh();
     start_color();
+    scale_x = window_size.width / COLS; 
+    scale_y = window_size.height / LINES;
 }
 
 Renderer::~Renderer() {
@@ -13,7 +14,12 @@ Renderer::~Renderer() {
 }
 
 void Renderer::draw_rectangle(Size size, Position pos, Color color) {
-    WINDOW* rect = newwin(size.height, size.width, pos.y, pos.x);
+    int win_size_x = size.width / scale_x;
+    int win_size_y = size.height / scale_y;
+    int win_pos_x = pos.x / (2 * scale_x);
+    int win_pos_y = pos.y / scale_y;
+
+    WINDOW* rect = newwin(win_size_y, win_size_x, win_pos_y, win_size_x);
 
     init_color(16, color.r, color.b, color.g);
     init_pair(1, COLOR_BLUE, 16); // how to add more colors?

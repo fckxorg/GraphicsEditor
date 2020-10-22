@@ -6,6 +6,9 @@
 #include "../data_classes/data_classes.hpp"
 
 class Renderer {
+    private:
+        int scale_x;
+        int scale_y;
     public:
         Renderer(Size window_size);
         ~Renderer();

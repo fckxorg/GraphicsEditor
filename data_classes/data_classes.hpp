@@ -8,7 +8,7 @@
 #include <SFML/Graphics.hpp>
 #endif
 
-// conditional compilation or dedicated conversion fuctions or nothing
+// conditional compilation or dedicated conversion fuctions or nothing?
 
 struct Size {
     uint16_t width;
@@ -18,6 +18,7 @@ struct Size {
 
     Size(uint16_t width, uint16_t height);
 
+// private and render engine as friend    
 #ifdef SFML_ENGINE
     explicit Size(const sf::Vector2f& sfsize);
 
