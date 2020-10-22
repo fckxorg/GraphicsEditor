@@ -5,9 +5,9 @@
 
 
 int main() {
-    Renderer renderer (Size(800, 800));
+    Renderer renderer (Size(300, 300));
 
-    RectWindow window(Size(300, 300), Position(100, 100), Color(255, 0, 0));
+    RectWindow window(Size(50, 20), Position(10, 10), Color(255, 0, 0));
    
     window.open(); 
     window.render(renderer);
