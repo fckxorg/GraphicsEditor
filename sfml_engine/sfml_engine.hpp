@@ -1,5 +1,5 @@
-#ifndef SFMLEngine
-#define SFMLEngine
+#ifndef SFML_ENGINE_HPP
+#define SFML_ENGINE_HPP
 
 
 #include <SFML/Graphics.hpp>

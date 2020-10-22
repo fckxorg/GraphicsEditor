@@ -1,7 +1,6 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "sfml_engine/sfml_engine.hpp"
 #include "window/window.hpp"
 
 

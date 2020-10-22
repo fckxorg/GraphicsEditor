@@ -1,13 +1,20 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <SFML/Graphics/Texture.hpp>
 #include <bits/stdint-uintn.h>
 #include <cstdint>
 #include <list>
 #include <memory>
 
+#include "../data_classes/data_classes.hpp"
+
+#ifdef NCURSES_ENGINE
+#include "../ncurses_engine/ncurses_engine.hpp"
+#endif
+
+#ifdef SFML_ENGINE
 #include "../sfml_engine/sfml_engine.hpp"
+#endif
 
 class Window {
    protected:
