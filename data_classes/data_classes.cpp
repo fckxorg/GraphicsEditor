@@ -35,3 +35,42 @@ Position::Position(const sf::Vector2f& sfpos)
 
 Position::operator sf::Vector2f() const { return sf::Vector2f(x, y); }
 #endif
+
+/*--------------- TEXT -------------------------------------*/
+
+Text::Text() = default;
+Text::Text(const char* text, uint16_t character_size, const char* font_path, Color color) : text(text), character_size(character_size), font_path(font_path), color(color){}
+
+void Text::set_text(const char* text) {
+    this->text = text;
+}
+
+const char* Text::get_text() const {
+    return text;
+}
+    
+void Text::set_font(const char* font) {
+    font_path = font;
+}
+
+const char* Text::get_font() const {
+    return font_path;
+}
+
+
+void Text::set_character_size(uint16_t character_size) {
+    this->character_size = character_size;
+}
+
+uint16_t Text::get_character_size() {
+    return character_size;
+}
+
+Color Text::get_color() {
+    return color;
+}
+
+void Text::set_color(Color color) {
+    this->color = color;
+}
+

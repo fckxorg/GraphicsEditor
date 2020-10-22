@@ -2,6 +2,7 @@
 #define DATA_CLASSES_HPP
 
 
+#include <bits/stdint-uintn.h>
 #include <cstdint>
 
 #ifdef SFML_ENGINE
@@ -55,6 +56,29 @@ struct Position {
 
     operator sf::Vector2f() const;
 #endif
+};
+
+struct Text {
+    const char* text;
+    uint16_t character_size;
+    const char* font_path;
+    Color color;
+    
+    Text();
+    Text(const char* text, uint16_t character_size, const char* font_path, Color color);
+
+    void set_text(const char* text);
+    const char* get_text() const;
+    
+    void set_font(const char* font);
+    const char* get_font() const;
+
+
+    void set_character_size(uint16_t character_size);
+    uint16_t get_character_size();
+
+    void set_color(Color color);
+    Color get_color();
 };
 
 #endif

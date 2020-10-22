@@ -2,6 +2,8 @@
 #define WINDOW_HPP
 
 #include <bits/stdint-uintn.h>
+#include <stdio.h>
+
 #include <cstdint>
 #include <list>
 #include <memory>
@@ -30,11 +32,14 @@ class Window {
     virtual void open() = 0;
     virtual void close() = 0;
 
+    virtual void refresh() = 0;
+
     bool is_opened() const;
 
     void set_event_mask(uint32_t mask);
-    void add_child_window(std::unique_ptr<Window> child);
-    //virtual void handle_event(Event event) = 0;
+    void add_child_window(std::unique_ptr<Window>& child);
+    // virtual void handle_event(Event event) = 0;
+    virtual void render(Renderer& target) = 0;
 };
 
 class RenderWindow : public Window {
@@ -55,6 +60,7 @@ class RenderWindow : public Window {
     void open();
 
     void close();
+    virtual void refresh() override;
 
     void set_pos(Position pos);
 
@@ -63,13 +69,11 @@ class RenderWindow : public Window {
     void set_rotation(const float rotation);
 
     float get_rotation() const;
-
-    virtual void render(Renderer& target) = 0;
 };
 
 class RectWindow : public RenderWindow {
    protected:
-       Color color;
+    Color color;
 
    public:
     RectWindow();
@@ -77,6 +81,36 @@ class RectWindow : public RenderWindow {
     RectWindow(Size size, Position pos, Color color);
 
     virtual void render(Renderer& target) override;
+};
+
+class TextWindow : public RenderWindow {
+    private:
+        Color bgcolor;
+        Text text;
+    public:
+        TextWindow();
+        TextWindow(Text text);
+
+        Text get_text() const;
+        void set_text(Text text);
+
+        void set_bgcolor(Color bgcolor); 
+        Color get_bgcolor() const;
+
+        virtual void render(Renderer& target) override;
+};
+
+class RectButton : public RectWindow {
+   public:
+    RectButton();
+    ~RectButton();
+
+    virtual void render(Renderer& target) override;
+    RectButton(Size size, Position pos, Color color) : RectWindow(size, pos, color) {}
+
+    void on_hover();
+
+    void on_click();
 };
 
 #endif
