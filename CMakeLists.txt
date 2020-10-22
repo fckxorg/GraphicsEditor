@@ -4,6 +4,7 @@ project(WindowManager VERSION 1.0)
 option(NCURSES_ENGINE "Use ncurses as render engine" OFF)
 option(SFML_ENGINE "Use SFML as render engine" ON)
 
+
 if(NCURSES_ENGINE)
     set(SFML_ENGINE OFF)
 endif(NCURSES_ENGINE)
@@ -57,3 +58,5 @@ if(SFML_ENGINE)
     target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window sfml_engine)
 endif(SFML_ENGINE)
 
+unset(SFML_ENGINE CACHE)
+unset(NCURSES_ENGINE CACHE)
