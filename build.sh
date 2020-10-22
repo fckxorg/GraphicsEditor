@@ -1,1 +1,2 @@
-cd build && cmake .. && make && cd .. && ./build/Main
+#!/bin/bash
+cd build && cmake $1 .. && make && cd .. && ./build/Main

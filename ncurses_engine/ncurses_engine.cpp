@@ -3,7 +3,8 @@
 
 Renderer::Renderer(Size window_size) {
     initscr();
-    resizeterm(window_size.height, window_size.width);
+    resizeterm(window_size.height, window_size.width); // how to set right scale?
+    refresh();
     start_color();
 }
 
