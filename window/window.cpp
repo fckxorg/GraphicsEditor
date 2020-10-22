@@ -77,7 +77,9 @@ void RectButton::render(Renderer& target) {
 /*--------------- TEXT WINDOW-----------------------------*/
 
 TextWindow::TextWindow() = default;
-TextWindow::TextWindow(Text text) : text(text) {}
+TextWindow::TextWindow(Text text, Position pos, Color bgcolor) : text(text), bgcolor(bgcolor) {
+    set_pos(pos);
+}
 
 Text TextWindow::get_text() const {
     return text;

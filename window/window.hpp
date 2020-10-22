@@ -89,7 +89,7 @@ class TextWindow : public RenderWindow {
         Text text;
     public:
         TextWindow();
-        TextWindow(Text text);
+        TextWindow(Text text, Position pos, Color bgcolor);
 
         Text get_text() const;
         void set_text(Text text);

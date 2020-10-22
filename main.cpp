@@ -8,17 +8,15 @@
 
 int main() {
 
-    RectWindow window(Size(1920, 900), Position(0, 0), Color(176, 176, 176));
+    RectWindow window(Size(1920, 900), Position(0, 0), Color(255, 255, 255));
   
-    /*Text button_text = {"Test", 12, NULL, Color(255, 0, 0)};
-    TextWindow* button_window = new TextWindow(button_text);
+    Text button_text = {"Test", 12, NULL, Color(255, 0, 0)};
+    std::unique_ptr<Window> button_window(new TextWindow(button_text, Position(765, 333), Color(0, 240, 255)));
     button_window->open();
-    button_window->set_pos(Position(765, 333));
-    button_window->set_bgcolor(Color(0, 255, 255));
-*/
-    std::unique_ptr<Window> test_button(new RectWindow(Size(100, 20), Position(765, 333), Color(0, 255, 0)));
+
+    std::unique_ptr<Window> test_button(new RectButton(Size(100, 20), Position(765, 333), Color(0, 240, 255)));
     test_button->open();
-    // test_button->add_child_window(std::unique_ptr<Window>(button_window));
+    test_button->add_child_window(button_window);
     window.add_child_window(test_button);
 
     window.open(); 
