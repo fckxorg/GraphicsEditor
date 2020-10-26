@@ -15,10 +15,13 @@ class Renderer {
    private:
     sf::RenderWindow window;
 
+    std::vector<sf::Font> fonts;
+
    public:
     Renderer(Size window_size);
 
     void draw_rectangle(Size size, Position pos, Color color); 
+    void draw_text(Text text, Position pos, Color bg_color);
 
     void show();
 };
