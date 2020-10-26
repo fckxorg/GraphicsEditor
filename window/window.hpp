@@ -60,6 +60,7 @@ class RenderWindow : public Window {
     void open();
 
     void close();
+
     virtual void refresh() override;
 
     void set_pos(Position pos);

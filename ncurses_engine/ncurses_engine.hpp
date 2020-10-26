@@ -4,6 +4,7 @@
 #include <ncurses.h>
 #include <cstring>
 #include <vector>
+#include <cmath>
 
 #include "../data_classes/data_classes.hpp"
 
@@ -12,8 +13,9 @@ class Renderer {
         int scale_x;
         int scale_y;
 
-        std::vector<int> colors;
-        std::vector<int> color_pairs;
+        int convert_to_ncurses_color(Color color);
+        
+        int get_pair(int fg_color, int bg_color);
     
         int rescale_value(const int value, const int scale);
 
