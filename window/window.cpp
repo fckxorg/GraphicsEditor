@@ -44,15 +44,15 @@ RectWindow::RectWindow() = default;
 RectWindow::~RectWindow() = default;
 RectWindow::RectWindow(Size size, Position pos, Color color) : RenderWindow(size, pos), color(color) {}
 
-void RectWindow::render(Renderer& target) {
+void RectWindow::render() {
     if (!this->opened) {
         return;
     }
     
-    target.draw_rectangle(size, pos, color);
+    Renderer::draw_rectangle(size, pos, color);
 
     for(auto& subwindow : subwindows) {
-        subwindow->render(target);
+        subwindow->render();
     }
     
 }
@@ -61,15 +61,15 @@ void RectWindow::render(Renderer& target) {
 RectButton::RectButton() = default;
 RectButton::~RectButton() = default;
 
-void RectButton::render(Renderer& target) {
+void RectButton::render() {
     if(!this->opened) {
         return;
     }
 
-    RectWindow::render(target);
+    RectWindow::render();
     
     for(auto& subwindow : subwindows) {
-        subwindow->render(target);
+        subwindow->render();
     }
 
 }
@@ -97,11 +97,11 @@ void TextWindow::set_bgcolor(Color bgcolor) {
     this->bgcolor = bgcolor;
 }
 
-void TextWindow::render(Renderer& target) {
-    target.draw_text(text, pos, bgcolor);
+void TextWindow::render() {
+    Renderer::draw_text(text, pos, bgcolor);
 
     for(auto& subwindow : subwindows) {
-        subwindow->render(target);
+        subwindow->render();
     }
 
 }

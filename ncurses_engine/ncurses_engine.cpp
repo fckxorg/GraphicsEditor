@@ -2,12 +2,20 @@
 #include <cstdio>
 #include <curses.h>
 
-Renderer::Renderer(Size window_size) {
+int Renderer::scale_x = 0;
+int Renderer::scale_y = 0;
+
+void Renderer::init(Size window_size) {
     initscr();
     refresh();
     start_color();
-    scale_x = window_size.width / COLS; 
-    scale_y = window_size.height / LINES;
+
+    Renderer::scale_x = window_size.width / COLS; 
+    Renderer::scale_y = window_size.height / LINES;
+}
+
+void Renderer::deinit() {
+    endwin();
 }
 
 int Renderer::convert_to_ncurses_color(Color color) {
@@ -61,10 +69,6 @@ int Renderer::get_pair(int fg_color, int bg_color) {
     init_pair(empty_pair_idx, fg_color, bg_color);
 
     return empty_pair_idx;
-}
-
-Renderer::~Renderer() {
-    endwin();
 }
 
 int Renderer::rescale_value(const int value, const int scale) {

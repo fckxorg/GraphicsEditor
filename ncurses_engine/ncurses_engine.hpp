@@ -10,25 +10,27 @@
 
 class Renderer {
     private:
-        int scale_x;
-        int scale_y;
+        static int scale_x;
+        static int scale_y;
 
-        int convert_to_ncurses_color(Color color);
+        static int convert_to_ncurses_color(Color color);
         
-        int get_pair(int fg_color, int bg_color);
+        static int get_pair(int fg_color, int bg_color);
     
-        int rescale_value(const int value, const int scale);
+        static int rescale_value(const int value, const int scale);
+        
+        Renderer(); 
 
     public:
 
-        Renderer(Size window_size);
-        ~Renderer();
+        static void init(Size window_size);
+        static void deinit();
 
-        void draw_rectangle(Size size, Position pos, Color color);
+        static void draw_rectangle(Size size, Position pos, Color color);
             
-        void draw_text(Text text, Position pos, Color bgcolor);
+        static void draw_text(Text text, Position pos, Color bgcolor);
 
-        void show();
+        static void show();
 };
 
 #endif

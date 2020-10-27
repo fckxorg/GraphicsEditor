@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "data_classes/data_classes.hpp"
+#include "ncurses_engine/ncurses_engine.hpp"
 #include "window/window.hpp"
 
 
@@ -22,13 +23,14 @@ int main() {
     window.add_child_window(test_button);
 
     window.open(); 
-    Renderer renderer (Size(1920, 1080));
-    window.render(renderer);
+    Renderer::init(Size(1920, 1080));
+    window.render();
 
     while(true) {
-        renderer.show();
-        sleep(10);
+        Renderer::show();
     }
+
+    Renderer::deinit();
 
     return 0;
 }

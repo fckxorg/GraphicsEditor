@@ -39,7 +39,7 @@ class Window {
     void set_event_mask(uint32_t mask);
     void add_child_window(std::unique_ptr<Window>& child);
     // virtual void handle_event(Event event) = 0;
-    virtual void render(Renderer& target) = 0;
+    virtual void render() = 0;
 };
 
 class RenderWindow : public Window {
@@ -81,7 +81,7 @@ class RectWindow : public RenderWindow {
     ~RectWindow();
     RectWindow(Size size, Position pos, Color color);
 
-    virtual void render(Renderer& target) override;
+    virtual void render() override;
 };
 
 class TextWindow : public RenderWindow {
@@ -98,7 +98,7 @@ class TextWindow : public RenderWindow {
         void set_bgcolor(Color bgcolor); 
         Color get_bgcolor() const;
 
-        virtual void render(Renderer& target) override;
+        virtual void render() override;
 };
 
 class RectButton : public RectWindow {
@@ -106,7 +106,7 @@ class RectButton : public RectWindow {
     RectButton();
     ~RectButton();
 
-    virtual void render(Renderer& target) override;
+    virtual void render() override;
     RectButton(Size size, Position pos, Color color) : RectWindow(size, pos, color) {}
 
     void on_hover();
