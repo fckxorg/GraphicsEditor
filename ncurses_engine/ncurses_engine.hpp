@@ -25,12 +25,10 @@ class Renderer {
 
         static void init(Size window_size);
         static void deinit();
-
         static void draw_rectangle(Size size, Position pos, Color color);
-            
         static void draw_text(Text text, Position pos, Color bgcolor);
-
         static void show();
+        static void clear();
 };
 
 #endif

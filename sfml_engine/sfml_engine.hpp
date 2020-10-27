@@ -8,22 +8,26 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Window/VideoMode.hpp>
 
 #include "../data_classes/data_classes.hpp"
 
 class Renderer {
    private:
-    sf::RenderWindow window;
+    static sf::RenderWindow window;
 
-    std::vector<sf::Font> fonts;
+    static std::vector<sf::Font> fonts;
+
+    Renderer();
 
    public:
-    Renderer(Size window_size);
-
-    void draw_rectangle(Size size, Position pos, Color color); 
-    void draw_text(Text text, Position pos, Color bg_color);
-
-    void show();
+    static void clear();
+    static void draw_rectangle(Size size, Position pos, Color color); 
+    static void draw_text(Text text, Position pos, Color bg_color);
+    static void init(Size window_size);
+    static void show();
+    static void deinit();
 };
 
 #endif
