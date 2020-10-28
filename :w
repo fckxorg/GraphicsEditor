@@ -88,43 +88,24 @@ void RectButton::render() {
 
 }
 
-bool RectButton::check_boundaries(Position click_pos) {
-    if(click_pos.x < pos.x || click_pos.x > pos.x + size.width) return false;
-    if(click_pos.y < pos.y || click_pos.y > pos.y + size.height) return false;
-
-    return true;
-}
-
-void RectButton::onMousePress(Event& event) {
-    Position click_position = event.mouse_button_event.pos;
-    if(!check_boundaries(click_position)) return;
-
+void RectButton::onMousePress() {
     Color curr_color = RectWindow::get_color();
     
     uint8_t color_r_pressed = std::min(curr_color.r - 50, 0);
     uint8_t color_g_pressed = std::min(curr_color.g - 50, 0);
     uint8_t color_b_pressed = std::min(curr_color.b - 50, 0);
 
-    Color pressed_color = Color(color_r_pressed, color_g_pressed, color_b_pressed);
-    this->color = pressed_color;
-}
-
-void RectButton::onMouseRelease(Event& event) {
-    this->color = default_color;
+    Color pressed_color = Color(current_color.r - )
 }
 
 void RectButton::handle_event(Event& event) {
     switch(event.type) {
         case MOUSE_BUTTON_PRESSED:
-            RectButton::onMousePress(event);
+            RectButton::onMousePress();
             break;
         case MOUSE_BUTTON_RELEASED:
-            RectButton::onMouseRelease(event);
+            RectButton::onMouseRelease();
             break;
-    }
-
-    for(auto& subwindow : subwindows) {
-        subwindow->handle_event(event);
     }
 }
 

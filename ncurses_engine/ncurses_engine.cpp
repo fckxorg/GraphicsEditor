@@ -118,6 +118,3 @@ void Renderer::show() {
     getch();
 }
 
-bool Renderer::poll_event(Event& event) {
-    return false;
-}

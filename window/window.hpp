@@ -39,7 +39,7 @@ class Window {
 
     void set_event_mask(uint32_t mask);
     void add_child_window(std::unique_ptr<Window>& child);
-    virtual void handle_event(Event event){}
+    virtual void handle_event(Event& event);
     virtual void render() = 0;
 };
 
@@ -82,35 +82,50 @@ class RectWindow : public RenderWindow {
     ~RectWindow();
     RectWindow(Size size, Position pos, Color color);
 
+    void set_color(Color color); 
+    
+    Color get_color();
+
     virtual void render() override;
 };
 
 class TextWindow : public RenderWindow {
-    private:
-        Color bgcolor;
-        Text text;
-    public:
-        TextWindow();
-        TextWindow(Text text, Position pos, Color bgcolor);
+   private:
+    Color bgcolor;
+    Text text;
 
-        Text get_text() const;
-        void set_text(Text text);
+   public:
+    TextWindow();
+    TextWindow(Text text, Position pos, Color bgcolor);
 
-        void set_bgcolor(Color bgcolor); 
-        Color get_bgcolor() const;
+    Text get_text() const;
+    void set_text(Text text);
 
-        virtual void render() override;
+    void set_bgcolor(Color bgcolor);
+    Color get_bgcolor() const;
+
+    virtual void render() override;
 };
 
 class RectButton : public RectWindow {
+   private:
+       Color default_color;
    public:
     RectButton();
     ~RectButton();
 
     virtual void render() override;
-    RectButton(Size size, Position pos, Color color) : RectWindow(size, pos, color) {}
+    RectButton(Size size, Position pos, Color color)
+        : RectWindow(size, pos, color), default_color(color) {}
+
+    virtual void handle_event(Event& event) override;
+
+    bool check_boundaries(Position click_pos);
 
     void on_hover();
+
+    virtual void onMousePress(Event& event);
+    virtual void onMouseRelease(Event& event);
 
     void on_click();
 };
