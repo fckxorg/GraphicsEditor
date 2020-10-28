@@ -70,16 +70,9 @@ void RectButton::render() {
     }
 }
 
-bool RectButton::check_boundaries(Position click_pos) {
-    if (click_pos.x < pos.x || click_pos.x > pos.x + size.width) return false;
-    if (click_pos.y < pos.y || click_pos.y > pos.y + size.height) return false;
-
-    return true;
-}
-
 void RectButton::onMousePress(Event& event) {
     Position click_position = event.mouse_button_event.pos;
-    if (!check_boundaries(click_position)) return;
+    if (!is_point_inside(click_position)) return;
 
     Color curr_color = RectWindow::get_color();
 
@@ -109,6 +102,13 @@ void RectButton::handle_event(Event& event) {
     }
 }
 
+bool RectWindow::is_point_inside(Position point) {
+    if (point.x < pos.x || point.x > pos.x + size.width) return false;
+    if (point.y < pos.y || point.y > pos.y + size.height) return false;
+
+    return true;
+}
+
 /*--------------- TEXT WINDOW-----------------------------*/
 
 TextWindow::TextWindow() = default;
@@ -132,6 +132,7 @@ void TextWindow::render() {
         subwindow->render();
     }
 }
+
 
 /*---------------- Slieder ------------------------------*/
 Slider::Slider() = default;
@@ -159,17 +160,9 @@ void Slider::handle_event(Event& event) {
     }
 }
 
-// TODO move this method to RectWindow
-bool Slider::check_boundaries(Position click_pos) {
-    if (click_pos.x < pos.x || click_pos.x > pos.x + size.width) return false;
-    if (click_pos.y < pos.y || click_pos.y > pos.y + size.height) return false;
-
-    return true;
-}
-
 void Slider::onMousePress(Event& event) {
     Position click_position = event.mouse_button_event.pos;
-    if (!check_boundaries(click_position)) return;
+    if (!is_point_inside(click_position)) return;
 
     Color curr_color = RectWindow::get_color();
 

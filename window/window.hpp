@@ -45,6 +45,7 @@ class RenderWindow : public Window {
     Size size;
     float rotation;
 
+
    public:
     RenderWindow();
 
@@ -68,6 +69,7 @@ class RenderWindow : public Window {
 class RectWindow : public RenderWindow {
    protected:
     Color color;
+    virtual bool is_point_inside(Position point);
 
    public:
     RectWindow();
