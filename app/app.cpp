@@ -6,7 +6,7 @@ void App::run() {
     Event event = {};
 
     // TODO timer event generation
-    while(root_window->is_opened()) {
+    while(true) {
         while(Renderer::poll_event(event)) {
             EventQueue::add_event(event);
         }

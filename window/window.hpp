@@ -22,16 +22,12 @@
 class Window {
    protected:
     uint32_t event_mask;
-    mutable bool opened;
 
    public:
     std::list<std::unique_ptr<Window>> subwindows;
 
     Window();
     virtual ~Window();
-
-    virtual void open() = 0;
-    virtual void close() = 0;
 
     virtual void refresh() = 0;
 
@@ -57,10 +53,6 @@ class RenderWindow : public Window {
     RenderWindow(const RenderWindow& other) = delete;
 
     RenderWindow(Size size, Position pos);
-
-    void open();
-
-    void close();
 
     virtual void refresh() override;
 

@@ -5,7 +5,6 @@
 /*--------------- WINDOW ---------------------*/
 
 Window::Window() = default;
-bool Window::is_opened() const { return opened; }
 
 void Window::set_event_mask(uint32_t mask) { event_mask = mask; }
 
@@ -27,9 +26,6 @@ RenderWindow::RenderWindow() = default;
 RenderWindow::~RenderWindow() = default;
 RenderWindow::RenderWindow(Size size, Position pos) : size(size), pos(pos) {}
 
-void RenderWindow::open() { opened = true; }
-void RenderWindow::close() { opened = false; }
-
 void RenderWindow::refresh() {}
 
 void RenderWindow::set_pos(Position pos) { this->pos = pos; }
@@ -48,10 +44,6 @@ RectWindow::RectWindow(Size size, Position pos, Color color)
     : RenderWindow(size, pos), color(color) {}
 
 void RectWindow::render() {
-    if (!this->opened) {
-        return;
-    }
-
     Renderer::draw_rectangle(size, pos, color);
 
     for (auto& subwindow : subwindows) {
@@ -71,10 +63,6 @@ RectButton::RectButton(Size size, Position pos, Color color)
     : RectWindow(size, pos, color), default_color(color) {}
 
 void RectButton::render() {
-    if (!this->opened) {
-        return;
-    }
-
     RectWindow::render();
 
     for (auto& subwindow : subwindows) {
@@ -273,10 +261,6 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
     std::unique_ptr<Window> bottom_button(new RectButton(button_size, bottom_button_pos, controls_colors));
     std::unique_ptr<Window> slider(new Slider(slider_size, slider_default_position, controls_colors, slider_lower_boundary, slider_upper_boundary, horizontal));
     
-
-    top_button->open();
-    bottom_button->open();
-    slider->open();
     
     add_child_window(top_button);
     add_child_window(bottom_button);

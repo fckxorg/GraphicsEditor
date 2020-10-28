@@ -15,18 +15,14 @@ int main() {
   
     Text button_text = {"Test", 12, roboto_font_path, Color(255, 0, 0)};
     std::unique_ptr<Window> button_text_window(new TextWindow(button_text, Position(765, 333), Color(0, 240, 255)));
-    button_text_window->open();
 
     std::unique_ptr<Window> test_button(new RectButton(Size(100, 40), Position(765, 333), Color(0, 240, 255)));
-    test_button->open();
     test_button->add_child_window(button_text_window);
 
     std::unique_ptr<Window> scrollbar(new Scrollbar(Size(30, 400), Position(400, 400), Color(245, 245, 245), false));
-    scrollbar->open();
     window->add_child_window(test_button);
     window->add_child_window(scrollbar);
 
-    window->open(); 
     App::init(Size(1920, 1080), "Test application");
     App::set_root_window(window);
     App::run();
