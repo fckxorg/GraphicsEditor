@@ -155,7 +155,7 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
       pressed(false),
       lower_bound(lower_bound),
       upper_bound(upper_bound),
-      horizontal(horizontal) {}
+      horizontal(horizontal), last_mouse_pos(pos) {}
 
 void Slider::handle_event(Event& event) {
     switch (event.type) {
@@ -193,25 +193,29 @@ void Slider::onMousePress(Event& event) {
         Color(color_r_pressed, color_g_pressed, color_b_pressed);
     this->color = pressed_color;
     pressed = true;
+    last_mouse_pos = click_position;
 }
 
 void Slider::onMouseMove(Event& event) {
     if (!pressed) return;
     Position mouse_position = event.mouse_move_event.pos;
 
-    if (check_boundaries(mouse_position)) return;
+    int delta_x = mouse_position.x - last_mouse_pos.x;
+    int delta_y = mouse_position.y - last_mouse_pos.y;
+
+    last_mouse_pos = mouse_position;
 
     Position new_pos = {};
 
     if (horizontal) {
-        uint16_t adjusted_upper_bound = std::max(upper_bound - size.width, 0);
-        new_pos.x = std::min(mouse_position.x, adjusted_upper_bound);
+        int adjusted_upper_bound = std::max(upper_bound - size.width, 0);
+        new_pos.x = std::min(pos.x + delta_x, adjusted_upper_bound);
         new_pos.x = std::max(new_pos.x, lower_bound);
 
         new_pos.y = pos.y;
     } else {
-        uint16_t adjusted_upper_bound = std::max(upper_bound - size.height, 0);
-        new_pos.y = std::min(mouse_position.y, adjusted_upper_bound);
+        int adjusted_upper_bound = std::max(upper_bound - size.height, 0);
+        new_pos.y = std::min(pos.y + delta_y, adjusted_upper_bound);
         new_pos.y = std::max(new_pos.y, lower_bound);
 
         new_pos.x = pos.x;

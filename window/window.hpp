@@ -130,6 +130,7 @@ class RectButton : public RectWindow {
 class Slider : public RectWindow {
     private:
        Color default_color; 
+       Position last_mouse_pos; 
        bool pressed;
        
        bool horizontal; 
