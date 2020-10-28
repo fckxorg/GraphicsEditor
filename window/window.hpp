@@ -115,8 +115,7 @@ class RectButton : public RectWindow {
     ~RectButton();
 
     virtual void render() override;
-    RectButton(Size size, Position pos, Color color)
-        : RectWindow(size, pos, color), default_color(color) {}
+    RectButton(Size size, Position pos, Color color);
 
     virtual void handle_event(Event& event) override;
 
@@ -126,8 +125,38 @@ class RectButton : public RectWindow {
 
     virtual void onMousePress(Event& event);
     virtual void onMouseRelease(Event& event);
+};
 
-    void on_click();
+class Slider : public RectWindow {
+    private:
+       Color default_color; 
+       bool pressed;
+       
+       bool horizontal; 
+       uint16_t lower_bound;
+       uint16_t upper_bound;
+
+       bool check_boundaries(Position click_pos);
+    public:
+        Slider();
+        ~Slider();
+        Slider(Size size, Position pos, Color color, uint16_t lower_bound, uint16_t upper_bound, bool horizontal=false);
+        virtual void onMousePress(Event& event);
+        virtual void onMouseRelease(Event& event);
+        virtual void onMouseMove(Event& event);
+
+        virtual void handle_event(Event& event);
+};
+
+
+class Scrollbar : public RectWindow {
+    private:
+        bool horizontal;
+    public:
+        Scrollbar();
+        ~Scrollbar();
+
+        Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
 };
 
 #endif

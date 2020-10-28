@@ -203,18 +203,20 @@ void Slider::onMouseMove(Event& event) {
 
     Position new_pos = {};
 
-    if (horizontal) {
+    if(horizontal) {
         uint16_t adjusted_upper_bound = std::max(upper_bound - size.width, 0);
         new_pos.x = std::min(mouse_position.x, adjusted_upper_bound);
-        new_pos.x = std::max(new_pos.x, lower_bound);
-
+        new_pos.x = std::max(mouse_position.x, lower_bound);
+        
         new_pos.y = pos.y;
-    } else {
-        uint16_t adjusted_upper_bound = std::max(upper_bound - size.height, 0);
+    }
+    else {
+         uint16_t adjusted_upper_bound = std::max(upper_bound - size.height, 0);
         new_pos.y = std::min(mouse_position.y, adjusted_upper_bound);
-        new_pos.y = std::max(new_pos.y, lower_bound);
-
+        new_pos.y = std::max(mouse_position.y, lower_bound);
+        
         new_pos.x = pos.x;
+
     }
 
     this->pos = new_pos;
@@ -223,58 +225,4 @@ void Slider::onMouseMove(Event& event) {
 void Slider::onMouseRelease(Event& event) {
     this->color = default_color;
     pressed = false;
-}
-
-/*-------------------------- Scrollbar ---------------------------*/
-
-Scrollbar::Scrollbar() = default;
-Scrollbar::~Scrollbar() = default;
-
-Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
-    : RectWindow(size, pos, color), horizontal(horizontal) {
-    Size button_size = {};
-    Size slider_size = {};
-
-    Position bottom_button_pos = {};
-    Position slider_default_position = {};
-
-    uint16_t slider_lower_boundary = 0;
-    uint16_t slider_upper_boundary = 0;
-    
-    if (horizontal) {
-        button_size = {static_cast<uint8_t>(size.width * 0.1), size.height};
-        slider_size = {static_cast<uint8_t>(size.width * 0.3), size.height}; // TODO adaptive size
-        slider_default_position = {static_cast<uint16_t>(pos.x + button_size.width), pos.y};
-        bottom_button_pos = {static_cast<uint16_t>(pos.x + size.width * 0.9), pos.y};
-        
-        slider_lower_boundary = slider_default_position.x;
-        slider_upper_boundary = bottom_button_pos.x;
-    } else {
-        button_size = {size.width, static_cast<uint8_t>(size.height * 0.1)};
-        bottom_button_pos = {pos.x, static_cast<uint16_t>(pos.y + size.height * 0.9)};
-        slider_size = {size.width, static_cast<uint8_t>(size.height * 0.3)}; // TODO adaptive size
-        slider_default_position = {pos.x, static_cast<uint16_t>(pos.y + button_size.height)};
-
-        slider_lower_boundary = slider_default_position.y;
-        slider_upper_boundary = bottom_button_pos.y;
-    }
-
-    uint8_t red_comp_color = color.r - 30;
-    uint8_t green_comp_color = color.g - 30;
-    uint8_t blue_comp_color = color.b - 30;
-
-    Color controls_colors = Color(red_comp_color, green_comp_color, blue_comp_color);
-
-    std::unique_ptr<Window> top_button(new RectButton(button_size, pos, controls_colors));
-    std::unique_ptr<Window> bottom_button(new RectButton(button_size, bottom_button_pos, controls_colors));
-    std::unique_ptr<Window> slider(new Slider(slider_size, slider_default_position, controls_colors, slider_lower_boundary, slider_upper_boundary, horizontal));
-    
-
-    top_button->open();
-    bottom_button->open();
-    slider->open();
-    
-    add_child_window(top_button);
-    add_child_window(bottom_button);
-    add_child_window(slider);
 }
