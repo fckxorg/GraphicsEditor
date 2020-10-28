@@ -26,7 +26,6 @@ RenderWindow::RenderWindow() = default;
 RenderWindow::~RenderWindow() = default;
 RenderWindow::RenderWindow(Size size, Position pos) : size(size), pos(pos) {}
 
-void RenderWindow::refresh() {}
 
 void RenderWindow::set_pos(Position pos) { this->pos = pos; }
 Position RenderWindow::get_position() const { return pos; }
@@ -35,6 +34,12 @@ void RenderWindow::set_rotation(const float rotation) {
     this->rotation = rotation;
 }
 float RenderWindow::get_rotation() const { return rotation; }
+
+void RenderWindow::render() {
+    for(auto& subwindow : subwindows) {
+        subwindow->render();
+    }
+}
 
 /*---------- RECT WINDOW -------------------*/
 
@@ -45,10 +50,7 @@ RectWindow::RectWindow(Size size, Position pos, Color color)
 
 void RectWindow::render() {
     Renderer::draw_rectangle(size, pos, color);
-
-    for (auto& subwindow : subwindows) {
-        subwindow->render();
-    }
+    RenderWindow::render();
 }
 
 void RectWindow::set_color(Color color) { this->color = color; }
@@ -64,10 +66,6 @@ RectButton::RectButton(Size size, Position pos, Color color)
 
 void RectButton::render() {
     RectWindow::render();
-
-    for (auto& subwindow : subwindows) {
-        subwindow->render();
-    }
 }
 
 void RectButton::onMousePress(Event& event) {
@@ -96,10 +94,8 @@ void RectButton::handle_event(Event& event) {
             RectButton::onMouseRelease(event);
             break;
     }
-
-    for (auto& subwindow : subwindows) {
-        subwindow->handle_event(event);
-    }
+    
+    Window::handle_event(event);
 }
 
 bool RectWindow::is_point_inside(Position point) {
@@ -127,10 +123,7 @@ void TextWindow::set_bgcolor(Color bgcolor) { this->bgcolor = bgcolor; }
 
 void TextWindow::render() {
     Renderer::draw_text(text, pos, bgcolor);
-
-    for (auto& subwindow : subwindows) {
-        subwindow->render();
-    }
+    RenderWindow::render();
 }
 
 
@@ -158,6 +151,8 @@ void Slider::handle_event(Event& event) {
             onMouseMove(event);
             break;
     }
+
+    Window::handle_event(event);
 }
 
 void Slider::onMousePress(Event& event) {

@@ -29,8 +29,6 @@ class Window {
     Window();
     virtual ~Window();
 
-    virtual void refresh() = 0;
-
     bool is_opened() const;
 
     void set_event_mask(uint32_t mask);
@@ -55,7 +53,7 @@ class RenderWindow : public Window {
 
     RenderWindow(Size size, Position pos);
 
-    virtual void refresh() override;
+    virtual void render();
 
     void set_pos(Position pos);
 
