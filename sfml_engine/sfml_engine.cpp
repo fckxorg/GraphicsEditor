@@ -1,12 +1,12 @@
 #include "sfml_engine.hpp"
-#include <SFML/Graphics/RenderWindow.hpp>
+
+#include <unordered_map>
 
 sf::RenderWindow Renderer::window;
-std::vector<sf::Font> Renderer::fonts; // TODO more elegant way to store fonts
+std::unordered_map<const char*, sf::Font> Renderer::fonts;
 
 void Renderer::clear() {
     window.clear();
-    fonts.clear();
 }
 
 void Renderer::init(Size window_size, const char* name) {
@@ -22,10 +22,13 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
 }
 
 void Renderer::draw_text(Text text, Position pos, Color bg_color) {
-    fonts.push_back(sf::Font());
-    fonts.back().loadFromFile(text.get_font());
+    if (!fonts.contains(text.get_font())) {
+        sf::Font new_font;
+        new_font.loadFromFile(text.get_font());
+        fonts[text.get_font()] = new_font;
+    }
 
-    sf::Text sfml_text(text.get_text(), fonts.back(),
+    sf::Text sfml_text(text.get_text(), fonts[text.get_font()],
                        text.get_character_size());
     sfml_text.setPosition(pos);
     sfml_text.setFillColor(text.get_color());

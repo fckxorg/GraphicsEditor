@@ -12,7 +12,7 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include <vector>
+#include <unordered_map>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
@@ -21,7 +21,7 @@ class Renderer {
    private:
     static sf::RenderWindow window;
 
-    static std::vector<sf::Font> fonts;
+    static std::unordered_map<const char*, sf::Font> fonts;
 
     static MouseButton get_mouse_button(sf::Mouse::Button);
     static MouseButtonEvent translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data);
