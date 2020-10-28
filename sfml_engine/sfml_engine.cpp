@@ -2,10 +2,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 sf::RenderWindow Renderer::window;
-std::vector<sf::Font> Renderer::fonts;
+std::vector<sf::Font> Renderer::fonts; // TODO more elegant way to store fonts
 
 void Renderer::clear() {
     window.clear();
+    fonts.clear();
 }
 
 void Renderer::init(Size window_size, const char* name) {
