@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "../data_classes/data_classes.hpp"
+#include "../event/event.hpp"
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"
@@ -38,7 +39,7 @@ class Window {
 
     void set_event_mask(uint32_t mask);
     void add_child_window(std::unique_ptr<Window>& child);
-    // virtual void handle_event(Event event) = 0;
+    virtual void handle_event(Event event){}
     virtual void render() = 0;
 };
 

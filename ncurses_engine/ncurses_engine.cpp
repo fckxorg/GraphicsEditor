@@ -7,7 +7,7 @@
 int Renderer::scale_x = 0;
 int Renderer::scale_y = 0;
 
-void Renderer::init(Size window_size) {
+void Renderer::init(Size window_size, const char* name) {
     initscr();
     refresh();
     start_color();
@@ -116,4 +116,8 @@ void Renderer::draw_text(Text text, Position pos, Color bgcolor) {
 void Renderer::show() {
     refresh();
     getch();
+}
+
+bool Renderer::poll_event(Event& event) {
+    return false;
 }

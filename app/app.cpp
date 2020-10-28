@@ -1,13 +1,35 @@
 #include "app.hpp"
 
-template<typename RenderEngine> 
-App<RenderEngine>::App() = default;
+std::unique_ptr<Window> App::root_window;
 
-template<typename RenderEngine>
-App<RenderEngine>::~App() = default;
+void App::run() {
+    Event event = {};
 
-template<typename RenderEngine>
-void App<RenderEngine>::event_loop() {
-   // render the window system
-   RenderEngine(root_window.get());
+    // TODO timer event generation
+    while(root_window->is_opened()) {
+        while(Renderer::poll_event(event)) {
+            EventQueue::add_event(event);
+        }
+        
+        while(!EventQueue::empty()) {
+            event = EventQueue::get_event();
+            root_window->handle_event(event);
+        }
+
+        root_window->render();
+        Renderer::show();
+        Renderer::clear();
+    }
+}
+
+void App::init(Size size, const char* name) {
+    Renderer::init(size, name);
+}
+
+void App::deinit() {
+    Renderer::deinit();
+}
+
+void App::set_root_window(std::unique_ptr<Window>& window) {
+    root_window = std::move(window);
 }

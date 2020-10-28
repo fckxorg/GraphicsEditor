@@ -29,6 +29,8 @@ endif(NCURSES_ENGINE)
 
 add_subdirectory(data_classes)
 add_subdirectory(window)
+add_subdirectory(app)
+add_subdirectory(event_queue)
 
 if(NCURSES_ENGINE)
     message(STATUS "Builidng with ncurses")
@@ -39,11 +41,13 @@ if(NCURSES_ENGINE)
                               PUBLIC "${PROJECT_SOURCE_DIR}/data_classes"                          
                               PUBLIC "${PROJECT_SOURCE_DIR}/window"
                               PUBLIC "${PROJECT_SOURCE_DIR}/ncurses_engine"
+                              PUBLIC "${PROJECT_SOURCE_DIR}/app"
+                              PUBLIC "${PROJECT_SOURCE_DIR}/event_queue"
                               PUBLIC "${CURSES_INCLUDE_DIR}")
 
     include_directories(${CURSES_INCLUDE_DIR})
 
-    target_link_libraries(Main PUBLIC ${CURSES_LIBRARIES} data_classes window ncurses_engine)
+    target_link_libraries(Main PUBLIC ${CURSES_LIBRARIES} data_classes window ncurses_engine app event_queue)
 endif(NCURSES_ENGINE)
 
 if(SFML_ENGINE)
@@ -52,10 +56,12 @@ if(SFML_ENGINE)
                               PUBLIC "${PROJECT_BINARY_DIR}"
                               PUBLIC "${PROJECT_SOURCE_DIR}/data_classes"                          
                               PUBLIC "${PROJECT_SOURCE_DIR}/window"
+                              PUBLIC "${PROJECT_SOURCE_DIR}/app"
+                              PUBLIC "${PROJECT_SOURCE_DIR}/event_queue"
                               PUBLIC "${PROJECT_SOURCE_DIR}/sfml_engine")
     set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/SFML/cmake-modules/")
     find_package(SFML REQUIRED system window graphics)
-    target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window sfml_engine)
+    target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window sfml_engine app event_queue)
 endif(SFML_ENGINE)
 
 unset(SFML_ENGINE CACHE)

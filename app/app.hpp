@@ -1,21 +1,31 @@
 #ifndef APP_HPP
 #define APP_HPP
-#include <queue>
 #include <memory>
 
+#ifdef NCURSES_ENGINE
+#include "../ncurses_engine/ncurses_engine.hpp"
+#endif
+
+#ifdef SFML_ENGINE
+#include "../sfml_engine/sfml_engine.hpp"
+#endif
+
+#include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
+#include "../event_queue/event_queue.hpp"
 #include "../window/window.hpp"
 
-template<typename RenderEngine>
 class App {
-    private:
-        std::queue<Event> event_queue;
-        std::unique_ptr<Window> root_window;
-    public:
-        App();
-        ~App();
+   private:
+    static std::unique_ptr<Window> root_window;
 
-        void event_loop();
+   public:
+    App() = delete;
+
+    static void init(Size size, const char* name);
+    static void run();
+    static void deinit();
+    static void set_root_window(std::unique_ptr<Window>& window);
 };
 
 #endif

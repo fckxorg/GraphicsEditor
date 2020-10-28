@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include "../data_classes/data_classes.hpp"
+#include "../event/event.hpp"
 
 class Renderer {
     private:
@@ -23,12 +24,14 @@ class Renderer {
 
     public:
 
-        static void init(Size window_size);
+        static void init(Size window_size, const char* name);
         static void deinit();
         static void draw_rectangle(Size size, Position pos, Color color);
         static void draw_text(Text text, Position pos, Color bgcolor);
         static void show();
         static void clear();
+
+        static bool poll_event(Event& event);
 };
 
 #endif
