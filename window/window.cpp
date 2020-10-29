@@ -3,6 +3,24 @@
 #include <bits/stdint-uintn.h>
 
 /*---------------------------------------*/
+/*         Interface Clickable           */
+/*---------------------------------------*/
+
+void InterfaceClickable::handle_mouse_button_event(Event* event) {
+    auto mouse_button_event = dynamic_cast<MouseButtonEvent*>(event);
+
+    if (mouse_button_event->action == MouseButtonEvent::Action::PRESSED) {
+        onMousePress(mouse_button_event);
+    }
+
+    if (mouse_button_event->action == MouseButtonEvent::Action::RELEASED) {
+        onMouseRelease(mouse_button_event);
+    }
+}
+
+InterfaceClickable::~InterfaceClickable() = default;
+
+/*---------------------------------------*/
 /*              Window                   */
 /*---------------------------------------*/
 
@@ -95,15 +113,7 @@ void RectButton::onMouseRelease(MouseButtonEvent* event) {
 
 void RectButton::handle_event(Event* event) {
     if (event->get_type() == SYSTEM_EVENT::MOUSE_BUTTON) {
-        auto mouse_button_event = dynamic_cast<MouseButtonEvent*>(event);
-
-        if (mouse_button_event->action == MouseButtonEvent::Action::PRESSED) {
-            onMousePress(mouse_button_event);
-        }
-
-        if (mouse_button_event->action == MouseButtonEvent::Action::RELEASED) {
-            onMouseRelease(mouse_button_event);
-        }
+        handle_mouse_button_event(event);
     }
 
     Window::handle_event(event);
@@ -158,17 +168,7 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
 void Slider::handle_event(Event* event) {
     switch (event->get_type()) {
         case MOUSE_BUTTON: {
-            auto mouse_button_event = dynamic_cast<MouseButtonEvent*>(event);
-
-            if (mouse_button_event->action ==
-                MouseButtonEvent::Action::PRESSED) {
-                onMousePress(mouse_button_event);
-            }
-
-            if (mouse_button_event->action ==
-                MouseButtonEvent::Action::RELEASED) {
-                onMouseRelease(mouse_button_event);
-            }
+            handle_mouse_button_event(event);
             break;
         }
 

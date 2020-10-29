@@ -19,6 +19,15 @@
 #include "../sfml_engine/sfml_engine.hpp"
 #endif
 
+class InterfaceClickable {
+    public:
+        void handle_mouse_button_event(Event* event);
+        virtual void onMousePress(MouseButtonEvent* event) = 0;
+        virtual void onMouseRelease(MouseButtonEvent* event) = 0;
+        virtual ~InterfaceClickable();
+};
+
+
 class Window {
    protected:
     uint32_t event_mask;
@@ -42,7 +51,6 @@ class RenderWindow : public Window {
     Position pos;
     Size size;
     float rotation;
-
 
    public:
     RenderWindow();
@@ -74,8 +82,8 @@ class RectWindow : public RenderWindow {
     ~RectWindow();
     RectWindow(Size size, Position pos, Color color);
 
-    void set_color(Color color); 
-    
+    void set_color(Color color);
+
     Color get_color();
 
     virtual void render() override;
@@ -99,9 +107,10 @@ class TextWindow : public RenderWindow {
     virtual void render() override;
 };
 
-class RectButton : public RectWindow {
+class RectButton : public RectWindow, public InterfaceClickable {
    private:
-       Color default_color;
+    Color default_color;
+
    public:
     RectButton();
     ~RectButton();
@@ -113,43 +122,43 @@ class RectButton : public RectWindow {
 
     bool check_boundaries(Position click_pos);
 
-    void on_hover();
+    virtual void onMousePress(MouseButtonEvent* event) override;
+    virtual void onMouseRelease(MouseButtonEvent* event) override;
+};
 
+class Slider : public RectWindow, public InterfaceClickable {
+   private:
+    Color default_color;
+    Position last_mouse_pos;
+    bool pressed;
+
+    bool horizontal;
+    uint16_t lower_bound;
+    uint16_t upper_bound;
+
+    bool check_boundaries(Position click_pos);
+
+   public:
+    Slider();
+    ~Slider();
+    Slider(Size size, Position pos, Color color, uint16_t lower_bound,
+           uint16_t upper_bound, bool horizontal = false);
     virtual void onMousePress(MouseButtonEvent* event);
     virtual void onMouseRelease(MouseButtonEvent* event);
+    virtual void onMouseMove(MouseMoveEvent* event);
+
+    virtual void handle_event(Event* event);
 };
-
-class Slider : public RectWindow {
-    private:
-       Color default_color; 
-       Position last_mouse_pos; 
-       bool pressed;
-       
-       bool horizontal; 
-       uint16_t lower_bound;
-       uint16_t upper_bound;
-
-       bool check_boundaries(Position click_pos);
-    public:
-        Slider();
-        ~Slider();
-        Slider(Size size, Position pos, Color color, uint16_t lower_bound, uint16_t upper_bound, bool horizontal=false);
-        virtual void onMousePress(MouseButtonEvent* event);
-        virtual void onMouseRelease(MouseButtonEvent* event);
-        virtual void onMouseMove(MouseMoveEvent* event);
-
-        virtual void handle_event(Event* event);
-};
-
 
 class Scrollbar : public RectWindow {
-    private:
-        bool horizontal;
-    public:
-        Scrollbar();
-        ~Scrollbar();
+   private:
+    bool horizontal;
 
-        Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
+   public:
+    Scrollbar();
+    ~Scrollbar();
+
+    Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
 };
 
 #endif
