@@ -1,25 +1,15 @@
-#include <cstdint>
-#include <list>
-#include <memory>
+#include <unordered_map>
+#include <unordered_set>
 
-#include "../event/event.hpp"
+#include "../window_base/window_base.hpp"
 
-class Window {
-   protected:
-    uint32_t event_mask;
-
-   public:
-    std::list<std::unique_ptr<Window>> subwindows;
-
-    Window();
-    virtual ~Window();
-
-    bool is_opened() const;
-
-    void set_event_mask(uint32_t mask);
-    void add_child_window(std::unique_ptr<Window>& child);
-    virtual void handle_event(Event* event);
-    virtual void render() = 0;
+class SubscriptionManager {
+    private:
+        static std::unordered_map<Window*, std::unordered_set<Window*>> subscriptions;
+    public:
+        SubscriptionManager() = delete;
+        static void add_subscription(Window* sender, ...);
+        static void unsubscribe(Window* sender, Window* recipient);
+        static void unsubscribe_all(Window* sender);
+        static void unsubscribe_from_all(Window* recipient);
 };
-
-

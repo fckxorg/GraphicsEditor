@@ -1,3 +1,7 @@
+#ifndef WINDOW_BASE_HPP
+#define WINDOW_BASE_HPP
+
+
 #include <list>
 #include <memory>
 #include <cstdint>
@@ -22,4 +26,4 @@ class Window {
     virtual void render() = 0;
 };
 
-
+#endif
