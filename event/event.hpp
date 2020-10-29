@@ -5,37 +5,41 @@
 
 #include "../data_classes/data_classes.hpp"
 
-enum MouseButton { LEFT, MIDDLE, RIGHT, UNDEFINED_BUTTON };
+enum SYSTEM_EVENT { MOUSE_BUTTON, MOUSE_MOVE, WINDOW_CLOSED };
 
-enum EVENT_TYPE {
-    MOUSE_BUTTON_PRESSED,
-    MOUSE_BUTTON_RELEASED,
-    MOUSE_HOVER,
-    MOUSE_MOVED,
-    WINDOW_CLOSED,
-    UNDEFINED_EVENT
-};
-
-struct MouseButtonEvent {
-    Position pos;
-    MouseButton mouse_button;
-};
-
-struct MouseHoverEvent {
-    Position pos;
-};
-
-struct MouseMoveEvent {
-    Position pos;
-};
-
-struct Event {
+class Event {
+   private:
     uint32_t type;
-    union {
-        MouseButtonEvent mouse_button_event;
-        MouseHoverEvent mouse_hover_event;
-        MouseMoveEvent mouse_move_event;
-    };
+
+   public:
+    uint32_t get_type() {
+        return type;
+    }
+
+    Event(uint32_t type) : type(type) {}
+    virtual ~Event() = default;
+};
+
+class WindowClosedEvent : public Event {
+    public:
+        WindowClosedEvent() : Event(WINDOW_CLOSED) {}
+};
+
+class MouseButtonEvent : public Event {
+   public:
+    enum MouseButton { LEFT, MIDDLE, RIGHT, UNDEFINED_BUTTON };
+    enum Action { PRESSED, RELEASED };
+    Position pos;
+    MouseButton button;
+    Action action;
+    MouseButtonEvent(Position pos, MouseButton button, Action action) : Event(MOUSE_BUTTON), pos(pos), button(button), action(action) {}
+};
+
+class MouseMoveEvent : public Event {
+   public:
+    Position pos;
+
+    MouseMoveEvent(Position pos) : Event(MOUSE_MOVE), pos(pos){}
 };
 
 #endif

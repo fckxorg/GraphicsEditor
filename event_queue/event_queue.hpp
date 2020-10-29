@@ -3,10 +3,10 @@
 
 class EventQueue {
     private:
-        static std::queue<Event> event_queue;
+        static std::queue<Event*> event_queue;
 
-        static Event get_event();
-        static void add_event(Event new_event);
+        static Event* get_event();
+        static void add_event(Event* new_event);
         static bool empty();
 
     public:

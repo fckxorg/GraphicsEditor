@@ -1,13 +1,12 @@
 #include "sfml_engine.hpp"
 
 #include <unordered_map>
+#include <stdio.h>
 
 sf::RenderWindow Renderer::window;
 std::unordered_map<const char*, sf::Font> Renderer::fonts;
 
-void Renderer::clear() {
-    window.clear();
-}
+void Renderer::clear() { window.clear(); }
 
 void Renderer::init(Size window_size, const char* name) {
     window.create(sf::VideoMode(window_size.width, window_size.height), name);
@@ -40,65 +39,54 @@ void Renderer::deinit() { window.close(); }
 
 void Renderer::show() { window.display(); }
 
-MouseButton Renderer::get_mouse_button(sf::Mouse::Button button) {
+MouseButtonEvent::MouseButton Renderer::get_mouse_button(sf::Mouse::Button button) {
     switch (button) {
         case sf::Mouse::Left:
-            return MouseButton::LEFT;
+            return MouseButtonEvent::MouseButton::LEFT;
         case sf::Mouse::Right:
-            return MouseButton::RIGHT;
+            return MouseButtonEvent::MouseButton::RIGHT;
         case sf::Mouse::Middle:
-            return MouseButton::MIDDLE;
+            return MouseButtonEvent::MouseButton::MIDDLE;
         default:
-            return UNDEFINED_BUTTON;
+            return MouseButtonEvent::MouseButton::UNDEFINED_BUTTON;
     }
 }
 
-MouseButtonEvent Renderer::translateMouseEvent(
-    sf::Event::MouseButtonEvent sf_mouse_data) {
-    Position pos(sf_mouse_data.x, sf_mouse_data.y);
-    MouseButton button = Renderer::get_mouse_button(sf_mouse_data.button);
-    MouseButtonEvent mouse_event_data = {pos, button};
+Event* Renderer::translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
+                                     MouseButtonEvent::Action action) {
 
-    return mouse_event_data;
+    Position pos(sf_mouse_data.x, sf_mouse_data.y);
+    MouseButtonEvent::MouseButton button =
+        Renderer::get_mouse_button(sf_mouse_data.button);
+
+    MouseButtonEvent* event = new MouseButtonEvent(pos, button, action);
+
+    return event;
 }
 
-bool Renderer::poll_event(Event& event) {
+Event* Renderer::poll_event() {
     sf::Event sf_event;
 
-    if (!window.pollEvent(sf_event)) return false;
+    if (!window.pollEvent(sf_event)) return nullptr;
 
     switch (sf_event.type) {
         case sf::Event::Closed: {
-            event.type = WINDOW_CLOSED;
-            break;
+            return new WindowClosedEvent();
         }
         case sf::Event::MouseButtonPressed: {
-            event.type = MOUSE_BUTTON_PRESSED;
-            event.mouse_button_event =
-                Renderer::translateMouseEvent(sf_event.mouseButton);
-            break;
+            return Renderer::translateMouseEvent(sf_event.mouseButton, MouseButtonEvent::Action::PRESSED);
         }
 
         case sf::Event::MouseButtonReleased: {
-            event.type = MOUSE_BUTTON_RELEASED;
-            event.mouse_button_event =
-                Renderer::translateMouseEvent(sf_event.mouseButton);
-            break;
+            return Renderer::translateMouseEvent(sf_event.mouseButton, MouseButtonEvent::Action::RELEASED);
         }
 
         case sf::Event::MouseMoved: {
-            event.type = MOUSE_MOVED;
             Position pos(sf_event.mouseMove.x, sf_event.mouseMove.y);
-            event.mouse_move_event = {pos};
-            break;
-        }
-
-        default: {
-            Event undefined_event = {UNDEFINED_EVENT};
-            break;
+            return new MouseMoveEvent(pos);
         }
     }
 
-    return true;
+    return nullptr;
 }
 

@@ -1,19 +1,23 @@
 #include "app.hpp"
+#include <cstdio>
 
 std::unique_ptr<Window> App::root_window;
 
 void App::run() {
-    Event event = {};
+    Event* event = nullptr;
 
     // TODO timer event generation
     while(true) {
-        while(Renderer::poll_event(event)) {
+        event = Renderer::poll_event();
+        while(event) {
             EventQueue::add_event(event);
+            event = Renderer::poll_event();
         }
         
         while(!EventQueue::empty()) {
             event = EventQueue::get_event();
             root_window->handle_event(event);
+            delete event;
         }
 
         root_window->render();

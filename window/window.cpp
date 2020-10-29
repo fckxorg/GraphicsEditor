@@ -16,7 +16,7 @@ void Window::add_child_window(std::unique_ptr<Window>& child) {
 
 Window::~Window() = default;
 
-void Window::handle_event(Event& event) {
+void Window::handle_event(Event* event) {
     for (auto& subwindow : subwindows) {
         subwindow->handle_event(event);
     }
@@ -74,8 +74,8 @@ RectButton::RectButton(Size size, Position pos, Color color)
 
 void RectButton::render() { RectWindow::render(); }
 
-void RectButton::onMousePress(Event& event) {
-    Position click_position = event.mouse_button_event.pos;
+void RectButton::onMousePress(MouseButtonEvent* event) {
+    Position click_position = event->pos;
     if (!is_point_inside(click_position)) return;
 
     Color curr_color = RectWindow::get_color();
@@ -89,16 +89,21 @@ void RectButton::onMousePress(Event& event) {
     this->color = pressed_color;
 }
 
-void RectButton::onMouseRelease(Event& event) { this->color = default_color; }
+void RectButton::onMouseRelease(MouseButtonEvent* event) {
+    this->color = default_color;
+}
 
-void RectButton::handle_event(Event& event) {
-    switch (event.type) {
-        case MOUSE_BUTTON_PRESSED:
-            RectButton::onMousePress(event);
-            break;
-        case MOUSE_BUTTON_RELEASED:
-            RectButton::onMouseRelease(event);
-            break;
+void RectButton::handle_event(Event* event) {
+    if (event->get_type() == SYSTEM_EVENT::MOUSE_BUTTON) {
+        auto mouse_button_event = dynamic_cast<MouseButtonEvent*>(event);
+
+        if (mouse_button_event->action == MouseButtonEvent::Action::PRESSED) {
+            onMousePress(mouse_button_event);
+        }
+
+        if (mouse_button_event->action == MouseButtonEvent::Action::RELEASED) {
+            onMouseRelease(mouse_button_event);
+        }
     }
 
     Window::handle_event(event);
@@ -150,24 +155,34 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
       horizontal(horizontal),
       last_mouse_pos(pos) {}
 
-void Slider::handle_event(Event& event) {
-    switch (event.type) {
-        case MOUSE_BUTTON_PRESSED:
-            onMousePress(event);
+void Slider::handle_event(Event* event) {
+    switch (event->get_type()) {
+        case MOUSE_BUTTON: {
+            auto mouse_button_event = dynamic_cast<MouseButtonEvent*>(event);
+
+            if (mouse_button_event->action ==
+                MouseButtonEvent::Action::PRESSED) {
+                onMousePress(mouse_button_event);
+            }
+
+            if (mouse_button_event->action ==
+                MouseButtonEvent::Action::RELEASED) {
+                onMouseRelease(mouse_button_event);
+            }
             break;
-        case MOUSE_BUTTON_RELEASED:
-            onMouseRelease(event);
-            break;
-        case MOUSE_MOVED:
-            onMouseMove(event);
+        }
+
+        case MOUSE_MOVE:
+            auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
+            onMouseMove(mouse_move_event);
             break;
     }
 
     Window::handle_event(event);
 }
 
-void Slider::onMousePress(Event& event) {
-    Position click_position = event.mouse_button_event.pos;
+void Slider::onMousePress(MouseButtonEvent* event) {
+    Position click_position = event->pos;
     if (!is_point_inside(click_position)) return;
 
     Color curr_color = RectWindow::get_color();
@@ -183,9 +198,9 @@ void Slider::onMousePress(Event& event) {
     last_mouse_pos = click_position;
 }
 
-void Slider::onMouseMove(Event& event) {
+void Slider::onMouseMove(MouseMoveEvent* event) {
     if (!pressed) return;
-    Position mouse_position = event.mouse_move_event.pos;
+    Position mouse_position = event->pos;
 
     int delta_x = mouse_position.x - last_mouse_pos.x;
     int delta_y = mouse_position.y - last_mouse_pos.y;
@@ -211,11 +226,10 @@ void Slider::onMouseMove(Event& event) {
     this->pos = new_pos;
 }
 
-void Slider::onMouseRelease(Event& event) {
+void Slider::onMouseRelease(MouseButtonEvent* event) {
     this->color = default_color;
     pressed = false;
 }
-
 
 /*---------------------------------------*/
 /*             Scrollbar                 */

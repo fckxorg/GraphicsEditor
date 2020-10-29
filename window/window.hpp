@@ -33,7 +33,7 @@ class Window {
 
     void set_event_mask(uint32_t mask);
     void add_child_window(std::unique_ptr<Window>& child);
-    virtual void handle_event(Event& event);
+    virtual void handle_event(Event* event);
     virtual void render() = 0;
 };
 
@@ -109,14 +109,14 @@ class RectButton : public RectWindow {
     virtual void render() override;
     RectButton(Size size, Position pos, Color color);
 
-    virtual void handle_event(Event& event) override;
+    virtual void handle_event(Event* event) override;
 
     bool check_boundaries(Position click_pos);
 
     void on_hover();
 
-    virtual void onMousePress(Event& event);
-    virtual void onMouseRelease(Event& event);
+    virtual void onMousePress(MouseButtonEvent* event);
+    virtual void onMouseRelease(MouseButtonEvent* event);
 };
 
 class Slider : public RectWindow {
@@ -134,11 +134,11 @@ class Slider : public RectWindow {
         Slider();
         ~Slider();
         Slider(Size size, Position pos, Color color, uint16_t lower_bound, uint16_t upper_bound, bool horizontal=false);
-        virtual void onMousePress(Event& event);
-        virtual void onMouseRelease(Event& event);
-        virtual void onMouseMove(Event& event);
+        virtual void onMousePress(MouseButtonEvent* event);
+        virtual void onMouseRelease(MouseButtonEvent* event);
+        virtual void onMouseMove(MouseMoveEvent* event);
 
-        virtual void handle_event(Event& event);
+        virtual void handle_event(Event* event);
 };
 
 

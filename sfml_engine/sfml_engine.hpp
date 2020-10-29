@@ -23,8 +23,8 @@ class Renderer {
 
     static std::unordered_map<const char*, sf::Font> fonts;
 
-    static MouseButton get_mouse_button(sf::Mouse::Button);
-    static MouseButtonEvent translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data);
+    static MouseButtonEvent::MouseButton get_mouse_button(sf::Mouse::Button);
+    static Event* translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data, MouseButtonEvent::Action action);
 
     Renderer();
 
@@ -36,6 +36,6 @@ class Renderer {
     static void show();
     static void deinit();
 
-    static bool poll_event(Event& event);
+    static Event* poll_event();
 };
 #endif
