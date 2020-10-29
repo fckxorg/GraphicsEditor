@@ -12,17 +12,16 @@ class Event {
     uint32_t type;
 
    public:
-    uint32_t get_type() {
-        return type;
-    }
+    uint32_t get_type();
+    Event();
 
-    Event(uint32_t type) : type(type) {}
-    virtual ~Event() = default;
+    Event(uint32_t type);
+    virtual ~Event();
 };
 
 class WindowClosedEvent : public Event {
     public:
-        WindowClosedEvent() : Event(WINDOW_CLOSED) {}
+        WindowClosedEvent();
 };
 
 class MouseButtonEvent : public Event {
@@ -32,14 +31,14 @@ class MouseButtonEvent : public Event {
     Position pos;
     MouseButton button;
     Action action;
-    MouseButtonEvent(Position pos, MouseButton button, Action action) : Event(MOUSE_BUTTON), pos(pos), button(button), action(action) {}
+    MouseButtonEvent(Position pos, MouseButton button, Action action);
 };
 
 class MouseMoveEvent : public Event {
    public:
     Position pos;
 
-    MouseMoveEvent(Position pos) : Event(MOUSE_MOVE), pos(pos){}
+    MouseMoveEvent(Position pos);
 };
 
 #endif
