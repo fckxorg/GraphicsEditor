@@ -10,6 +10,7 @@
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
+#include "../window_base/window_base.hpp"
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"
@@ -27,24 +28,6 @@ class InterfaceClickable {
         virtual ~InterfaceClickable();
 };
 
-
-class Window {
-   protected:
-    uint32_t event_mask;
-
-   public:
-    std::list<std::unique_ptr<Window>> subwindows;
-
-    Window();
-    virtual ~Window();
-
-    bool is_opened() const;
-
-    void set_event_mask(uint32_t mask);
-    void add_child_window(std::unique_ptr<Window>& child);
-    virtual void handle_event(Event* event);
-    virtual void render() = 0;
-};
 
 class RenderWindow : public Window {
    protected:
