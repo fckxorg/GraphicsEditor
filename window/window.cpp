@@ -2,7 +2,9 @@
 
 #include <bits/stdint-uintn.h>
 
-/*--------------- WINDOW ---------------------*/
+/*---------------------------------------*/
+/*              Window                   */
+/*---------------------------------------*/
 
 Window::Window() = default;
 
@@ -20,12 +22,13 @@ void Window::handle_event(Event& event) {
     }
 }
 
-/*----------- RENDER WINDOW ----------------*/
+/*---------------------------------------*/
+/*            RenderWindow               */
+/*---------------------------------------*/
 
 RenderWindow::RenderWindow() = default;
 RenderWindow::~RenderWindow() = default;
 RenderWindow::RenderWindow(Size size, Position pos) : size(size), pos(pos) {}
-
 
 void RenderWindow::set_pos(Position pos) { this->pos = pos; }
 Position RenderWindow::get_position() const { return pos; }
@@ -36,12 +39,14 @@ void RenderWindow::set_rotation(const float rotation) {
 float RenderWindow::get_rotation() const { return rotation; }
 
 void RenderWindow::render() {
-    for(auto& subwindow : subwindows) {
+    for (auto& subwindow : subwindows) {
         subwindow->render();
     }
 }
 
-/*---------- RECT WINDOW -------------------*/
+/*---------------------------------------*/
+/*              RectWindow               */
+/*---------------------------------------*/
 
 RectWindow::RectWindow() = default;
 RectWindow::~RectWindow() = default;
@@ -57,16 +62,17 @@ void RectWindow::set_color(Color color) { this->color = color; }
 
 Color RectWindow::get_color() { return color; }
 
-/* --------- RECT BUTTON -------------------*/
+/*---------------------------------------*/
+/*              RectButton               */
+/*---------------------------------------*/
+
 RectButton::RectButton() = default;
 RectButton::~RectButton() = default;
 
 RectButton::RectButton(Size size, Position pos, Color color)
     : RectWindow(size, pos, color), default_color(color) {}
 
-void RectButton::render() {
-    RectWindow::render();
-}
+void RectButton::render() { RectWindow::render(); }
 
 void RectButton::onMousePress(Event& event) {
     Position click_position = event.mouse_button_event.pos;
@@ -94,7 +100,7 @@ void RectButton::handle_event(Event& event) {
             RectButton::onMouseRelease(event);
             break;
     }
-    
+
     Window::handle_event(event);
 }
 
@@ -105,7 +111,9 @@ bool RectWindow::is_point_inside(Position point) {
     return true;
 }
 
-/*--------------- TEXT WINDOW-----------------------------*/
+/*---------------------------------------*/
+/*              TextWindow               */
+/*---------------------------------------*/
 
 TextWindow::TextWindow() = default;
 TextWindow::TextWindow(Text text, Position pos, Color bgcolor)
@@ -126,8 +134,10 @@ void TextWindow::render() {
     RenderWindow::render();
 }
 
+/*---------------------------------------*/
+/*                Slider                 */
+/*---------------------------------------*/
 
-/*---------------- Slieder ------------------------------*/
 Slider::Slider() = default;
 Slider::~Slider() = default;
 Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
@@ -137,7 +147,8 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
       pressed(false),
       lower_bound(lower_bound),
       upper_bound(upper_bound),
-      horizontal(horizontal), last_mouse_pos(pos) {}
+      horizontal(horizontal),
+      last_mouse_pos(pos) {}
 
 void Slider::handle_event(Event& event) {
     switch (event.type) {
@@ -205,7 +216,10 @@ void Slider::onMouseRelease(Event& event) {
     pressed = false;
 }
 
-/*-------------------------- Scrollbar ---------------------------*/
+
+/*---------------------------------------*/
+/*             Scrollbar                 */
+/*---------------------------------------*/
 
 Scrollbar::Scrollbar() = default;
 Scrollbar::~Scrollbar() = default;
@@ -220,20 +234,27 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
 
     uint16_t slider_lower_boundary = 0;
     uint16_t slider_upper_boundary = 0;
-    
+
     if (horizontal) {
         button_size = {static_cast<uint8_t>(size.width * 0.1), size.height};
-        slider_size = {static_cast<uint8_t>(size.width * 0.3), size.height}; // TODO adaptive size
-        slider_default_position = {static_cast<uint16_t>(pos.x + button_size.width), pos.y};
-        bottom_button_pos = {static_cast<uint16_t>(pos.x + size.width * 0.9), pos.y};
-        
+        slider_size = {static_cast<uint8_t>(size.width * 0.3),
+                       size.height};  // TODO adaptive size
+        slider_default_position = {
+            static_cast<uint16_t>(pos.x + button_size.width), pos.y};
+        bottom_button_pos = {static_cast<uint16_t>(pos.x + size.width * 0.9),
+                             pos.y};
+
         slider_lower_boundary = slider_default_position.x;
         slider_upper_boundary = bottom_button_pos.x;
     } else {
         button_size = {size.width, static_cast<uint8_t>(size.height * 0.1)};
-        bottom_button_pos = {pos.x, static_cast<uint16_t>(pos.y + size.height * 0.9)};
-        slider_size = {size.width, static_cast<uint8_t>(size.height * 0.3)}; // TODO adaptive size
-        slider_default_position = {pos.x, static_cast<uint16_t>(pos.y + button_size.height)};
+        bottom_button_pos = {pos.x,
+                             static_cast<uint16_t>(pos.y + size.height * 0.9)};
+        slider_size = {
+            size.width,
+            static_cast<uint8_t>(size.height * 0.3)};  // TODO adaptive size
+        slider_default_position = {
+            pos.x, static_cast<uint16_t>(pos.y + button_size.height)};
 
         slider_lower_boundary = slider_default_position.y;
         slider_upper_boundary = bottom_button_pos.y;
@@ -243,13 +264,17 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
     uint8_t green_comp_color = color.g - 30;
     uint8_t blue_comp_color = color.b - 30;
 
-    Color controls_colors = Color(red_comp_color, green_comp_color, blue_comp_color);
+    Color controls_colors =
+        Color(red_comp_color, green_comp_color, blue_comp_color);
 
-    std::unique_ptr<Window> top_button(new RectButton(button_size, pos, controls_colors));
-    std::unique_ptr<Window> bottom_button(new RectButton(button_size, bottom_button_pos, controls_colors));
-    std::unique_ptr<Window> slider(new Slider(slider_size, slider_default_position, controls_colors, slider_lower_boundary, slider_upper_boundary, horizontal));
-    
-    
+    std::unique_ptr<Window> top_button(
+        new RectButton(button_size, pos, controls_colors));
+    std::unique_ptr<Window> bottom_button(
+        new RectButton(button_size, bottom_button_pos, controls_colors));
+    std::unique_ptr<Window> slider(
+        new Slider(slider_size, slider_default_position, controls_colors,
+                   slider_lower_boundary, slider_upper_boundary, horizontal));
+
     add_child_window(top_button);
     add_child_window(bottom_button);
     add_child_window(slider);
