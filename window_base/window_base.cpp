@@ -6,7 +6,6 @@
 
 Window::Window() = default;
 
-void Window::set_event_mask(uint32_t mask) { event_mask = mask; }
 
 void Window::add_child_window(std::unique_ptr<Window>& child) {
     subwindows.push_back(std::move(child));
@@ -14,10 +13,6 @@ void Window::add_child_window(std::unique_ptr<Window>& child) {
 
 Window::~Window() = default;
 
-void Window::handle_event(Event* event) {
-    for (auto& subwindow : subwindows) {
-        subwindow->handle_event(event);
-    }
-}
+void Window::handle_event(Event* event) {}
 
 

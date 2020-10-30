@@ -20,6 +20,21 @@ void InterfaceClickable::handle_mouse_button_event(Event* event) {
 
 InterfaceClickable::~InterfaceClickable() = default;
 
+
+/*---------------------------------------*/
+/*              RootWindow               */
+/*---------------------------------------*/
+void RootWindow::render() {
+    for (auto& subwindow : subwindows) {
+        subwindow->render();
+    }
+
+}
+void RootWindow::handle_event(Event* event) {
+    SubscriptionManager::send_event(this, event);
+};
+
+
 /*---------------------------------------*/
 /*            RenderWindow               */
 /*---------------------------------------*/
@@ -95,8 +110,6 @@ void RectButton::handle_event(Event* event) {
     if (event->get_type() == SYSTEM_EVENT::MOUSE_BUTTON) {
         handle_mouse_button_event(event);
     }
-
-    Window::handle_event(event);
 }
 
 bool RectWindow::is_point_inside(Position point) {
@@ -157,8 +170,6 @@ void Slider::handle_event(Event* event) {
             onMouseMove(mouse_move_event);
             break;
     }
-
-    Window::handle_event(event);
 }
 
 void Slider::onMousePress(MouseButtonEvent* event) {
@@ -217,6 +228,12 @@ void Slider::onMouseRelease(MouseButtonEvent* event) {
 
 Scrollbar::Scrollbar() = default;
 Scrollbar::~Scrollbar() = default;
+
+void Scrollbar::handle_event(Event* event) {
+    for(auto& subwindow : subwindows) {
+        subwindow->handle_event(event);
+    }
+}
 
 Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
     : RectWindow(size, pos, color), horizontal(horizontal) {

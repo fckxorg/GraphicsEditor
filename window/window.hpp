@@ -11,6 +11,7 @@
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 #include "../window_base/window_base.hpp"
+#include "../subscription_manager/subscription_manager.hpp"
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"
@@ -26,6 +27,12 @@ class InterfaceClickable {
         virtual void onMousePress(MouseButtonEvent* event) = 0;
         virtual void onMouseRelease(MouseButtonEvent* event) = 0;
         virtual ~InterfaceClickable();
+};
+
+class RootWindow : public Window {
+    public:
+        virtual void render();
+        virtual void handle_event(Event* event);
 };
 
 
@@ -140,7 +147,8 @@ class Scrollbar : public RectWindow {
    public:
     Scrollbar();
     ~Scrollbar();
-
+    
+    void handle_event(Event* event) override;
     Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
 };
 

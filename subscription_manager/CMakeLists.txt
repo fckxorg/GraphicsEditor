@@ -1,0 +1,2 @@
+add_library(subscription_manager subscription_manager.hpp subscription_manager.cpp)
+set_target_properties(subscription_manager PROPERTIES LINKER_LANGUAGE CXX)
