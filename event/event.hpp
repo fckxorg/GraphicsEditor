@@ -5,7 +5,7 @@
 
 #include "../data_classes/data_classes.hpp"
 
-enum SYSTEM_EVENT { MOUSE_BUTTON, MOUSE_MOVE, WINDOW_CLOSED };
+enum SYSTEM_EVENT { MOUSE_BUTTON, MOUSE_MOVE, WINDOW_CLOSED, BUTTON_PRESSED };
 
 class Event {
    private:
@@ -20,8 +20,8 @@ class Event {
 };
 
 class WindowClosedEvent : public Event {
-    public:
-        WindowClosedEvent();
+   public:
+    WindowClosedEvent();
 };
 
 class MouseButtonEvent : public Event {
@@ -39,6 +39,12 @@ class MouseMoveEvent : public Event {
     Position pos;
 
     MouseMoveEvent(Position pos);
+};
+
+class ButtonPressEvent : public Event {
+   public:
+    uint32_t value;
+    ButtonPressEvent(uint32_t value);
 };
 
 #endif

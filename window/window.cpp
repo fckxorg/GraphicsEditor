@@ -20,7 +20,6 @@ void InterfaceClickable::handle_mouse_button_event(Event* event) {
 
 InterfaceClickable::~InterfaceClickable() = default;
 
-
 /*---------------------------------------*/
 /*              RootWindow               */
 /*---------------------------------------*/
@@ -28,12 +27,10 @@ void RootWindow::render() {
     for (auto& subwindow : subwindows) {
         subwindow->render();
     }
-
 }
 void RootWindow::handle_event(Event* event) {
     SubscriptionManager::send_event(this, event);
 };
-
 
 /*---------------------------------------*/
 /*            RenderWindow               */
@@ -82,8 +79,8 @@ Color RectWindow::get_color() { return color; }
 RectButton::RectButton() = default;
 RectButton::~RectButton() = default;
 
-RectButton::RectButton(Size size, Position pos, Color color)
-    : RectWindow(size, pos, color), default_color(color) {}
+RectButton::RectButton(Size size, Position pos, Color color, uint32_t value)
+    : RectWindow(size, pos, color), default_color(color), value(value) {}
 
 void RectButton::render() { RectWindow::render(); }
 
@@ -100,6 +97,7 @@ void RectButton::onMousePress(MouseButtonEvent* event) {
     Color pressed_color =
         Color(color_r_pressed, color_g_pressed, color_b_pressed);
     this->color = pressed_color;
+    SubscriptionManager::send_event(this, new ButtonPressEvent(value));
 }
 
 void RectButton::onMouseRelease(MouseButtonEvent* event) {
@@ -165,11 +163,48 @@ void Slider::handle_event(Event* event) {
             break;
         }
 
-        case MOUSE_MOVE:
+        case MOUSE_MOVE: {
             auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
             onMouseMove(mouse_move_event);
             break;
+        }
+
+        case BUTTON_PRESSED: {
+            auto button_press_event = dynamic_cast<ButtonPressEvent*>(event);
+
+            if (button_press_event->value == UP) {
+                onButtonUp();
+            }
+            else if (button_press_event->value == DOWN) {
+                onButtonDown();
+            }
+            break;
+        }
     }
+}
+
+void Slider::onButtonUp() {
+    if (horizontal) {
+        this->pos = Position(
+            std::max(static_cast<uint16_t>(pos.x - 10), lower_bound), pos.y);
+    }
+    else {
+        this->pos = Position(pos.x, std::max(static_cast<uint16_t>(pos.y - 10), lower_bound));
+    }
+
+    last_mouse_pos = pos;
+}
+
+void Slider::onButtonDown() {
+    if (horizontal) {
+        this->pos = Position(
+            std::min(static_cast<uint16_t>(pos.x + 10), static_cast<uint16_t>(upper_bound - size.width)), pos.y);
+    }
+    else {
+        this->pos = Position(pos.x, std::min(static_cast<uint16_t>(pos.y + 10), static_cast<uint16_t>(upper_bound - size.height)));
+    }
+
+    last_mouse_pos = pos;
 }
 
 void Slider::onMousePress(MouseButtonEvent* event) {
@@ -230,7 +265,7 @@ Scrollbar::Scrollbar() = default;
 Scrollbar::~Scrollbar() = default;
 
 void Scrollbar::handle_event(Event* event) {
-    for(auto& subwindow : subwindows) {
+    for (auto& subwindow : subwindows) {
         subwindow->handle_event(event);
     }
 }
@@ -279,12 +314,15 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
         Color(red_comp_color, green_comp_color, blue_comp_color);
 
     std::unique_ptr<Window> top_button(
-        new RectButton(button_size, pos, controls_colors));
+        new RectButton(button_size, pos, controls_colors, UP));
     std::unique_ptr<Window> bottom_button(
-        new RectButton(button_size, bottom_button_pos, controls_colors));
+        new RectButton(button_size, bottom_button_pos, controls_colors, DOWN));
     std::unique_ptr<Window> slider(
         new Slider(slider_size, slider_default_position, controls_colors,
                    slider_lower_boundary, slider_upper_boundary, horizontal));
+
+    SubscriptionManager::add_subscription(top_button.get(), slider.get());
+    SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
 
     add_child_window(top_button);
     add_child_window(bottom_button);

@@ -10,8 +10,8 @@
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
-#include "../window_base/window_base.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
+#include "../window_base/window_base.hpp"
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"
@@ -21,20 +21,21 @@
 #include "../sfml_engine/sfml_engine.hpp"
 #endif
 
+enum DIRECTION { UP, DOWN };
+
 class InterfaceClickable {
-    public:
-        void handle_mouse_button_event(Event* event);
-        virtual void onMousePress(MouseButtonEvent* event) = 0;
-        virtual void onMouseRelease(MouseButtonEvent* event) = 0;
-        virtual ~InterfaceClickable();
+   public:
+    void handle_mouse_button_event(Event* event);
+    virtual void onMousePress(MouseButtonEvent* event) = 0;
+    virtual void onMouseRelease(MouseButtonEvent* event) = 0;
+    virtual ~InterfaceClickable();
 };
 
 class RootWindow : public Window {
-    public:
-        virtual void render();
-        virtual void handle_event(Event* event);
+   public:
+    virtual void render();
+    virtual void handle_event(Event* event);
 };
-
 
 class RenderWindow : public Window {
    protected:
@@ -100,13 +101,14 @@ class TextWindow : public RenderWindow {
 class RectButton : public RectWindow, public InterfaceClickable {
    private:
     Color default_color;
+    uint32_t value;
 
    public:
     RectButton();
     ~RectButton();
 
     virtual void render() override;
-    RectButton(Size size, Position pos, Color color);
+    RectButton(Size size, Position pos, Color color, uint32_t value = 0);
 
     virtual void handle_event(Event* event) override;
 
@@ -128,6 +130,7 @@ class Slider : public RectWindow, public InterfaceClickable {
 
     bool check_boundaries(Position click_pos);
 
+
    public:
     Slider();
     ~Slider();
@@ -136,6 +139,9 @@ class Slider : public RectWindow, public InterfaceClickable {
     virtual void onMousePress(MouseButtonEvent* event);
     virtual void onMouseRelease(MouseButtonEvent* event);
     virtual void onMouseMove(MouseMoveEvent* event);
+
+    void onButtonUp();
+    void onButtonDown();
 
     virtual void handle_event(Event* event);
 };
@@ -147,7 +153,7 @@ class Scrollbar : public RectWindow {
    public:
     Scrollbar();
     ~Scrollbar();
-    
+
     void handle_event(Event* event) override;
     Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
 };

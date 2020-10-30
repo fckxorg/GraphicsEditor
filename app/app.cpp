@@ -17,7 +17,6 @@ void App::run() {
         while(!EventQueue::empty()) {
             event = EventQueue::get_event();
             root_window->handle_event(event);
-            delete event;
         }
 
         root_window->render();
