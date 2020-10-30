@@ -27,7 +27,6 @@ void SubscriptionManager::unsubscribe_from_all(Window* recipient) {
 }
 
 void SubscriptionManager::send_event(Window* sender, Event* event) {
-    printf("Sending events to recipients from %p\n", sender);
     for (auto& recipient : subscriptions[sender]) {
         recipient->handle_event(event);
     }
