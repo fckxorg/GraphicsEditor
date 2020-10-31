@@ -61,11 +61,12 @@ struct Position {
 struct Text {
     const char* text;
     uint16_t character_size;
+    float line_spacing;
     const char* font_path;
     Color color;
     
     Text();
-    Text(const char* text, uint16_t character_size, const char* font_path, Color color);
+    Text(const char* text, uint16_t character_size, const char* font_path, Color color, float line_spacing = 1);
 
     void set_text(const char* text);
     const char* get_text() const;

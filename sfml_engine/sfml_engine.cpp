@@ -34,6 +34,7 @@ void Renderer::draw_text(Text text, Position pos, Color bg_color) {
     sf::Text sfml_text(text.get_text(), fonts[text.get_font()],
                        text.get_character_size());
     sfml_text.setPosition(pos);
+    sfml_text.setLineSpacing(text.line_spacing);
     sfml_text.setFillColor(text.get_color());
 
     window.draw(sfml_text);
@@ -52,6 +53,7 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
                        text.get_character_size());
     sfml_text.setPosition(relative_offset);
     sfml_text.setFillColor(text.get_color());
+    sfml_text.setLineSpacing(text.line_spacing);
 
     sf::RenderTexture viewport_texture;
     viewport_texture.create(size.width, size.height);

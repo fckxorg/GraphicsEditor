@@ -26,22 +26,15 @@ int main() {
     std::unique_ptr<Window> root_window(new RootWindow());    
     std::unique_ptr<Window> window (new RectWindow(Size(1920, 900), Position(0, 0), Color(255, 255, 255)));
   
-    Text button_text = {"Test\nwith more than\none str", 12, roboto_font_path, Color(255, 0, 0)};
     Text scroll_test = {text_buffer.get(), 18, roboto_font_path, Color(0, 0, 0)};
 
-    std::unique_ptr<Window> button_text_window(new TextWindow(button_text, Position(765, 333), Color(0, 240, 255)));
+    std::unique_ptr<Window> scrollable_text(new ScrollableText(Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
 
-    std::unique_ptr<Window> test_button(new RectButton(Size(100, 40), Position(765, 333), Color(0, 240, 255)));
-    std::unique_ptr<Window> scrollable_text(new ScrollableText(Size(380, 400), Position(10, 400), Color(0, 240, 255), scroll_test));
-    test_button->add_child_window(button_text_window);
-
-    std::unique_ptr<Window> scrollbar(new Scrollbar(Size(30, 400), Position(400, 400), Color(245, 245, 245), false));
+    std::unique_ptr<Window> scrollbar(new Scrollbar(Size(30, 400), Position(480, 100), Color(245, 245, 245), false));
     
     // should be subscribed before ownership moves to window in hieararchy
-    SubscriptionManager::add_subscription(root_window.get(), test_button.get());
     SubscriptionManager::add_subscription(root_window.get(), scrollbar.get());
 
-    window->add_child_window(test_button);
     window->add_child_window(scrollbar);
     window->add_child_window(scrollable_text);
 
