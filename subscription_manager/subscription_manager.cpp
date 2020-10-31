@@ -1,13 +1,10 @@
 #include "subscription_manager.hpp"
 
-#include <cstdio>
-
 std::unordered_map<Window*, std::unordered_set<Window*>>
     SubscriptionManager::subscriptions;
 
 void SubscriptionManager::add_subscription(Window* sender, Window* recipient) {
     subscriptions[sender].insert(recipient);
-    fprintf(stderr, "Subscribed %p to %p\n", recipient, sender);
 }
 
 void SubscriptionManager::unsubscribe(Window* sender, Window* recipient) {

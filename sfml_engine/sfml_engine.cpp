@@ -1,7 +1,11 @@
 #include "sfml_engine.hpp"
 
-#include <unordered_map>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <stdio.h>
+
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <unordered_map>
 
 sf::RenderWindow Renderer::window;
 std::unordered_map<const char*, sf::Font> Renderer::fonts;
@@ -35,11 +39,41 @@ void Renderer::draw_text(Text text, Position pos, Color bg_color) {
     window.draw(sfml_text);
 }
 
+void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
+                                    Color color, Position relative_offset,
+                                    uint16_t n_lines) {
+    if (!fonts.contains(text.get_font())) {
+        sf::Font new_font;
+        new_font.loadFromFile(text.get_font());
+        fonts[text.get_font()] = new_font;
+    }
+
+    sf::Text sfml_text(text.get_text(), fonts[text.get_font()],
+                       text.get_character_size());
+    sfml_text.setPosition(relative_offset);
+    sfml_text.setFillColor(text.get_color());
+
+    sf::RenderTexture viewport_texture;
+    viewport_texture.create(size.width, size.height);
+    viewport_texture.clear(sf::Color::White);
+    
+    viewport_texture.draw(sfml_text);
+    viewport_texture.display();
+
+
+    sf::Sprite viewport_sprite;
+    viewport_sprite.setTexture(viewport_texture.getTexture());
+    viewport_sprite.setPosition(pos);
+    window.draw(viewport_sprite);
+
+}
+
 void Renderer::deinit() { window.close(); }
 
 void Renderer::show() { window.display(); }
 
-MouseButtonEvent::MouseButton Renderer::get_mouse_button(sf::Mouse::Button button) {
+MouseButtonEvent::MouseButton Renderer::get_mouse_button(
+    sf::Mouse::Button button) {
     switch (button) {
         case sf::Mouse::Left:
             return MouseButtonEvent::MouseButton::LEFT;
@@ -54,7 +88,6 @@ MouseButtonEvent::MouseButton Renderer::get_mouse_button(sf::Mouse::Button butto
 
 Event* Renderer::translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
                                      MouseButtonEvent::Action action) {
-
     Position pos(sf_mouse_data.x, sf_mouse_data.y);
     MouseButtonEvent::MouseButton button =
         Renderer::get_mouse_button(sf_mouse_data.button);
@@ -74,11 +107,13 @@ Event* Renderer::poll_event() {
             return new WindowClosedEvent();
         }
         case sf::Event::MouseButtonPressed: {
-            return Renderer::translateMouseEvent(sf_event.mouseButton, MouseButtonEvent::Action::PRESSED);
+            return Renderer::translateMouseEvent(
+                sf_event.mouseButton, MouseButtonEvent::Action::PRESSED);
         }
 
         case sf::Event::MouseButtonReleased: {
-            return Renderer::translateMouseEvent(sf_event.mouseButton, MouseButtonEvent::Action::RELEASED);
+            return Renderer::translateMouseEvent(
+                sf_event.mouseButton, MouseButtonEvent::Action::RELEASED);
         }
 
         case sf::Event::MouseMoved: {

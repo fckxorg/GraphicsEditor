@@ -174,8 +174,7 @@ void Slider::handle_event(Event* event) {
 
             if (button_press_event->value == UP) {
                 onButtonUp();
-            }
-            else if (button_press_event->value == DOWN) {
+            } else if (button_press_event->value == DOWN) {
                 onButtonDown();
             }
             break;
@@ -187,9 +186,9 @@ void Slider::onButtonUp() {
     if (horizontal) {
         this->pos = Position(
             std::max(static_cast<uint16_t>(pos.x - 10), lower_bound), pos.y);
-    }
-    else {
-        this->pos = Position(pos.x, std::max(static_cast<uint16_t>(pos.y - 10), lower_bound));
+    } else {
+        this->pos = Position(
+            pos.x, std::max(static_cast<uint16_t>(pos.y - 10), lower_bound));
     }
 
     last_mouse_pos = pos;
@@ -197,11 +196,14 @@ void Slider::onButtonUp() {
 
 void Slider::onButtonDown() {
     if (horizontal) {
+        this->pos =
+            Position(std::min(static_cast<uint16_t>(pos.x + 10),
+                              static_cast<uint16_t>(upper_bound - size.width)),
+                     pos.y);
+    } else {
         this->pos = Position(
-            std::min(static_cast<uint16_t>(pos.x + 10), static_cast<uint16_t>(upper_bound - size.width)), pos.y);
-    }
-    else {
-        this->pos = Position(pos.x, std::min(static_cast<uint16_t>(pos.y + 10), static_cast<uint16_t>(upper_bound - size.height)));
+            pos.x, std::min(static_cast<uint16_t>(pos.y + 10),
+                            static_cast<uint16_t>(upper_bound - size.height)));
     }
 
     last_mouse_pos = pos;
@@ -328,3 +330,16 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
     add_child_window(bottom_button);
     add_child_window(slider);
 }
+
+/*---------------------------------------*/
+/*             ScrollableText            */
+/*---------------------------------------*/
+
+ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text) : RectWindow(viewport_size, pos, bg_color), text(text), offset(0, 0){
+    n_lines = 3;
+}
+
+void ScrollableText::render() {
+    Renderer::draw_scrollable_text(text, size, pos, color, offset, n_lines);
+}
+

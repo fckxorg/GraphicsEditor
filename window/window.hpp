@@ -148,14 +148,25 @@ class Slider : public RectWindow, public InterfaceClickable {
 
 class Scrollbar : public RectWindow {
    private:
-    bool horizontal;
-
+    bool horizontal;    
    public:
     Scrollbar();
     ~Scrollbar();
 
     void handle_event(Event* event) override;
     Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
+};
+
+
+class ScrollableText : public RectWindow {
+    private:
+        Text text;  
+        Position offset;
+        uint16_t n_lines;
+    public:
+
+        ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text);
+        virtual void render() override;
 };
 
 #endif
