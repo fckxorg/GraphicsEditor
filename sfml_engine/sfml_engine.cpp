@@ -41,8 +41,7 @@ void Renderer::draw_text(Text text, Position pos, Color bg_color) {
 }
 
 void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
-                                    Color color, Position relative_offset,
-                                    uint16_t n_lines) {
+                                    Color color, int16_t relative_offset) {
     if (!fonts.contains(text.get_font())) {
         sf::Font new_font;
         new_font.loadFromFile(text.get_font());
@@ -51,7 +50,7 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
 
     sf::Text sfml_text(text.get_text(), fonts[text.get_font()],
                        text.get_character_size());
-    sfml_text.setPosition(relative_offset);
+    sfml_text.setPosition(0, relative_offset);
     sfml_text.setFillColor(text.get_color());
     sfml_text.setLineSpacing(text.line_spacing);
 

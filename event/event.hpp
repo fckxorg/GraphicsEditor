@@ -16,6 +16,7 @@ class Event {
     Event();
 
     Event(uint32_t type);
+    Event(const Event& event);
     virtual ~Event();
 };
 

@@ -177,6 +177,8 @@ void Slider::handle_event(Event* event) {
             } else if (button_press_event->value == DOWN) {
                 onButtonDown();
             }
+
+            SubscriptionManager::send_event(this, new ButtonPressEvent(button_press_event->value));
             break;
         }
     }
@@ -230,27 +232,28 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
     if (!pressed) return;
     Position mouse_position = event->pos;
 
-    int delta_x = mouse_position.x - last_mouse_pos.x;
-    int delta_y = mouse_position.y - last_mouse_pos.y;
+    int delta = 0;
 
-    last_mouse_pos = mouse_position;
 
     Position new_pos = {};
 
     if (horizontal) {
+        delta = mouse_position.x - last_mouse_pos.x;
         int adjusted_upper_bound = std::max(upper_bound - size.width, 0);
-        new_pos.x = std::min(pos.x + delta_x, adjusted_upper_bound);
+        new_pos.x = std::min(pos.x + delta, adjusted_upper_bound);
         new_pos.x = std::max(new_pos.x, lower_bound);
 
         new_pos.y = pos.y;
     } else {
+        delta = mouse_position.y - last_mouse_pos.y;
         int adjusted_upper_bound = std::max(upper_bound - size.height, 0);
-        new_pos.y = std::min(pos.y + delta_y, adjusted_upper_bound);
+        new_pos.y = std::min(pos.y + delta, adjusted_upper_bound);
         new_pos.y = std::max(new_pos.y, lower_bound);
 
         new_pos.x = pos.x;
     }
 
+    last_mouse_pos = mouse_position;
     this->pos = new_pos;
 }
 
@@ -325,6 +328,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
 
     SubscriptionManager::add_subscription(top_button.get(), slider.get());
     SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
+    
+    slider_ptr = slider.get();
 
     add_child_window(top_button);
     add_child_window(bottom_button);
@@ -335,11 +340,34 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
 /*             ScrollableText            */
 /*---------------------------------------*/
 
-ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text) : RectWindow(viewport_size, pos, bg_color), text(text), offset(0, 0){
-    n_lines = 3;
-}
+ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
+                               Text text)
+    : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {}
 
 void ScrollableText::render() {
-    Renderer::draw_scrollable_text(text, size, pos, color, offset, n_lines);
+    Renderer::draw_scrollable_text(text, size, pos, color, offset);
+}
+
+void ScrollableText::handle_event(Event* event) {
+    printf("Got an event\n");
+    switch (event->get_type()) {
+        case BUTTON_PRESSED:
+            auto button_press_event = dynamic_cast<ButtonPressEvent*>(event);
+            if (button_press_event->value == UP) {
+                onButtonUp();
+            } else if (button_press_event->value == DOWN) {
+                onButtonDown();
+            }
+            break;
+    }
+}
+
+void ScrollableText::onButtonDown() {
+    offset -= 10;
+}
+
+void ScrollableText::onButtonUp() {
+    if(offset == 0) return;
+    offset += 10;
 }
 

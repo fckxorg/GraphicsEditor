@@ -28,5 +28,5 @@ void SubscriptionManager::send_event(Window* sender, Event* event) {
         recipient->handle_event(event);
     }
 
-    delete event;
+    //delete event; //TODO fix this
 }

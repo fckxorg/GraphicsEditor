@@ -34,6 +34,7 @@ int main() {
     
     // should be subscribed before ownership moves to window in hieararchy
     SubscriptionManager::add_subscription(root_window.get(), scrollbar.get());
+    SubscriptionManager::add_subscription(dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, scrollable_text.get());
 
     window->add_child_window(scrollbar);
     window->add_child_window(scrollable_text);

@@ -150,6 +150,7 @@ class Scrollbar : public RectWindow {
    private:
     bool horizontal;    
    public:
+    Window* slider_ptr;
     Scrollbar();
     ~Scrollbar();
 
@@ -161,12 +162,16 @@ class Scrollbar : public RectWindow {
 class ScrollableText : public RectWindow {
     private:
         Text text;  
-        Position offset;
-        uint16_t n_lines;
+        int16_t offset;
     public:
-
+        
         ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text);
         virtual void render() override;
+
+        void handle_event(Event* event) override;
+
+        void onButtonUp();
+        void onButtonDown();
 };
 
 #endif
