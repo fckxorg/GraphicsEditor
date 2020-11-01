@@ -1,7 +1,5 @@
 #include "app.hpp"
 
-#include <cstdio>
-
 std::unique_ptr<Window> App::root_window;
 
 void App::run() {
