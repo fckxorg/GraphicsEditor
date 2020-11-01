@@ -2,6 +2,8 @@
 
 #include <bits/stdint-uintn.h>
 
+#include <cstdio>
+
 /*---------------------------------------*/
 /*         Interface Clickable           */
 /*---------------------------------------*/
@@ -147,14 +149,15 @@ void TextWindow::render() {
 Slider::Slider() = default;
 Slider::~Slider() = default;
 Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
-               uint16_t upper_bound, bool horizontal)
+               uint16_t upper_bound, uint16_t step, bool horizontal)
     : RectWindow(size, pos, color),
       default_color(color),
       pressed(false),
       lower_bound(lower_bound),
       upper_bound(upper_bound),
       horizontal(horizontal),
-      last_mouse_pos(pos) {}
+      last_mouse_pos(pos),
+      step(step) {}
 
 void Slider::handle_event(Event* event) {
     switch (event->get_type()) {
@@ -188,10 +191,10 @@ void Slider::handle_event(Event* event) {
 void Slider::onButtonUp() {
     if (horizontal) {
         this->pos = Position(
-            std::max(static_cast<uint16_t>(pos.x - 10), lower_bound), pos.y);
+            std::max(static_cast<uint16_t>(pos.x - step), lower_bound), pos.y);
     } else {
         this->pos = Position(
-            pos.x, std::max(static_cast<uint16_t>(pos.y - 10), lower_bound));
+            pos.x, std::max(static_cast<uint16_t>(pos.y - step), lower_bound));
     }
 
     last_mouse_pos = pos;
@@ -200,12 +203,12 @@ void Slider::onButtonUp() {
 void Slider::onButtonDown() {
     if (horizontal) {
         this->pos =
-            Position(std::min(static_cast<uint16_t>(pos.x + 10),
+            Position(std::min(static_cast<uint16_t>(pos.x + step),
                               static_cast<uint16_t>(upper_bound - size.width)),
                      pos.y);
     } else {
         this->pos = Position(
-            pos.x, std::min(static_cast<uint16_t>(pos.y + 10),
+            pos.x, std::min(static_cast<uint16_t>(pos.y + step),
                             static_cast<uint16_t>(upper_bound - size.height)));
     }
 
@@ -275,13 +278,15 @@ void Scrollbar::handle_event(Event* event) {
     }
 }
 
-Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size,
-                     bool horizontal)
+Scrollbar::Scrollbar(Size size, Position pos, Color color,
+                     uint16_t viewport_size, uint16_t scroll_block_size,
+                     uint16_t step, bool horizontal)
     : RectWindow(size, pos, color), horizontal(horizontal) {
     Size button_size = {};
 
     Position bottom_button_pos = {};
     Position slider_default_position = {};
+    Size slider_size = {};
 
     uint16_t slider_lower_boundary = 0;
     uint16_t slider_upper_boundary = 0;
@@ -295,6 +300,10 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size,
 
         slider_lower_boundary = slider_default_position.x;
         slider_upper_boundary = bottom_button_pos.x;
+        slider_size =
+            Size((static_cast<float>(viewport_size) / scroll_block_size) *
+                     size.width * 0.8,
+                 size.height);
     } else {
         button_size = {size.width, static_cast<uint8_t>(size.height * 0.1)};
         bottom_button_pos = {pos.x,
@@ -304,6 +313,15 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size,
 
         slider_lower_boundary = slider_default_position.y;
         slider_upper_boundary = bottom_button_pos.y;
+        slider_size = Size(size.width, (static_cast<float>(viewport_size) /
+                                        scroll_block_size) *
+                                           size.height * 0.8);
+    }
+
+    scroll_ratio = static_cast<float>(scroll_block_size) / static_cast<float>(slider_upper_boundary - slider_lower_boundary);
+
+    if(scroll_ratio < 1) {
+        scroll_ratio = 1;
     }
 
     uint8_t red_comp_color = color.r - 30;
@@ -319,7 +337,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size,
         new RectButton(button_size, bottom_button_pos, controls_colors, DOWN));
     std::unique_ptr<Window> slider(
         new Slider(slider_size, slider_default_position, controls_colors,
-                   slider_lower_boundary, slider_upper_boundary, horizontal));
+                   slider_lower_boundary, slider_upper_boundary,
+                   step / scroll_ratio, horizontal));
 
     SubscriptionManager::add_subscription(top_button.get(), slider.get());
     SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
@@ -338,14 +357,16 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size,
 ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
                                Text text)
     : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {
+    uint16_t n_lines = ScrollableText::get_nlines();
+    whole_block_height =
+        n_lines * (text.get_character_size() * text.line_spacing * 0.08 *
+                   text.get_character_size());
 
-    uint16_t n_lines = ScrollableText::get_nlines();    
-    whole_block_height = n_lines * (text.get_character_size() * text.line_spacing * 0.08 * text.get_character_size());
-
-    std::unique_ptr<Window> scrollbar(new Scrollbar(
-        Size(viewport_size.width * 0.07, viewport_size.height),
-        Position(pos.x + viewport_size.width, pos.y), Color(245, 245, 245),
-        Size(viewport_size.width * 0.07, 20), false));
+    std::unique_ptr<Window> scrollbar(
+        new Scrollbar(Size(viewport_size.width * 0.07, viewport_size.height),
+                      Position(pos.x + viewport_size.width, pos.y),
+                      Color(245, 245, 245), viewport_size.height,
+                      whole_block_height, text.get_character_size(), false));
     SubscriptionManager::add_subscription(
         dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, this);
     add_child_window(scrollbar);
@@ -373,15 +394,16 @@ void ScrollableText::handle_event(Event* event) {
     }
 }
 
-void ScrollableText::onButtonDown() { 
-    if(offset - text.get_character_size() < -whole_block_height + size.height) {
-        offset = -whole_block_height + size.height;  
+void ScrollableText::onButtonDown() {
+    if (offset - text.get_character_size() <
+        -whole_block_height + size.height) {
+        offset = -whole_block_height + size.height;
     }
-    offset -= text.get_character_size(); 
+    offset -= text.get_character_size();
 }
 
 void ScrollableText::onButtonUp() {
-    if(offset + text.get_character_size() > 0) {
+    if (offset + text.get_character_size() > 0) {
         offset = 0;
     }
     offset += text.get_character_size();
