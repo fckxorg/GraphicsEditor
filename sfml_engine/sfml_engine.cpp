@@ -48,7 +48,7 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
 }
 
 MouseButtonEvent::MouseButton Renderer::get_mouse_button(
-    sf::Mouse::Button button) {
+    sf::Mouse::Button button) { // XXX normal way to create private static const map?
   switch (button) {
     case sf::Mouse::Left:
       return MouseButtonEvent::MouseButton::LEFT;
