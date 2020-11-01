@@ -275,10 +275,9 @@ void Scrollbar::handle_event(Event* event) {
     }
 }
 
-Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
+Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size, bool horizontal)
     : RectWindow(size, pos, color), horizontal(horizontal) {
     Size button_size = {};
-    Size slider_size = {};
 
     Position bottom_button_pos = {};
     Position slider_default_position = {};
@@ -288,8 +287,6 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
 
     if (horizontal) {
         button_size = {static_cast<uint8_t>(size.width * 0.1), size.height};
-        slider_size = {static_cast<uint8_t>(size.width * 0.3),
-                       size.height};  // TODO adaptive size
         slider_default_position = {
             static_cast<uint16_t>(pos.x + button_size.width), pos.y};
         bottom_button_pos = {static_cast<uint16_t>(pos.x + size.width * 0.9),
@@ -301,9 +298,6 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, bool horizontal)
         button_size = {size.width, static_cast<uint8_t>(size.height * 0.1)};
         bottom_button_pos = {pos.x,
                              static_cast<uint16_t>(pos.y + size.height * 0.9)};
-        slider_size = {
-            size.width,
-            static_cast<uint8_t>(size.height * 0.3)};  // TODO adaptive size
         slider_default_position = {
             pos.x, static_cast<uint16_t>(pos.y + button_size.height)};
 

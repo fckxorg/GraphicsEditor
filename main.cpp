@@ -30,7 +30,7 @@ int main() {
 
     std::unique_ptr<Window> scrollable_text(new ScrollableText(Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
 
-    std::unique_ptr<Window> scrollbar(new Scrollbar(Size(30, 400), Position(480, 100), Color(245, 245, 245), false));
+    std::unique_ptr<Window> scrollbar(new Scrollbar(Size(30, 400), Position(480, 100), Color(245, 245, 245), Size(30, 320), false));
     
     // should be subscribed before ownership moves to window in hieararchy
     SubscriptionManager::add_subscription(root_window.get(), scrollbar.get());

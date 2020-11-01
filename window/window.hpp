@@ -136,6 +136,7 @@ class Slider : public RectWindow, public InterfaceClickable {
     ~Slider();
     Slider(Size size, Position pos, Color color, uint16_t lower_bound,
            uint16_t upper_bound, bool horizontal = false);
+
     virtual void onMousePress(MouseButtonEvent* event);
     virtual void onMouseRelease(MouseButtonEvent* event);
     virtual void onMouseMove(MouseMoveEvent* event);
@@ -155,7 +156,7 @@ class Scrollbar : public RectWindow {
     ~Scrollbar();
 
     void handle_event(Event* event) override;
-    Scrollbar(Size size, Position pos, Color color, bool horizontal = false);
+    Scrollbar(Size size, Position pos, Color color, Size slider_size, bool horizontal = false);
 };
 
 
