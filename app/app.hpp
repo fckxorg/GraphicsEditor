@@ -16,16 +16,16 @@
 #include "../window/window.hpp"
 
 class App {
-   private:
-    static std::unique_ptr<Window> root_window;
+ private:
+  static std::unique_ptr<Window> root_window;
 
-   public:
-    App() = delete;
+ public:
+  App() = delete;
 
-    static void init(Size size, const char* name);
-    static void run();
-    static void deinit();
-    static void set_root_window(std::unique_ptr<Window>& window);
+  static void init(Size size, const char* name);
+  static void run();
+  static void deinit();
+  static void set_root_window(std::unique_ptr<Window>& window);
 };
 
 #endif
