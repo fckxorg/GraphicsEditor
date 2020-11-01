@@ -4,6 +4,12 @@
 
 #include <cstdio>
 
+const uint8_t PRESS_FADE_DELTA = 50;
+const uint8_t CONTROLS_COLOR_DELTA = 30;
+const float SCROLLBAR_BUTTON_RATIO = 0.1;
+const float LINESPACING_COEFF = 0.08;
+const float SCROLLBAR_SIZE_RATIO = 0.07;
+
 /*---------------------------------------*/
 /*         Interface Clickable           */
 /*---------------------------------------*/
@@ -103,9 +109,9 @@ void RectButton::onMousePress(MouseButtonEvent* event) {
 
   Color curr_color = RectWindow::get_color();
 
-  uint8_t color_r_pressed = std::min(curr_color.r - 50, 0);
-  uint8_t color_g_pressed = std::min(curr_color.g - 50, 0);
-  uint8_t color_b_pressed = std::min(curr_color.b - 50, 0);
+  uint8_t color_r_pressed = std::min(curr_color.r - PRESS_FADE_DELTA, 0);
+  uint8_t color_g_pressed = std::min(curr_color.g - PRESS_FADE_DELTA, 0);
+  uint8_t color_b_pressed = std::min(curr_color.b - PRESS_FADE_DELTA, 0);
 
   Color pressed_color =
       Color(color_r_pressed, color_g_pressed, color_b_pressed);
@@ -230,9 +236,9 @@ void Slider::onMousePress(MouseButtonEvent* event) {
 
   Color curr_color = RectWindow::get_color();
 
-  uint8_t color_r_pressed = std::min(curr_color.r - 50, 0);
-  uint8_t color_g_pressed = std::min(curr_color.g - 50, 0);
-  uint8_t color_b_pressed = std::min(curr_color.b - 50, 0);
+  uint8_t color_r_pressed = std::min(curr_color.r - PRESS_FADE_DELTA, 0);
+  uint8_t color_g_pressed = std::min(curr_color.g - PRESS_FADE_DELTA, 0);
+  uint8_t color_b_pressed = std::min(curr_color.b - PRESS_FADE_DELTA, 0);
 
   Color pressed_color =
       Color(color_r_pressed, color_g_pressed, color_b_pressed);
@@ -317,21 +323,25 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   uint16_t slider_upper_boundary = 0;
 
   if (horizontal) {
-    button_size = {static_cast<uint8_t>(size.width * 0.1), size.height};
+    button_size = {static_cast<uint8_t>(size.width * SCROLLBAR_BUTTON_RATIO),
+                   size.height};
     slider_default_position = {static_cast<uint16_t>(pos.x + button_size.width),
                                pos.y};
-    bottom_button_pos = {static_cast<uint16_t>(pos.x + size.width * 0.9),
+    bottom_button_pos = {static_cast<uint16_t>(
+                             pos.x + size.width * (1 - SCROLLBAR_BUTTON_RATIO)),
                          pos.y};
 
     slider_lower_boundary = slider_default_position.x;
     slider_upper_boundary = bottom_button_pos.x;
     slider_size = Size((static_cast<float>(viewport_size) / scroll_block_size) *
-                           size.width * 0.8,
+                           size.width * (1 - 2 * SCROLLBAR_BUTTON_RATIO),
                        size.height);
   } else {
-    button_size = {size.width, static_cast<uint8_t>(size.height * 0.1)};
-    bottom_button_pos = {pos.x,
-                         static_cast<uint16_t>(pos.y + size.height * 0.9)};
+    button_size = {size.width,
+                   static_cast<uint8_t>(size.height * SCROLLBAR_BUTTON_RATIO)};
+    bottom_button_pos = {
+        pos.x, static_cast<uint16_t>(pos.y + size.height *
+                                                 (1 - SCROLLBAR_BUTTON_RATIO))};
     slider_default_position = {
         pos.x, static_cast<uint16_t>(pos.y + button_size.height)};
 
@@ -339,7 +349,7 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
     slider_upper_boundary = bottom_button_pos.y;
     slider_size = Size(size.width,
                        (static_cast<float>(viewport_size) / scroll_block_size) *
-                           size.height * 0.8);
+                           size.height * (1 - 2 * SCROLLBAR_BUTTON_RATIO));
   }
 
   scroll_ratio =
@@ -350,9 +360,9 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
     scroll_ratio = 1;
   }
 
-  uint8_t red_comp_color = color.r - 30;
-  uint8_t green_comp_color = color.g - 30;
-  uint8_t blue_comp_color = color.b - 30;
+  uint8_t red_comp_color = color.r - CONTROLS_COLOR_DELTA;
+  uint8_t green_comp_color = color.g - CONTROLS_COLOR_DELTA;
+  uint8_t blue_comp_color = color.b - CONTROLS_COLOR_DELTA;
 
   Color controls_colors =
       Color(red_comp_color, green_comp_color, blue_comp_color);
@@ -385,10 +395,10 @@ ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
     : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {
   uint16_t n_lines = ScrollableText::get_nlines();
   whole_block_height = n_lines * (text.character_size * text.line_spacing *
-                                  0.08 * text.character_size);
+                                  LINESPACING_COEFF * text.character_size);
 
   std::unique_ptr<Window> scrollbar(new Scrollbar(
-      Size(viewport_size.width * 0.07, viewport_size.height),
+      Size(viewport_size.width * SCROLLBAR_SIZE_RATIO, viewport_size.height),
       Position(pos.x + viewport_size.width, pos.y), Color(245, 245, 245),
       viewport_size.height, whole_block_height, text.character_size, false));
   SubscriptionManager::add_subscription(

@@ -22,6 +22,12 @@
 #include "../sfml_engine/sfml_engine.hpp"
 #endif
 
+extern const uint8_t PRESS_FADE_DELTA;
+extern const uint8_t CONTROLS_COLOR_DELTA;
+extern const float SCROLLBAR_BUTTON_RATIO;
+extern const float LINESPACING_COEFF;
+extern const float SCROLLBAR_SIZE_RATIO;
+
 enum DIRECTION { UP, DOWN };
 
 class InterfaceClickable {
