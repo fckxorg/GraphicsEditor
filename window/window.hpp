@@ -163,7 +163,12 @@ class Scrollbar : public RectWindow {
 class ScrollableText : public RectWindow {
     private:
         Text text;  
-        int16_t offset;
+        uint16_t whole_block_height;
+        int16_t offset; 
+
+
+        uint16_t get_nlines();
+
     public:
         
         ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text);

@@ -178,7 +178,8 @@ void Slider::handle_event(Event* event) {
                 onButtonDown();
             }
 
-            SubscriptionManager::send_event(this, new ButtonPressEvent(button_press_event->value));
+            SubscriptionManager::send_event(
+                this, new ButtonPressEvent(button_press_event->value));
             break;
         }
     }
@@ -234,7 +235,6 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
 
     int delta = 0;
 
-
     Position new_pos = {};
 
     if (horizontal) {
@@ -275,7 +275,8 @@ void Scrollbar::handle_event(Event* event) {
     }
 }
 
-Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size, bool horizontal)
+Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size,
+                     bool horizontal)
     : RectWindow(size, pos, color), horizontal(horizontal) {
     Size button_size = {};
 
@@ -322,7 +323,7 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size, boo
 
     SubscriptionManager::add_subscription(top_button.get(), slider.get());
     SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
-    
+
     slider_ptr = slider.get();
 
     add_child_window(top_button);
@@ -337,15 +338,25 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size, boo
 ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
                                Text text)
     : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {
-        
-    }
+
+    uint16_t n_lines = ScrollableText::get_nlines();    
+    whole_block_height = n_lines * (text.get_character_size() * text.line_spacing * 0.08 * text.get_character_size());
+
+    std::unique_ptr<Window> scrollbar(new Scrollbar(
+        Size(viewport_size.width * 0.07, viewport_size.height),
+        Position(pos.x + viewport_size.width, pos.y), Color(245, 245, 245),
+        Size(viewport_size.width * 0.07, 20), false));
+    SubscriptionManager::add_subscription(
+        dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, this);
+    add_child_window(scrollbar);
+}
 
 void ScrollableText::render() {
     Renderer::draw_scrollable_text(text, size, pos, color, offset);
+    RenderWindow::render();
 }
 
 void ScrollableText::handle_event(Event* event) {
-    printf("Got an event\n");
     switch (event->get_type()) {
         case BUTTON_PRESSED:
             auto button_press_event = dynamic_cast<ButtonPressEvent*>(event);
@@ -354,16 +365,38 @@ void ScrollableText::handle_event(Event* event) {
             } else if (button_press_event->value == DOWN) {
                 onButtonDown();
             }
-            break;
+            return;
+    }
+
+    for (auto& subwindow : subwindows) {
+        subwindow->handle_event(event);
     }
 }
 
-void ScrollableText::onButtonDown() {
-    offset -= text.get_character_size();
+void ScrollableText::onButtonDown() { 
+    if(offset - text.get_character_size() < -whole_block_height + size.height) {
+        offset = -whole_block_height + size.height;  
+    }
+    offset -= text.get_character_size(); 
 }
 
 void ScrollableText::onButtonUp() {
-    if(offset == 0) return;
+    if(offset + text.get_character_size() > 0) {
+        offset = 0;
+    }
     offset += text.get_character_size();
 }
 
+uint16_t ScrollableText::get_nlines() {
+    int16_t n_lines = 1;
+    const char* cur = text.get_text();
+
+    while (*cur != '\0') {
+        if (*cur == '\n') {
+            ++n_lines;
+        }
+        ++cur;
+    }
+
+    return n_lines;
+}

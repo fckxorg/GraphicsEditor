@@ -26,17 +26,14 @@ int main() {
     std::unique_ptr<Window> root_window(new RootWindow());    
     std::unique_ptr<Window> window (new RectWindow(Size(1920, 900), Position(0, 0), Color(255, 255, 255)));
   
-    Text scroll_test = {text_buffer.get(), 18, roboto_font_path, Color(0, 0, 0)};
+    Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0)};
 
     std::unique_ptr<Window> scrollable_text(new ScrollableText(Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
 
-    std::unique_ptr<Window> scrollbar(new Scrollbar(Size(30, 400), Position(480, 100), Color(245, 245, 245), Size(30, 320), false));
     
     // should be subscribed before ownership moves to window in hieararchy
-    SubscriptionManager::add_subscription(root_window.get(), scrollbar.get());
-    SubscriptionManager::add_subscription(dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, scrollable_text.get());
+    SubscriptionManager::add_subscription(root_window.get(), scrollable_text.get());
 
-    window->add_child_window(scrollbar);
     window->add_child_window(scrollable_text);
 
     root_window->add_child_window(window);
