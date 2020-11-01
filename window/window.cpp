@@ -371,14 +371,14 @@ ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
     : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {
     uint16_t n_lines = ScrollableText::get_nlines();
     whole_block_height =
-        n_lines * (text.get_character_size() * text.line_spacing * 0.08 *
-                   text.get_character_size());
+        n_lines * (text.character_size * text.line_spacing * 0.08 *
+                   text.character_size);
 
     std::unique_ptr<Window> scrollbar(
         new Scrollbar(Size(viewport_size.width * 0.07, viewport_size.height),
                       Position(pos.x + viewport_size.width, pos.y),
                       Color(245, 245, 245), viewport_size.height,
-                      whole_block_height, text.get_character_size(), false));
+                      whole_block_height, text.character_size, false));
     SubscriptionManager::add_subscription(
         dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, this);
 
@@ -415,23 +415,23 @@ void ScrollableText::handle_event(Event* event) {
 }
 
 void ScrollableText::onButtonDown() {
-    if (offset - text.get_character_size() <
+    if (offset - text.character_size <
         -whole_block_height + size.height) {
         offset = -whole_block_height + size.height;
     }
-    offset -= text.get_character_size();
+    offset -= text.character_size;
 }
 
 void ScrollableText::onButtonUp() {
-    if (offset + text.get_character_size() > 0) {
+    if (offset + text.character_size > 0) {
         offset = 0;
     }
-    offset += text.get_character_size();
+    offset += text.character_size;
 }
 
 uint16_t ScrollableText::get_nlines() {
     int16_t n_lines = 1;
-    const char* cur = text.get_text();
+    const char* cur = text.text;
 
     while (*cur != '\0') {
         if (*cur == '\n') {

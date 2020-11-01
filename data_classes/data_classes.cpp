@@ -30,8 +30,7 @@ Position::Position(uint16_t x, uint16_t y) : x(x), y(y) {}
 
 #ifdef SFML_ENGINE
 Position::Position(const sf::Vector2f& sfpos)
-        : x(static_cast<uint16_t>(sfpos.x)),
-          y(static_cast<uint16_t>(sfpos.y)) {}
+    : x(static_cast<uint16_t>(sfpos.x)), y(static_cast<uint16_t>(sfpos.y)) {}
 
 Position::operator sf::Vector2f() const { return sf::Vector2f(x, y); }
 #endif
@@ -39,38 +38,11 @@ Position::operator sf::Vector2f() const { return sf::Vector2f(x, y); }
 /*--------------- TEXT -------------------------------------*/
 
 Text::Text() = default;
-Text::Text(const char* text, uint16_t character_size, const char* font_path, Color color, float line_spacing) : text(text), character_size(character_size), font_path(font_path), color(color), line_spacing(line_spacing){}
-
-void Text::set_text(const char* text) {
-    this->text = text;
-}
-
-const char* Text::get_text() const {
-    return text;
-}
-    
-void Text::set_font(const char* font) {
-    font_path = font;
-}
-
-const char* Text::get_font() const {
-    return font_path;
-}
-
-
-void Text::set_character_size(uint16_t character_size) {
-    this->character_size = character_size;
-}
-
-uint16_t Text::get_character_size() {
-    return character_size;
-}
-
-Color Text::get_color() {
-    return color;
-}
-
-void Text::set_color(Color color) {
-    this->color = color;
-}
+Text::Text(const char* text, uint16_t character_size, const char* font_path,
+           Color color, float line_spacing)
+    : text(text),
+      character_size(character_size),
+      font_path(font_path),
+      color(color),
+      line_spacing(line_spacing) {}
 

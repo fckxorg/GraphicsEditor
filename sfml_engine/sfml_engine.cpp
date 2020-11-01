@@ -25,33 +25,33 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
 }
 
 void Renderer::draw_text(Text text, Position pos, Color bg_color) {
-    if (!fonts.contains(text.get_font())) {
+    if (!fonts.contains(text.font_path)) {
         sf::Font new_font;
-        new_font.loadFromFile(text.get_font());
-        fonts[text.get_font()] = new_font;
+        new_font.loadFromFile(text.font_path);
+        fonts[text.font_path] = new_font;
     }
 
-    sf::Text sfml_text(text.get_text(), fonts[text.get_font()],
-                       text.get_character_size());
+    sf::Text sfml_text(text.text, fonts[text.font_path],
+                       text.character_size);
     sfml_text.setPosition(pos);
     sfml_text.setLineSpacing(text.line_spacing);
-    sfml_text.setFillColor(text.get_color());
+    sfml_text.setFillColor(text.color);
 
     window.draw(sfml_text);
 }
 
 void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
                                     Color color, float relative_offset) {
-    if (!fonts.contains(text.get_font())) {
+    if (!fonts.contains(text.font_path)) {
         sf::Font new_font;
-        new_font.loadFromFile(text.get_font());
-        fonts[text.get_font()] = new_font;
+        new_font.loadFromFile(text.font_path);
+        fonts[text.font_path] = new_font;
     }
 
-    sf::Text sfml_text(text.get_text(), fonts[text.get_font()],
-                       text.get_character_size());
+    sf::Text sfml_text(text.text, fonts[text.font_path],
+                       text.character_size);
     sfml_text.setPosition(0, relative_offset);
-    sfml_text.setFillColor(text.get_color());
+    sfml_text.setFillColor(text.color);
     sfml_text.setLineSpacing(text.line_spacing);
 
     sf::RenderTexture viewport_texture;
