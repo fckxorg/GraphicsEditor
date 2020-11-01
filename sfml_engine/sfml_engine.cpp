@@ -3,14 +3,18 @@
 sf::RenderWindow Renderer::window;
 std::unordered_map<const char*, sf::Font> Renderer::fonts;
 
-void Renderer::clear() { window.clear(); }
-
 void Renderer::init(Size window_size, const char* name) {
   assert(name != nullptr);
 
   window.create(sf::VideoMode(window_size.width, window_size.height), name);
   Renderer::clear();
 }
+
+void Renderer::deinit() { window.close(); }
+
+void Renderer::clear() { window.clear(); }
+
+void Renderer::show() { window.display(); }
 
 void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   sf::RectangleShape rect = sf::RectangleShape(size);
@@ -20,32 +24,15 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
 }
 
 void Renderer::draw_text(Text text, Position pos, Color bg_color) {
-  if (!fonts.contains(text.font_path)) {
-    sf::Font new_font;
-    new_font.loadFromFile(text.font_path);
-    fonts[text.font_path] = new_font;
-  }
-
-  sf::Text sfml_text(text.text, fonts[text.font_path], text.character_size);
+  sf::Text sfml_text = Renderer::get_sfml_text(text);
   sfml_text.setPosition(pos);
-  sfml_text.setLineSpacing(text.line_spacing);
-  sfml_text.setFillColor(text.color);
-
   window.draw(sfml_text);
 }
 
 void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
                                     Color color, float relative_offset) {
-  if (!fonts.contains(text.font_path)) {
-    sf::Font new_font;
-    new_font.loadFromFile(text.font_path);
-    fonts[text.font_path] = new_font;
-  }
-
-  sf::Text sfml_text(text.text, fonts[text.font_path], text.character_size);
+  sf::Text sfml_text = Renderer::get_sfml_text(text);
   sfml_text.setPosition(0, relative_offset);
-  sfml_text.setFillColor(text.color);
-  sfml_text.setLineSpacing(text.line_spacing);
 
   sf::RenderTexture viewport_texture;
   viewport_texture.create(size.width, size.height);
@@ -59,10 +46,6 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
   viewport_sprite.setPosition(pos);
   window.draw(viewport_sprite);
 }
-
-void Renderer::deinit() { window.close(); }
-
-void Renderer::show() { window.display(); }
 
 MouseButtonEvent::MouseButton Renderer::get_mouse_button(
     sf::Mouse::Button button) {
@@ -115,5 +98,19 @@ Event* Renderer::poll_event() {
   }
 
   return nullptr;
+}
+
+sf::Text Renderer::get_sfml_text(Text text) {
+  if (!fonts.contains(text.font_path)) {
+    sf::Font new_font;
+    new_font.loadFromFile(text.font_path);
+    fonts[text.font_path] = new_font;
+  }
+
+  sf::Text sfml_text(text.text, fonts[text.font_path], text.character_size);
+  sfml_text.setLineSpacing(text.line_spacing);
+  sfml_text.setFillColor(text.color);
+
+  return sfml_text;
 }
 

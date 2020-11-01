@@ -10,6 +10,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <unordered_map>
 #include <cassert>
 
@@ -21,6 +23,8 @@ class Renderer {
   static sf::RenderWindow window;
 
   static std::unordered_map<const char*, sf::Font> fonts;
+
+  static sf::Text get_sfml_text(Text text);
 
   static MouseButtonEvent::MouseButton get_mouse_button(sf::Mouse::Button);
   static Event* translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
