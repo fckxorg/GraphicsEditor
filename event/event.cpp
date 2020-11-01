@@ -17,3 +17,5 @@ MouseButtonEvent::MouseButtonEvent(Position pos, MouseButton button, Action acti
 MouseMoveEvent::MouseMoveEvent(Position pos) : Event(MOUSE_MOVE), pos(pos){}
 
 ButtonPressEvent::ButtonPressEvent(uint32_t value) : Event(BUTTON_PRESSED), value(value) {}
+
+ScrollEvent::ScrollEvent(int delta) : Event(SCROLL), delta(delta) {}

@@ -158,6 +158,7 @@ class Scrollbar : public RectWindow {
     Scrollbar();
     ~Scrollbar();
 
+    float get_scroll_ratio();
     void handle_event(Event* event) override;
     Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size, uint16_t scroll_block_size, uint16_t step, bool horizontal = false);
 };
@@ -168,6 +169,7 @@ class ScrollableText : public RectWindow {
         Text text;  
         uint16_t whole_block_height;
         int16_t offset; 
+        float scroll_ratio;
 
         uint16_t get_nlines();
 

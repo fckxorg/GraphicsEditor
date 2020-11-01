@@ -5,7 +5,7 @@
 
 #include "../data_classes/data_classes.hpp"
 
-enum SYSTEM_EVENT { MOUSE_BUTTON, MOUSE_MOVE, WINDOW_CLOSED, BUTTON_PRESSED };
+enum SYSTEM_EVENT { MOUSE_BUTTON, MOUSE_MOVE, WINDOW_CLOSED, BUTTON_PRESSED, SCROLL };
 
 class Event {
    private:
@@ -46,6 +46,12 @@ class ButtonPressEvent : public Event {
    public:
     uint32_t value;
     ButtonPressEvent(uint32_t value);
+};
+
+class ScrollEvent : public Event {
+    public:
+        int delta;
+        ScrollEvent(int delta); 
 };
 
 #endif

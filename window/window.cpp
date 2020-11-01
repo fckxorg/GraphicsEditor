@@ -74,6 +74,13 @@ void RectWindow::set_color(Color color) { this->color = color; }
 
 Color RectWindow::get_color() { return color; }
 
+bool RectWindow::is_point_inside(Position point) {
+    if (point.x < pos.x || point.x > pos.x + size.width) return false;
+    if (point.y < pos.y || point.y > pos.y + size.height) return false;
+
+    return true;
+}
+
 /*---------------------------------------*/
 /*              RectButton               */
 /*---------------------------------------*/
@@ -110,13 +117,6 @@ void RectButton::handle_event(Event* event) {
     if (event->get_type() == SYSTEM_EVENT::MOUSE_BUTTON) {
         handle_mouse_button_event(event);
     }
-}
-
-bool RectWindow::is_point_inside(Position point) {
-    if (point.x < pos.x || point.x > pos.x + size.width) return false;
-    if (point.y < pos.y || point.y > pos.y + size.height) return false;
-
-    return true;
 }
 
 /*---------------------------------------*/
@@ -238,6 +238,8 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
 
     int delta = 0;
 
+    int slider_delta = 0;
+
     Position new_pos = {};
 
     if (horizontal) {
@@ -246,6 +248,8 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
         new_pos.x = std::min(pos.x + delta, adjusted_upper_bound);
         new_pos.x = std::max(new_pos.x, lower_bound);
 
+        slider_delta = new_pos.x - pos.x;
+
         new_pos.y = pos.y;
     } else {
         delta = mouse_position.y - last_mouse_pos.y;
@@ -253,8 +257,12 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
         new_pos.y = std::min(pos.y + delta, adjusted_upper_bound);
         new_pos.y = std::max(new_pos.y, lower_bound);
 
+        slider_delta = new_pos.y - pos.y;
+
         new_pos.x = pos.x;
     }
+
+    SubscriptionManager::send_event(this, new ScrollEvent(slider_delta));
 
     last_mouse_pos = mouse_position;
     this->pos = new_pos;
@@ -271,6 +279,8 @@ void Slider::onMouseRelease(MouseButtonEvent* event) {
 
 Scrollbar::Scrollbar() = default;
 Scrollbar::~Scrollbar() = default;
+
+float Scrollbar::get_scroll_ratio() { return scroll_ratio; }
 
 void Scrollbar::handle_event(Event* event) {
     for (auto& subwindow : subwindows) {
@@ -318,9 +328,11 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
                                            size.height * 0.8);
     }
 
-    scroll_ratio = static_cast<float>(scroll_block_size) / static_cast<float>(slider_upper_boundary - slider_lower_boundary);
+    scroll_ratio =
+        static_cast<float>(scroll_block_size) /
+        static_cast<float>(slider_upper_boundary - slider_lower_boundary);
 
-    if(scroll_ratio < 1) {
+    if (scroll_ratio < 1) {
         scroll_ratio = 1;
     }
 
@@ -369,6 +381,9 @@ ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
                       whole_block_height, text.get_character_size(), false));
     SubscriptionManager::add_subscription(
         dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, this);
+
+    scroll_ratio =
+        dynamic_cast<Scrollbar*>(scrollbar.get())->get_scroll_ratio();
     add_child_window(scrollbar);
 }
 
@@ -379,7 +394,7 @@ void ScrollableText::render() {
 
 void ScrollableText::handle_event(Event* event) {
     switch (event->get_type()) {
-        case BUTTON_PRESSED:
+        case BUTTON_PRESSED: {
             auto button_press_event = dynamic_cast<ButtonPressEvent*>(event);
             if (button_press_event->value == UP) {
                 onButtonUp();
@@ -387,6 +402,11 @@ void ScrollableText::handle_event(Event* event) {
                 onButtonDown();
             }
             return;
+        }
+        case SCROLL: {
+            auto scroll_event = dynamic_cast<ScrollEvent*>(event);
+            offset -= scroll_event->delta * scroll_ratio;
+        }
     }
 
     for (auto& subwindow : subwindows) {
