@@ -1,10 +1,10 @@
 #include "sfml_engine.hpp"
 
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 #include <stdio.h>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <unordered_map>
 
 sf::RenderWindow Renderer::window;
@@ -41,7 +41,7 @@ void Renderer::draw_text(Text text, Position pos, Color bg_color) {
 }
 
 void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
-                                    Color color, int16_t relative_offset) {
+                                    Color color, float relative_offset) {
     if (!fonts.contains(text.get_font())) {
         sf::Font new_font;
         new_font.loadFromFile(text.get_font());
@@ -57,16 +57,14 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
     sf::RenderTexture viewport_texture;
     viewport_texture.create(size.width, size.height);
     viewport_texture.clear(sf::Color::White);
-    
+
     viewport_texture.draw(sfml_text);
     viewport_texture.display();
-
 
     sf::Sprite viewport_sprite;
     viewport_sprite.setTexture(viewport_texture.getTexture());
     viewport_sprite.setPosition(pos);
     window.draw(viewport_sprite);
-
 }
 
 void Renderer::deinit() { window.close(); }

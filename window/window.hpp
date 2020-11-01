@@ -4,6 +4,7 @@
 #include <bits/stdint-uintn.h>
 #include <stdio.h>
 
+#include <cmath>
 #include <cstdint>
 #include <list>
 #include <memory>
@@ -131,7 +132,6 @@ class Slider : public RectWindow, public InterfaceClickable {
 
     bool check_boundaries(Position click_pos);
 
-
    public:
     Slider();
     ~Slider();
@@ -150,7 +150,7 @@ class Slider : public RectWindow, public InterfaceClickable {
 
 class Scrollbar : public RectWindow {
    private:
-    bool horizontal;    
+    bool horizontal;
     float scroll_ratio;
 
    public:
@@ -160,28 +160,28 @@ class Scrollbar : public RectWindow {
 
     float get_scroll_ratio();
     void handle_event(Event* event) override;
-    Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size, uint16_t scroll_block_size, uint16_t step, bool horizontal = false);
+    Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size,
+              uint16_t scroll_block_size, uint16_t step,
+              bool horizontal = false);
 };
 
-
 class ScrollableText : public RectWindow {
-    private:
-        Text text;  
-        uint16_t whole_block_height;
-        int16_t offset; 
-        float scroll_ratio;
+   private:
+    Text text;
+    uint16_t whole_block_height;
+    float offset;
+    float scroll_ratio;
 
-        uint16_t get_nlines();
+    uint16_t get_nlines();
 
-    public:
-        
-        ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text);
-        virtual void render() override;
+   public:
+    ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text);
+    virtual void render() override;
 
-        void handle_event(Event* event) override;
+    void handle_event(Event* event) override;
 
-        void onButtonUp();
-        void onButtonDown();
+    void onButtonUp();
+    void onButtonDown();
 };
 
 #endif

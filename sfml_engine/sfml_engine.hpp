@@ -32,7 +32,7 @@ class Renderer {
     static void clear();
     static void draw_rectangle(Size size, Position pos, Color color); 
     static void draw_text(Text text, Position pos, Color bg_color);
-    static void draw_scrollable_text(Text text, Size size, Position pos, Color color, int16_t relative_offset);
+    static void draw_scrollable_text(Text text, Size size, Position pos, Color color, float relative_offset);
     static void init(Size window_size, const char* name);
     static void show();
     static void deinit();
