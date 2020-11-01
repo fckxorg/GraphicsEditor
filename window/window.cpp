@@ -336,7 +336,9 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color, Size slider_size, boo
 
 ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
                                Text text)
-    : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {}
+    : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {
+        
+    }
 
 void ScrollableText::render() {
     Renderer::draw_scrollable_text(text, size, pos, color, offset);
@@ -357,11 +359,11 @@ void ScrollableText::handle_event(Event* event) {
 }
 
 void ScrollableText::onButtonDown() {
-    offset -= 10;
+    offset -= text.get_character_size();
 }
 
 void ScrollableText::onButtonUp() {
     if(offset == 0) return;
-    offset += 10;
+    offset += text.get_character_size();
 }
 
