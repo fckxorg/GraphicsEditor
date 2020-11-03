@@ -38,6 +38,11 @@ class InterfaceClickable {
   virtual ~InterfaceClickable();
 };
 
+class InterfaceDraggable : public InterfaceClickable {
+    public:
+        virtual void onMouseMove(MouseMoveEvent* event) = 0;
+};
+
 class RootWindow : public Window {
  public:
   virtual void render();
@@ -125,7 +130,7 @@ class RectButton : public RectWindow, public InterfaceClickable {
   virtual void onMouseRelease(MouseButtonEvent* event) override;
 };
 
-class Slider : public RectWindow, public InterfaceClickable {
+class Slider : public RectWindow, public InterfaceDraggable {
  private:
   Color default_color;
   Position last_mouse_pos;
