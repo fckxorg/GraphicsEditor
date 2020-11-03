@@ -163,18 +163,20 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
       last_mouse_pos(pos),
       step(step) {
   if (horizontal) {
+    primary_axis = &Position::x;
     this->upper_bound = std::max(upper_bound - size.width, 0);
   } else {
+    primary_axis = &Position::y;
     this->upper_bound = std::max(upper_bound - size.height, 0);
   }
 }
 
-void Slider::move(int delta, uint16_t Position::*axis) {
+void Slider::move(int delta) {
   uint16_t new_pos =
-      std::max(static_cast<uint16_t>(pos.*axis + delta), lower_bound);
+      std::max(static_cast<uint16_t>(pos.*primary_axis + delta), lower_bound);
   new_pos = std::min(static_cast<uint16_t>(new_pos), upper_bound);
 
-  pos.*axis = new_pos;
+  pos.*primary_axis = new_pos;
 }
 
 void Slider::handle_event(Event* event) {
@@ -208,22 +210,12 @@ void Slider::handle_event(Event* event) {
 }
 
 void Slider::onButtonUp() {
-  if (horizontal) {
-      move(-step, &Position::x);
-  } else {
-      move(-step, &Position::y);
-  }
-
+  move(-step);
   last_mouse_pos = pos;
 }
 
 void Slider::onButtonDown() {
-  if (horizontal) {
-      move(step, &Position::x);
-  } else {
-      move(step, &Position::y);
-  }
-
+  move(step);
   last_mouse_pos = pos;
 }
 

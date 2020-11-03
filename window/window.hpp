@@ -138,7 +138,9 @@ class Slider : public RectWindow, public InterfaceDraggable {
   uint16_t lower_bound;
   uint16_t upper_bound;
 
-  void move(int delta, uint16_t Position::*axis);
+  uint16_t Position::* primary_axis;
+
+  void move(int delta);
 
   Position get_new_slider_pos(Position mouse_position, uint16_t Position::*axis,
                               uint16_t Position::*secondary_axis,
