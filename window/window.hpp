@@ -40,8 +40,8 @@ class InterfaceClickable {
 };
 
 class InterfaceDraggable : public InterfaceClickable {
-    public:
-        virtual void onMouseMove(MouseMoveEvent* event) = 0;
+ public:
+  virtual void onMouseMove(MouseMoveEvent* event) = 0;
 };
 
 class RootWindow : public Window {
@@ -138,16 +138,19 @@ class Slider : public RectWindow, public InterfaceDraggable {
   uint16_t lower_bound;
   uint16_t upper_bound;
 
-  Position get_new_slider_pos(Position mouse_position, uint16_t Position::*axis, uint16_t Position::*secondary_axis) {
+  Position get_new_slider_pos(Position mouse_position, uint16_t Position::*axis,
+                              uint16_t Position::*secondary_axis, int& slider_delta) {
     Position new_pos = {};
     int delta = mouse_position.*axis - last_mouse_pos.*axis;
-    new_pos.*axis = std::min(static_cast<uint16_t>(pos.*axis + delta), upper_bound);
+    new_pos.*axis =
+        std::min(static_cast<uint16_t>(pos.*axis + delta), upper_bound);
     new_pos.*axis = std::max(new_pos.*axis, lower_bound);
     new_pos.*secondary_axis = pos.*secondary_axis;
 
+    slider_delta = new_pos.*axis - pos.*axis;
+
     return new_pos;
   }
-
 
  public:
   Slider();

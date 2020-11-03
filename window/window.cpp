@@ -253,11 +253,11 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
   Position new_pos = {};
 
   if (horizontal) {
-    new_pos = get_new_slider_pos(mouse_position, &Position::x, &Position::y);
-    slider_delta = new_pos.x - pos.x;
+    new_pos = get_new_slider_pos(mouse_position, &Position::x, &Position::y,
+                                 slider_delta);
   } else {
-    new_pos = get_new_slider_pos(mouse_position, &Position::y, &Position::x);
-    slider_delta = new_pos.y - pos.y;
+    new_pos = get_new_slider_pos(mouse_position, &Position::y, &Position::x,
+                                 slider_delta);
   }
 
   SubscriptionManager::send_event(this, new ScrollEvent(slider_delta));
