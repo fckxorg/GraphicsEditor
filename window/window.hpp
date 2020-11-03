@@ -31,19 +31,35 @@ extern const float SCROLLBAR_SIZE_RATIO;
 
 enum DIRECTION { UP, DOWN };
 
+/*!
+ * Interface which should be inherited by any clickable window
+ * */
+
 class InterfaceClickable {
  public:
+  /*!
+   * This method decides which event handler to call
+   * @param event event data structure
+   * */
   void handle_mouse_button_event(Event* event);
   virtual void onMousePress(MouseButtonEvent* event) = 0;
   virtual void onMouseRelease(MouseButtonEvent* event) = 0;
   virtual ~InterfaceClickable();
 };
 
+/*!
+ * This interface should be inherited by any draggable window
+ * */
+
 class InterfaceDraggable : public InterfaceClickable {
  public:
   virtual void onMouseMove(MouseMoveEvent* event) = 0;
 };
 
+
+/*!
+ * Root window of window hierarchy. It is just container, which wouldn't render and is used to send system events.
+ * */
 class RootWindow : public Window {
  public:
   virtual void render();
@@ -138,7 +154,7 @@ class Slider : public RectWindow, public InterfaceDraggable {
   uint16_t lower_bound;
   uint16_t upper_bound;
 
-  uint16_t Position::* primary_axis;
+  uint16_t Position::*primary_axis;
 
   void move(int delta);
 

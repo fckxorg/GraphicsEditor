@@ -153,6 +153,19 @@ void TextWindow::render() {
 
 Slider::Slider() = default;
 Slider::~Slider() = default;
+
+/*!
+ * This constructor sets movement axis, so other slider methods will be able to use it later
+ * as a pointer to member of Position class
+ * @param size size of slider
+ * @param pos position of slider
+ * @param color slider color
+ * @param lower_bound left/top boundary for the slider
+ * @param upper_bound right/bottom boundary for the slider
+ * @param step step for slider movement (only used to move after button clicks)
+ * @param horizontal flag, defining direction of slider movement
+*/
+
 Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
                uint16_t upper_bound, uint16_t step, bool horizontal)
     : RectWindow(size, pos, color),
@@ -170,6 +183,8 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
     this->upper_bound = std::max(upper_bound - size.height, 0);
   }
 }
+
+
 
 void Slider::move(int delta) {
   uint16_t new_pos =
@@ -244,7 +259,7 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
 
   Position mouse_position = event->pos;
   Position old_pos = pos;
-  
+
   int mouse_delta = mouse_position.*primary_axis - last_mouse_pos.*primary_axis;
   move(mouse_delta);
   int slider_delta = pos.*primary_axis - old_pos.*primary_axis;
