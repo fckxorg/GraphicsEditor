@@ -137,7 +137,6 @@ class Slider : public RectWindow, public InterfaceDraggable {
   uint16_t lower_bound;
   uint16_t upper_bound;
 
-  bool check_boundaries(Position click_pos);
 
  public:
   Slider();

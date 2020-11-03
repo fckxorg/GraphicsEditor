@@ -159,10 +159,15 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
       default_color(color),
       pressed(false),
       lower_bound(lower_bound),
-      upper_bound(upper_bound),
       horizontal(horizontal),
       last_mouse_pos(pos),
-      step(step) {}
+      step(step) {
+  if (horizontal) {
+    this->upper_bound = std::max(upper_bound - size.width, 0);
+  } else {
+    this->upper_bound = std::max(upper_bound - size.height, 0);
+  }
+}
 
 void Slider::handle_event(Event* event) {
   assert(event != nullptr);
@@ -208,14 +213,11 @@ void Slider::onButtonUp() {
 
 void Slider::onButtonDown() {
   if (horizontal) {
-    this->pos =
-        Position(std::min(static_cast<uint16_t>(pos.x + step),
-                          static_cast<uint16_t>(upper_bound - size.width)),
-                 pos.y);
+    this->pos = Position(
+        std::min(static_cast<uint16_t>(pos.x + step), upper_bound), pos.y);
   } else {
     this->pos = Position(
-        pos.x, std::min(static_cast<uint16_t>(pos.y + step),
-                        static_cast<uint16_t>(upper_bound - size.height)));
+        pos.x, std::min(static_cast<uint16_t>(pos.y + step), upper_bound));
   }
 
   last_mouse_pos = pos;
@@ -254,8 +256,7 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
 
   if (horizontal) {
     delta = mouse_position.x - last_mouse_pos.x;
-    int adjusted_upper_bound = std::max(upper_bound - size.width, 0);
-    new_pos.x = std::min(pos.x + delta, adjusted_upper_bound);
+    new_pos.x = std::min(static_cast<uint16_t>(pos.x + delta), upper_bound);
     new_pos.x = std::max(new_pos.x, lower_bound);
 
     slider_delta = new_pos.x - pos.x;
@@ -263,8 +264,7 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
     new_pos.y = pos.y;
   } else {
     delta = mouse_position.y - last_mouse_pos.y;
-    int adjusted_upper_bound = std::max(upper_bound - size.height, 0);
-    new_pos.y = std::min(pos.y + delta, adjusted_upper_bound);
+    new_pos.y = std::min(static_cast<uint16_t>(pos.y + delta), upper_bound);
     new_pos.y = std::max(new_pos.y, lower_bound);
 
     slider_delta = new_pos.y - pos.y;
