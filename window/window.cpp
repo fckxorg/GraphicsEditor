@@ -240,26 +240,18 @@ void Slider::onMousePress(MouseButtonEvent* event) {
 
 void Slider::onMouseMove(MouseMoveEvent* event) {
   assert(event != nullptr);
-
   if (!pressed) return;
+
   Position mouse_position = event->pos;
-
-  int slider_delta = 0;
-
-  Position new_pos = {};
-
-  if (horizontal) {
-    new_pos = get_new_slider_pos(mouse_position, &Position::x, &Position::y,
-                                 slider_delta);
-  } else {
-    new_pos = get_new_slider_pos(mouse_position, &Position::y, &Position::x,
-                                 slider_delta);
-  }
+  Position old_pos = pos;
+  
+  int mouse_delta = mouse_position.*primary_axis - last_mouse_pos.*primary_axis;
+  move(mouse_delta);
+  int slider_delta = pos.*primary_axis - old_pos.*primary_axis;
 
   SubscriptionManager::send_event(this, new ScrollEvent(slider_delta));
 
   last_mouse_pos = mouse_position;
-  this->pos = new_pos;
 }
 
 void Slider::onMouseRelease(MouseButtonEvent* event) {
