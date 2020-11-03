@@ -10,7 +10,9 @@
 
 class SubscriptionManager {
  private:
-  static std::unordered_map<Window*, std::unordered_set<Window*>> subscriptions;
+  static std::unordered_map<Window*, std::unordered_set<Window*>> subscriptions; //TODO custom hash for pointers
+
+  //XXX std::function-like functors with arguments union
 
  public:
   SubscriptionManager() = delete;
