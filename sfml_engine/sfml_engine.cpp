@@ -23,7 +23,7 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   window.draw(rect);
 }
 
-void Renderer::draw_text(Text text, Position pos, Color bg_color) {
+void Renderer::draw_text(Text text, Position pos) {
   sf::Text sfml_text = Renderer::get_sfml_text(text);
   sfml_text.setPosition(pos);
   window.draw(sfml_text);

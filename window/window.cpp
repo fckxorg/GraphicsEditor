@@ -136,21 +136,14 @@ void RectButton::handle_event(Event* event) {
 /*---------------------------------------*/
 
 TextWindow::TextWindow() = default;
-TextWindow::TextWindow(Text text, Position pos, Color bgcolor)
-    : text(text), bgcolor(bgcolor) {
-  set_pos(pos);
-}
+TextWindow::TextWindow(Text text, Position pos) : text(text) { set_pos(pos); }
 
 Text TextWindow::get_text() const { return text; }
 
 void TextWindow::set_text(Text text) { this->text = text; }
 
-Color TextWindow::get_bgcolor() const { return bgcolor; }
-
-void TextWindow::set_bgcolor(Color bgcolor) { this->bgcolor = bgcolor; }
-
 void TextWindow::render() {
-  Renderer::draw_text(text, pos, bgcolor);
+  Renderer::draw_text(text, pos);
   RenderWindow::render();
 }
 

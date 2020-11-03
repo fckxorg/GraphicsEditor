@@ -63,11 +63,13 @@ struct Text {
   uint16_t character_size;
   float line_spacing;
   const char* font_path;
+
   Color color;
+  Color bg_color;
 
   Text();
   Text(const char* text, uint16_t character_size, const char* font_path,
-       Color color, float line_spacing = 1);
+       Color color, Color bg_color, float line_spacing = 1);
 };
 
 #endif

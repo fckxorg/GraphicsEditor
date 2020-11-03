@@ -26,7 +26,7 @@ int main() {
   fclose(test_file);
 
   char roboto_font_path[] = "fonts/Roboto-Thin.ttf";
-  Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0)};
+  Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0), Color(255, 255, 255)};
 
   std::unique_ptr<Window> root_window(new RootWindow());
   std::unique_ptr<Window> window(

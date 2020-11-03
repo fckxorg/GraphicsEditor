@@ -39,10 +39,11 @@ Position::operator sf::Vector2f() const { return sf::Vector2f(x, y); }
 
 Text::Text() = default;
 Text::Text(const char* text, uint16_t character_size, const char* font_path,
-           Color color, float line_spacing)
+           Color color, Color bg_color, float line_spacing)
     : text(text),
       character_size(character_size),
       font_path(font_path),
       color(color),
+      bg_color(bg_color),
       line_spacing(line_spacing) {}
 

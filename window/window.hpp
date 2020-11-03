@@ -94,18 +94,14 @@ class RectWindow : public RenderWindow {
 
 class TextWindow : public RenderWindow {
  private:
-  Color bgcolor;
   Text text;
 
  public:
   TextWindow();
-  TextWindow(Text text, Position pos, Color bgcolor);
+  TextWindow(Text text, Position pos);
 
   Text get_text() const;
   void set_text(Text text);
-
-  void set_bgcolor(Color bgcolor);
-  Color get_bgcolor() const;
 
   virtual void render() override;
 };
