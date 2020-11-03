@@ -248,28 +248,16 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
   if (!pressed) return;
   Position mouse_position = event->pos;
 
-  int delta = 0;
-
   int slider_delta = 0;
 
   Position new_pos = {};
 
   if (horizontal) {
-    delta = mouse_position.x - last_mouse_pos.x;
-    new_pos.x = std::min(static_cast<uint16_t>(pos.x + delta), upper_bound);
-    new_pos.x = std::max(new_pos.x, lower_bound);
-
+    new_pos = get_new_slider_pos(mouse_position, &Position::x, &Position::y);
     slider_delta = new_pos.x - pos.x;
-
-    new_pos.y = pos.y;
   } else {
-    delta = mouse_position.y - last_mouse_pos.y;
-    new_pos.y = std::min(static_cast<uint16_t>(pos.y + delta), upper_bound);
-    new_pos.y = std::max(new_pos.y, lower_bound);
-
+    new_pos = get_new_slider_pos(mouse_position, &Position::y, &Position::x);
     slider_delta = new_pos.y - pos.y;
-
-    new_pos.x = pos.x;
   }
 
   SubscriptionManager::send_event(this, new ScrollEvent(slider_delta));

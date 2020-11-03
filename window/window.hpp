@@ -1,6 +1,7 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include <bits/stdint-uintn.h>
 #include <stdio.h>
 
 #include <cassert>
@@ -136,6 +137,16 @@ class Slider : public RectWindow, public InterfaceDraggable {
   bool horizontal;
   uint16_t lower_bound;
   uint16_t upper_bound;
+
+  Position get_new_slider_pos(Position mouse_position, uint16_t Position::*axis, uint16_t Position::*secondary_axis) {
+    Position new_pos = {};
+    int delta = mouse_position.*axis - last_mouse_pos.*axis;
+    new_pos.*axis = std::min(static_cast<uint16_t>(pos.*axis + delta), upper_bound);
+    new_pos.*axis = std::max(new_pos.*axis, lower_bound);
+    new_pos.*secondary_axis = pos.*secondary_axis;
+
+    return new_pos;
+  }
 
 
  public:
