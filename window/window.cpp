@@ -205,9 +205,6 @@ void Slider::handle_event(Event* event) {
       } else if (button_press_event->value == DOWN) {
         onButtonDown();
       }
-
-      SubscriptionManager::send_event(
-          this, new ButtonPressEvent(button_press_event->value));
       break;
     }
   }
@@ -216,11 +213,17 @@ void Slider::handle_event(Event* event) {
 void Slider::onButtonUp() {
   move(-step);
   last_mouse_pos = pos;
+  float position = static_cast<float>(pos.*primary_axis - lower_bound) /
+                   static_cast<float>(upper_bound - lower_bound);
+  SubscriptionManager::send_event(this, new SliderMoveEvent(position));
 }
 
 void Slider::onButtonDown() {
   move(step);
   last_mouse_pos = pos;
+  float position = static_cast<float>(pos.*primary_axis - lower_bound) /
+                   static_cast<float>(upper_bound - lower_bound);
+  SubscriptionManager::send_event(this, new SliderMoveEvent(position));
 }
 
 void Slider::onMousePress(MouseButtonEvent* event) {
@@ -245,7 +248,7 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
   float position = static_cast<float>(pos.*primary_axis - lower_bound) /
                    static_cast<float>(upper_bound - lower_bound);
 
-  SubscriptionManager::send_event(this, new ScrollEvent(position));
+  SubscriptionManager::send_event(this, new SliderMoveEvent(position));
 
   last_mouse_pos = mouse_position;
 }
@@ -266,6 +269,12 @@ Scrollbar::~Scrollbar() = default;
 
 void Scrollbar::handle_event(Event* event) {
   assert(event != nullptr);
+
+  if(event->get_type() == SLIDER_MOVE) {
+    SliderMoveEvent* slider_event = dynamic_cast<SliderMoveEvent*>(event);
+    SubscriptionManager::send_event(this, new ScrollEvent(slider_event->position));
+    return;
+  }
 
   for (auto& subwindow : subwindows) {
     subwindow->handle_event(event);
@@ -334,8 +343,7 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
 
   SubscriptionManager::add_subscription(top_button.get(), slider.get());
   SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
-
-  slider_ptr = slider.get();
+  SubscriptionManager::add_subscription(slider.get(), this);
 
   add_child_window(top_button);
   add_child_window(bottom_button);
@@ -357,8 +365,9 @@ ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
       Size(viewport_size.width * SCROLLBAR_SIZE_RATIO, viewport_size.height),
       Position(pos.x + viewport_size.width, pos.y), Color(245, 245, 245),
       viewport_size.height, whole_block_height, text.character_size, false));
-  SubscriptionManager::add_subscription(
-      dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, this);
+
+  SubscriptionManager::add_subscription(scrollbar.get(), this);
+
   add_child_window(scrollbar);
 }
 

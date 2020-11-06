@@ -176,7 +176,6 @@ class Slider : public RectWindow, public InterfaceDraggable {
 
 class Scrollbar : public RectWindow {
  public:
-  Window* slider_ptr;
   Scrollbar();
   ~Scrollbar();
 

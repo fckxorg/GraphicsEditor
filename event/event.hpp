@@ -10,7 +10,8 @@ enum SYSTEM_EVENT {
   MOUSE_MOVE,
   WINDOW_CLOSED,
   BUTTON_PRESSED,
-  SCROLL
+  SCROLL,
+  SLIDER_MOVE
 };
 
 class Event {
@@ -58,6 +59,12 @@ class ScrollEvent : public Event {
  public:
   float position;
   ScrollEvent(float position);
+};
+
+class SliderMoveEvent : public Event {
+ public:
+  float position;
+  SliderMoveEvent(float position);
 };
 
 #endif

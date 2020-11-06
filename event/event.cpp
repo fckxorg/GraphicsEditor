@@ -18,3 +18,6 @@ ButtonPressEvent::ButtonPressEvent(uint32_t value)
     : Event(BUTTON_PRESSED), value(value) {}
 
 ScrollEvent::ScrollEvent(float position) : Event(SCROLL), position(position) {}
+
+SliderMoveEvent::SliderMoveEvent(float position)
+    : Event(SLIDER_MOVE), position(position) {}
