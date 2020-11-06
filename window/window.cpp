@@ -39,9 +39,7 @@ void RootWindow::render() {
     subwindow->render();
   }
 }
-void RootWindow::handle_event(Event* event) {
-  SubscriptionManager::send_event(this, event);
-};
+void RootWindow::handle_event(Event* event) { SEND(this, event); };
 
 /*---------------------------------------*/
 /*            RenderWindow               */
@@ -108,7 +106,7 @@ void RectButton::onMousePress(MouseButtonEvent* event) {
 
   this->color = RectWindow::get_color() - PRESS_FADE_DELTA;
 
-  SubscriptionManager::send_event(this, new ButtonPressEvent(value));
+  SEND(this, new ButtonPressEvent(value));
 }
 
 void RectButton::onMouseRelease(MouseButtonEvent* event) {
@@ -183,6 +181,11 @@ void Slider::move(int delta) {
   pos.*primary_axis = new_pos;
 }
 
+float Slider::get_relative_pos() {
+  return static_cast<float>(pos.*primary_axis - lower_bound) /
+         static_cast<float>(upper_bound - lower_bound);
+}
+
 void Slider::handle_event(Event* event) {
   assert(event != nullptr);
   switch (event->get_type()) {
@@ -213,17 +216,13 @@ void Slider::handle_event(Event* event) {
 void Slider::onButtonUp() {
   move(-step);
   last_mouse_pos = pos;
-  float position = static_cast<float>(pos.*primary_axis - lower_bound) /
-                   static_cast<float>(upper_bound - lower_bound);
-  SubscriptionManager::send_event(this, new SliderMoveEvent(position));
+  SEND(this, new SliderMoveEvent(get_relative_pos()));
 }
 
 void Slider::onButtonDown() {
   move(step);
   last_mouse_pos = pos;
-  float position = static_cast<float>(pos.*primary_axis - lower_bound) /
-                   static_cast<float>(upper_bound - lower_bound);
-  SubscriptionManager::send_event(this, new SliderMoveEvent(position));
+  SEND(this, new SliderMoveEvent(get_relative_pos()));
 }
 
 void Slider::onMousePress(MouseButtonEvent* event) {
@@ -245,10 +244,7 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
   int mouse_delta = mouse_position.*primary_axis - last_mouse_pos.*primary_axis;
   move(mouse_delta);
 
-  float position = static_cast<float>(pos.*primary_axis - lower_bound) /
-                   static_cast<float>(upper_bound - lower_bound);
-
-  SubscriptionManager::send_event(this, new SliderMoveEvent(position));
+  SEND(this, new SliderMoveEvent(get_relative_pos()));
 
   last_mouse_pos = mouse_position;
 }
@@ -270,9 +266,9 @@ Scrollbar::~Scrollbar() = default;
 void Scrollbar::handle_event(Event* event) {
   assert(event != nullptr);
 
-  if(event->get_type() == SLIDER_MOVE) {
+  if (event->get_type() == SLIDER_MOVE) {
     SliderMoveEvent* slider_event = dynamic_cast<SliderMoveEvent*>(event);
-    SubscriptionManager::send_event(this, new ScrollEvent(slider_event->position));
+    SEND(this, new ScrollEvent(slider_event->position));
     return;
   }
 
@@ -328,7 +324,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
                               scroll_block_size * size.*primary_size *
                               (1 - 2 * SCROLLBAR_BUTTON_RATIO);
   slider_size.*secondary_size = size.*secondary_size;
-  slider_step = static_cast<float>(slider_size.*primary_size) / viewport_size * step;
+  slider_step =
+      static_cast<float>(slider_size.*primary_size) / viewport_size * step;
 
   Color controls_colors = color - CONTROLS_COLOR_DELTA;
 

@@ -11,6 +11,8 @@
 #define SUBSCRIBE(SENDER, RECIPIENT) \
   SubscriptionManager::add_subscription((SENDER), (RECIPIENT))
 
+#define SEND(SENDER, EVENT) SubscriptionManager::send_event((SENDER), (EVENT))
+
 class SubscriptionManager {
  private:
   static std::unordered_map<Window*, std::unordered_set<Window*>>
