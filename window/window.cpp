@@ -3,6 +3,7 @@
 #include <bits/stdint-uintn.h>
 
 #include <cstdio>
+#include <list>
 
 const uint8_t PRESS_FADE_DELTA = 50;
 const uint8_t CONTROLS_COLOR_DELTA = 30;
@@ -274,7 +275,7 @@ void Scrollbar::handle_event(Event* event) {
 Scrollbar::Scrollbar(Size size, Position pos, Color color,
                      uint16_t viewport_size, uint16_t scroll_block_size,
                      uint16_t step, bool horizontal)
-    : RectWindow(size, pos, color), horizontal(horizontal) {
+    : RectWindow(size, pos, color) {
   Size button_size = {};
 
   Position bottom_button_pos = {};
@@ -284,42 +285,33 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   uint16_t slider_lower_boundary = 0;
   uint16_t slider_upper_boundary = 0;
 
-  if (horizontal) {
-    button_size = {static_cast<uint8_t>(size.width * SCROLLBAR_BUTTON_RATIO),
-                   size.height};
-    slider_default_position = {static_cast<uint16_t>(pos.x + button_size.width),
-                               pos.y};
-    bottom_button_pos = {static_cast<uint16_t>(
-                             pos.x + size.width * (1 - SCROLLBAR_BUTTON_RATIO)),
-                         pos.y};
+  uint16_t Position::*primary_axis = &Position::y;
+  uint16_t Position::*secondary_axis = &Position::x;
 
-    slider_lower_boundary = slider_default_position.x;
-    slider_upper_boundary = bottom_button_pos.x;
-    slider_size = Size((static_cast<float>(viewport_size) / scroll_block_size) *
-                           size.width * (1 - 2 * SCROLLBAR_BUTTON_RATIO),
-                       size.height);
-  } else {
-    button_size = {size.width,
-                   static_cast<uint8_t>(size.height * SCROLLBAR_BUTTON_RATIO)};
-    bottom_button_pos = {
-        pos.x, static_cast<uint16_t>(pos.y + size.height *
-                                                 (1 - SCROLLBAR_BUTTON_RATIO))};
-    slider_default_position = {
-        pos.x, static_cast<uint16_t>(pos.y + button_size.height)};
+  uint16_t Size::*primary_size = &Size::height;
+  uint16_t Size::*secondary_size = &Size::width;
 
-    slider_lower_boundary = slider_default_position.y;
-    slider_upper_boundary = bottom_button_pos.y;
-    slider_size = Size(size.width,
-                       (static_cast<float>(viewport_size) / scroll_block_size) *
-                           size.height * (1 - 2 * SCROLLBAR_BUTTON_RATIO));
+  if(horizontal) {
+        std::swap(primary_axis, secondary_axis);
+        std::swap(primary_size, secondary_size);
   }
 
-  uint8_t red_comp_color = color.r - CONTROLS_COLOR_DELTA;
-  uint8_t green_comp_color = color.g - CONTROLS_COLOR_DELTA;
-  uint8_t blue_comp_color = color.b - CONTROLS_COLOR_DELTA;
+  button_size.*primary_size = size.*primary_size * SCROLLBAR_BUTTON_RATIO;
+  button_size.*secondary_size = size.*secondary_size;
+  
+  slider_default_position.*primary_axis = pos.*primary_axis + button_size.*primary_size;
+  slider_default_position.*secondary_axis = pos.*secondary_axis;
 
-  Color controls_colors =
-      Color(red_comp_color, green_comp_color, blue_comp_color);
+  bottom_button_pos.*primary_axis = pos.*primary_axis + size.*primary_size * (1 - SCROLLBAR_BUTTON_RATIO);
+  bottom_button_pos.*secondary_axis = pos.*secondary_axis;
+
+  slider_lower_boundary = slider_default_position.*primary_axis;
+  slider_upper_boundary = bottom_button_pos.*primary_axis;
+
+  slider_size.*primary_size = static_cast<float>(viewport_size) / scroll_block_size * size.*primary_size * (1 - 2 * SCROLLBAR_BUTTON_RATIO);
+  slider_size.*secondary_size = size.*secondary_size;
+
+  Color controls_colors = color - CONTROLS_COLOR_DELTA;
 
   std::unique_ptr<Window> top_button(
       new RectButton(button_size, pos, controls_colors, UP));

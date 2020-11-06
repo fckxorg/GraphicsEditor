@@ -175,15 +175,11 @@ class Slider : public RectWindow, public InterfaceDraggable {
 };
 
 class Scrollbar : public RectWindow {
- private:
-  bool horizontal;
-
  public:
   Window* slider_ptr;
   Scrollbar();
   ~Scrollbar();
 
-  float get_scroll_ratio();
   void handle_event(Event* event) override;
   Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size,
             uint16_t scroll_block_size, uint16_t step, bool horizontal = false);

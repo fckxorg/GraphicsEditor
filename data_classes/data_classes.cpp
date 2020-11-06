@@ -20,9 +20,9 @@ Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
     : r(r), g(g), b(b), a(a){};
 
 Color Color::operator+(int delta) {
-  uint8_t color_r = std::min(r + delta, 0);
-  uint8_t color_g = std::min(g + delta, 0);
-  uint8_t color_b = std::min(b + delta, 0);
+  uint8_t color_r = std::max(static_cast<int>(r) + delta, 0);
+  uint8_t color_g = std::max(static_cast<int>(g) + delta, 0);
+  uint8_t color_b = std::max(static_cast<int>(b) + delta, 0);
 
   return Color(color_r, color_g, color_b, a);
 }
@@ -58,5 +58,6 @@ Text::Text(const char* text, uint16_t character_size, const char* font_path,
       font_path(font_path),
       color(color),
       bg_color(bg_color),
+
       line_spacing(line_spacing) {}
 
