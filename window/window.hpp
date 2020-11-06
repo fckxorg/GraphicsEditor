@@ -177,7 +177,6 @@ class Slider : public RectWindow, public InterfaceDraggable {
 class Scrollbar : public RectWindow {
  private:
   bool horizontal;
-  float scroll_ratio;
 
  public:
   Window* slider_ptr;
@@ -195,7 +194,6 @@ class ScrollableText : public RectWindow {
   Text text;
   uint16_t whole_block_height;
   float offset;
-  float scroll_ratio;
 
   uint16_t get_nlines();
 

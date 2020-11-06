@@ -56,8 +56,8 @@ class ButtonPressEvent : public Event {
 
 class ScrollEvent : public Event {
  public:
-  int delta;
-  ScrollEvent(int delta);
+  float position;
+  ScrollEvent(float position);
 };
 
 #endif

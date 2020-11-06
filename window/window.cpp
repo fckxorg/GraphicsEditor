@@ -155,8 +155,8 @@ Slider::Slider() = default;
 Slider::~Slider() = default;
 
 /*!
- * This constructor sets movement axis, so other slider methods will be able to use it later
- * as a pointer to member of Position class
+ * This constructor sets movement axis, so other slider methods will be able to
+ * use it later as a pointer to member of Position class
  * @param size size of slider
  * @param pos position of slider
  * @param color slider color
@@ -164,7 +164,7 @@ Slider::~Slider() = default;
  * @param upper_bound right/bottom boundary for the slider
  * @param step step for slider movement (only used to move after button clicks)
  * @param horizontal flag, defining direction of slider movement
-*/
+ */
 
 Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
                uint16_t upper_bound, uint16_t step, bool horizontal)
@@ -183,8 +183,6 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
     this->upper_bound = std::max(upper_bound - size.height, 0);
   }
 }
-
-
 
 void Slider::move(int delta) {
   uint16_t new_pos =
@@ -262,9 +260,11 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
 
   int mouse_delta = mouse_position.*primary_axis - last_mouse_pos.*primary_axis;
   move(mouse_delta);
-  int slider_delta = pos.*primary_axis - old_pos.*primary_axis;
 
-  SubscriptionManager::send_event(this, new ScrollEvent(slider_delta));
+  float position = static_cast<float>(pos.*primary_axis - lower_bound) /
+                   static_cast<float>(upper_bound - lower_bound);
+
+  SubscriptionManager::send_event(this, new ScrollEvent(position));
 
   last_mouse_pos = mouse_position;
 }
@@ -282,8 +282,6 @@ void Slider::onMouseRelease(MouseButtonEvent* event) {
 
 Scrollbar::Scrollbar() = default;
 Scrollbar::~Scrollbar() = default;
-
-float Scrollbar::get_scroll_ratio() { return scroll_ratio; }
 
 void Scrollbar::handle_event(Event* event) {
   assert(event != nullptr);
@@ -335,14 +333,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
                        (static_cast<float>(viewport_size) / scroll_block_size) *
                            size.height * (1 - 2 * SCROLLBAR_BUTTON_RATIO));
   }
-
-  scroll_ratio =
-      static_cast<float>(scroll_block_size) /
+  static_cast<float>(scroll_block_size) /
       static_cast<float>(slider_upper_boundary - slider_lower_boundary);
-
-  if (scroll_ratio < 1) {
-    scroll_ratio = 1;
-  }
 
   uint8_t red_comp_color = color.r - CONTROLS_COLOR_DELTA;
   uint8_t green_comp_color = color.g - CONTROLS_COLOR_DELTA;
@@ -355,10 +347,9 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
       new RectButton(button_size, pos, controls_colors, UP));
   std::unique_ptr<Window> bottom_button(
       new RectButton(button_size, bottom_button_pos, controls_colors, DOWN));
-  std::unique_ptr<Window> slider(
-      new Slider(slider_size, slider_default_position, controls_colors,
-                 slider_lower_boundary, slider_upper_boundary,
-                 step / scroll_ratio, horizontal));
+  std::unique_ptr<Window> slider(new Slider(
+      slider_size, slider_default_position, controls_colors,
+      slider_lower_boundary, slider_upper_boundary, step, horizontal));
 
   SubscriptionManager::add_subscription(top_button.get(), slider.get());
   SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
@@ -387,8 +378,6 @@ ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
       viewport_size.height, whole_block_height, text.character_size, false));
   SubscriptionManager::add_subscription(
       dynamic_cast<Scrollbar*>(scrollbar.get())->slider_ptr, this);
-
-  scroll_ratio = dynamic_cast<Scrollbar*>(scrollbar.get())->get_scroll_ratio();
   add_child_window(scrollbar);
 }
 
@@ -412,7 +401,7 @@ void ScrollableText::handle_event(Event* event) {
     }
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset -= scroll_event->delta * scroll_ratio;
+      offset = -(whole_block_height - size.height) * scroll_event->position;
     }
   }
 
