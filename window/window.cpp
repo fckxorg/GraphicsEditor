@@ -341,10 +341,14 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
       slider_size, slider_default_position, controls_colors,
       slider_lower_boundary, slider_upper_boundary, slider_step, horizontal));
 
+  SUBSCRIBE(top_button.get(), slider.get());
+  SUBSCRIBE(bottom_button.get(), slider.get());
+  SUBSCRIBE(slider.get(), this);
+  /*
   SubscriptionManager::add_subscription(top_button.get(), slider.get());
   SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
   SubscriptionManager::add_subscription(slider.get(), this);
-
+*/
   add_child_window(top_button);
   add_child_window(bottom_button);
   add_child_window(slider);
@@ -380,15 +384,6 @@ void ScrollableText::handle_event(Event* event) {
   assert(event != nullptr);
 
   switch (event->get_type()) {
-    case BUTTON_PRESSED: {
-      auto button_press_event = dynamic_cast<ButtonPressEvent*>(event);
-      if (button_press_event->value == UP) {
-        onButtonUp();
-      } else if (button_press_event->value == DOWN) {
-        onButtonDown();
-      }
-      return;
-    }
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
       offset = -(whole_block_height - size.height) * scroll_event->position;
@@ -398,22 +393,6 @@ void ScrollableText::handle_event(Event* event) {
   for (auto& subwindow : subwindows) {
     subwindow->handle_event(event);
   }
-}
-
-void ScrollableText::onButtonDown() {
-  if (offset - text.character_size < -whole_block_height + size.height) {
-    offset = -whole_block_height + size.height;
-    return;
-  }
-  offset -= text.character_size;
-}
-
-void ScrollableText::onButtonUp() {
-  if (offset + text.character_size > 0) {
-    offset = 0;
-    return;
-  }
-  offset += text.character_size;
 }
 
 uint16_t ScrollableText::get_nlines() {
