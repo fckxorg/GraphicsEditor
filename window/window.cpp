@@ -344,11 +344,7 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   SUBSCRIBE(top_button.get(), slider.get());
   SUBSCRIBE(bottom_button.get(), slider.get());
   SUBSCRIBE(slider.get(), this);
-  /*
-  SubscriptionManager::add_subscription(top_button.get(), slider.get());
-  SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
-  SubscriptionManager::add_subscription(slider.get(), this);
-*/
+
   add_child_window(top_button);
   add_child_window(bottom_button);
   add_child_window(slider);
@@ -370,7 +366,7 @@ ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
       Position(pos.x + viewport_size.width, pos.y), Color(245, 245, 245),
       viewport_size.height, whole_block_height, text.character_size, false));
 
-  SubscriptionManager::add_subscription(scrollbar.get(), this);
+  SUBSCRIBE(scrollbar.get(), this);
 
   add_child_window(scrollbar);
 }

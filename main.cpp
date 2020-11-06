@@ -26,7 +26,8 @@ int main() {
   fclose(test_file);
 
   char roboto_font_path[] = "fonts/Roboto-Thin.ttf";
-  Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0), Color(255, 255, 255)};
+  Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0),
+                      Color(255, 255, 255)};
 
   std::unique_ptr<Window> root_window(new RootWindow());
   std::unique_ptr<Window> window(
@@ -35,8 +36,7 @@ int main() {
       Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
 
   // should be subscribed before ownership moves to window in hieararchy
-  SubscriptionManager::add_subscription(root_window.get(),
-                                        scrollable_text.get());
+  SUBSCRIBE(root_window.get(), scrollable_text.get());
 
   window->add_child_window(scrollable_text);
   root_window->add_child_window(window);
