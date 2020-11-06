@@ -103,19 +103,9 @@ void RectButton::render() { RectWindow::render(); }
 
 void RectButton::onMousePress(MouseButtonEvent* event) {
   assert(event != nullptr);
+  if (!is_point_inside(event->pos)) return;
 
-  Position click_position = event->pos;
-  if (!is_point_inside(click_position)) return;
-
-  Color curr_color = RectWindow::get_color();
-
-  uint8_t color_r_pressed = std::min(curr_color.r - PRESS_FADE_DELTA, 0);
-  uint8_t color_g_pressed = std::min(curr_color.g - PRESS_FADE_DELTA, 0);
-  uint8_t color_b_pressed = std::min(curr_color.b - PRESS_FADE_DELTA, 0);
-
-  Color pressed_color =
-      Color(color_r_pressed, color_g_pressed, color_b_pressed);
-  this->color = pressed_color;
+  this->color = RectWindow::get_color() - PRESS_FADE_DELTA;
 
   SubscriptionManager::send_event(this, new ButtonPressEvent(value));
 }
@@ -234,21 +224,11 @@ void Slider::onButtonDown() {
 
 void Slider::onMousePress(MouseButtonEvent* event) {
   assert(event != nullptr);
+  if (!is_point_inside(event->pos)) return;
 
-  Position click_position = event->pos;
-  if (!is_point_inside(click_position)) return;
-
-  Color curr_color = RectWindow::get_color();
-
-  uint8_t color_r_pressed = std::min(curr_color.r - PRESS_FADE_DELTA, 0);
-  uint8_t color_g_pressed = std::min(curr_color.g - PRESS_FADE_DELTA, 0);
-  uint8_t color_b_pressed = std::min(curr_color.b - PRESS_FADE_DELTA, 0);
-
-  Color pressed_color =
-      Color(color_r_pressed, color_g_pressed, color_b_pressed);
-  this->color = pressed_color;
+  this->color = RectWindow::get_color() - PRESS_FADE_DELTA;
   pressed = true;
-  last_mouse_pos = click_position;
+  last_mouse_pos = event->pos;
 }
 
 void Slider::onMouseMove(MouseMoveEvent* event) {
@@ -333,8 +313,6 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
                        (static_cast<float>(viewport_size) / scroll_block_size) *
                            size.height * (1 - 2 * SCROLLBAR_BUTTON_RATIO));
   }
-  static_cast<float>(scroll_block_size) /
-      static_cast<float>(slider_upper_boundary - slider_lower_boundary);
 
   uint8_t red_comp_color = color.r - CONTROLS_COLOR_DELTA;
   uint8_t green_comp_color = color.g - CONTROLS_COLOR_DELTA;

@@ -1,9 +1,8 @@
 #ifndef DATA_CLASSES_HPP
 #define DATA_CLASSES_HPP
 
-#include <bits/stdint-uintn.h>
-
 #include <cstdint>
+#include <algorithm>
 
 #ifdef SFML_ENGINE
 #include <SFML/Graphics.hpp>
@@ -36,6 +35,9 @@ struct Color {
   Color();
 
   Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
+
+  Color operator+(int delta);
+  Color operator-(int delta);
 
 #ifdef SFML_ENGINE
   explicit Color(const sf::Color& sfcolor);
