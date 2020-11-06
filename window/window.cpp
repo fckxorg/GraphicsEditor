@@ -284,6 +284,9 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
 
   uint16_t slider_lower_boundary = 0;
   uint16_t slider_upper_boundary = 0;
+  uint16_t slider_step = 0;
+
+  /* Setting up pointers to members to unify further calculations */
 
   uint16_t Position::*primary_axis = &Position::y;
   uint16_t Position::*secondary_axis = &Position::x;
@@ -291,35 +294,43 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   uint16_t Size::*primary_size = &Size::height;
   uint16_t Size::*secondary_size = &Size::width;
 
-  if(horizontal) {
-        std::swap(primary_axis, secondary_axis);
-        std::swap(primary_size, secondary_size);
+  if (horizontal) {
+    std::swap(primary_axis, secondary_axis);
+    std::swap(primary_size, secondary_size);
   }
+
+  /* calculating sizes and positions of scrollbar controls */
 
   button_size.*primary_size = size.*primary_size * SCROLLBAR_BUTTON_RATIO;
   button_size.*secondary_size = size.*secondary_size;
-  
-  slider_default_position.*primary_axis = pos.*primary_axis + button_size.*primary_size;
+
+  slider_default_position.*primary_axis =
+      pos.*primary_axis + button_size.*primary_size;
   slider_default_position.*secondary_axis = pos.*secondary_axis;
 
-  bottom_button_pos.*primary_axis = pos.*primary_axis + size.*primary_size * (1 - SCROLLBAR_BUTTON_RATIO);
+  bottom_button_pos.*primary_axis =
+      pos.*primary_axis + size.*primary_size * (1 - SCROLLBAR_BUTTON_RATIO);
   bottom_button_pos.*secondary_axis = pos.*secondary_axis;
 
   slider_lower_boundary = slider_default_position.*primary_axis;
   slider_upper_boundary = bottom_button_pos.*primary_axis;
 
-  slider_size.*primary_size = static_cast<float>(viewport_size) / scroll_block_size * size.*primary_size * (1 - 2 * SCROLLBAR_BUTTON_RATIO);
+  slider_size.*primary_size = static_cast<float>(viewport_size) /
+                              scroll_block_size * size.*primary_size *
+                              (1 - 2 * SCROLLBAR_BUTTON_RATIO);
   slider_size.*secondary_size = size.*secondary_size;
+  slider_step = static_cast<float>(slider_size.*primary_size) / viewport_size * step;
 
   Color controls_colors = color - CONTROLS_COLOR_DELTA;
 
+  /* creating scrollbar controls */
   std::unique_ptr<Window> top_button(
       new RectButton(button_size, pos, controls_colors, UP));
   std::unique_ptr<Window> bottom_button(
       new RectButton(button_size, bottom_button_pos, controls_colors, DOWN));
   std::unique_ptr<Window> slider(new Slider(
       slider_size, slider_default_position, controls_colors,
-      slider_lower_boundary, slider_upper_boundary, step, horizontal));
+      slider_lower_boundary, slider_upper_boundary, slider_step, horizontal));
 
   SubscriptionManager::add_subscription(top_button.get(), slider.get());
   SubscriptionManager::add_subscription(bottom_button.get(), slider.get());
@@ -383,6 +394,7 @@ void ScrollableText::handle_event(Event* event) {
 void ScrollableText::onButtonDown() {
   if (offset - text.character_size < -whole_block_height + size.height) {
     offset = -whole_block_height + size.height;
+    return;
   }
   offset -= text.character_size;
 }
@@ -390,6 +402,7 @@ void ScrollableText::onButtonDown() {
 void ScrollableText::onButtonUp() {
   if (offset + text.character_size > 0) {
     offset = 0;
+    return;
   }
   offset += text.character_size;
 }
