@@ -61,3 +61,6 @@ Text::Text(const char* text, uint16_t character_size, const char* font_path,
 
       line_spacing(line_spacing) {}
 
+/*--------------- VIEWPORT ---------------------------------*/
+Viewport::Viewport() = default;
+Viewport::Viewport(Size size, Position pos) : size(size), pos(pos) {}

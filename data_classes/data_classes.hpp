@@ -74,4 +74,12 @@ struct Text {
        Color color, Color bg_color, float line_spacing = 1);
 };
 
+struct Viewport {
+    Size size;
+    Position pos;
+
+    Viewport();
+    Viewport(Size size, Position pos);
+};
+
 #endif

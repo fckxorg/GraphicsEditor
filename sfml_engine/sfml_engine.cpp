@@ -1,7 +1,7 @@
 #include "sfml_engine.hpp"
 
 sf::RenderWindow Renderer::window;
-std::unordered_map<const char*, sf::Font> Renderer::fonts; //TODO resource manager and custom hash for strings
+std::unordered_map<const char*, sf::Font> Renderer::fonts; //TODO resource manager
 
 void Renderer::init(Size window_size, const char* name) {
   assert(name != nullptr);
