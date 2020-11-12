@@ -39,14 +39,18 @@ int main() {
   //std::unique_ptr<Window> scrollable_text(new ScrollableText(
   //    Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
 
-  std::unique_ptr<Window> scrollable_window(new ScrollableWindow(Size(380, 400), Size(380, 900), Position(100, 100), Color(255, 0, 0)));
+  std::unique_ptr<Window> scrollable_window(new ScrollableWindow(Size(380, 400), Size(380, 900), Position(100, 100), Color(255, 255, 255)));
+  std::unique_ptr<Window> scrollbar(new Scrollbar(Size(27, 400), Position(480, 100), Color(245, 245, 245), 400, 900, scroll_test.character_size));
 
-  scrollable_window->add_child_window(inner_container);
 
   // should be subscribed before ownership moves to window in hieararchy
-  SUBSCRIBE(root_window.get(), scrollable_window.get());
+  SUBSCRIBE(root_window.get(), scrollbar.get());
+  SUBSCRIBE(scrollbar.get(), scrollable_window.get());
 
+  scrollable_window->add_child_window(inner_container);
   window->add_child_window(scrollable_window);
+  window->add_child_window(scrollbar);
+
   root_window->add_child_window(window);
 
   App::init(Size(1920, 1080), "Test application");

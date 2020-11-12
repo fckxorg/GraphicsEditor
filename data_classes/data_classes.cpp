@@ -39,7 +39,7 @@ Color::operator sf::Color() const { return sf::Color(r, g, b, a); }
 /*--------------- POSITION ----------------------------------*/
 
 Position::Position() = default;
-Position::Position(uint16_t x, uint16_t y) : x(x), y(y) {}
+Position::Position(int16_t x, int16_t y) : x(x), y(y) {}
 
 #ifdef SFML_ENGINE
 Position::Position(const sf::Vector2f& sfpos)

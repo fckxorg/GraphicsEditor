@@ -53,7 +53,7 @@ if(NCURSES_ENGINE)
 
     include_directories(${CURSES_INCLUDE_DIR})
 
-    target_link_libraries(Main PUBLIC ${CURSES_LIBRARIES} data_classes window_base subscription_manager window ncurses_engine app event_queue event)
+    target_link_libraries(Main PUBLIC ${CURSES_LIBRARIES} data_classes window_base window subscription_manager ncurses_engine app event_queue event)
 endif(NCURSES_ENGINE)
 
 if(SFML_ENGINE)
@@ -70,7 +70,7 @@ if(SFML_ENGINE)
                               PUBLIC "${PROJECT_SOURCE_DIR}/sfml_engine")
     set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/SFML/cmake-modules/")
     find_package(SFML REQUIRED system window graphics)
-    target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window_base subscription_manager window sfml_engine app event_queue event)
+    target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window_base window subscription_manager sfml_engine app event_queue event)
 endif(SFML_ENGINE)
 
 unset(SFML_ENGINE CACHE)

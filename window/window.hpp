@@ -90,6 +90,8 @@ class RenderWindow : public Window {
   void set_rotation(const float rotation);
 
   float get_rotation() const;
+
+  void move_children(float offset_x, float offset_y);
 };
 
 class RectWindow : public RenderWindow {
@@ -154,7 +156,7 @@ class Slider : public RectWindow, public InterfaceDraggable {
   uint16_t lower_bound;
   uint16_t upper_bound;
 
-  uint16_t Position::*primary_axis;
+  int16_t Position::*primary_axis;
 
   void move(int delta);
   float get_relative_pos();

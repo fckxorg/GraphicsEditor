@@ -63,6 +63,18 @@ void RenderWindow::render() {
   }
 }
 
+void RenderWindow::move_children(float offset_x, float offset_y) {
+  pos.x += offset_x;
+  pos.y += offset_y;
+
+  printf("New pos is %d %d", pos.x, pos.y);
+
+  for (auto& subwindow : subwindows) {
+    dynamic_cast<RenderWindow*>(subwindow.get())
+        ->move_children(offset_x, offset_y);
+  }
+}
+
 /*---------------------------------------*/
 /*              RectWindow               */
 /*---------------------------------------*/
@@ -293,8 +305,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
 
   /* Setting up pointers to members to unify further calculations */
 
-  uint16_t Position::*primary_axis = &Position::y;
-  uint16_t Position::*secondary_axis = &Position::x;
+  int16_t Position::*primary_axis = &Position::y;
+  int16_t Position::*secondary_axis = &Position::x;
 
   uint16_t Size::*primary_size = &Size::height;
   uint16_t Size::*secondary_size = &Size::width;
@@ -371,71 +383,16 @@ void ScrollableWindow::handle_event(Event* event) {
   switch (event->get_type()) {
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset_y =
-          -(inner_container_size.height - size.height) * scroll_event->position;
+      offset_y = -offset_y - (inner_container_size.height - size.height) *
+                                 scroll_event->position;
+      printf("Offset is %f\n", offset_y);
+      fflush(stdout);
     }
   }
 
   for (auto& subwindow : subwindows) {
     auto window = dynamic_cast<RenderWindow*>(subwindow.get());
-    Position cur_pos = window->get_position();
-    cur_pos.y += offset_y;
-    cur_pos.x += offset_x;
-    window->set_pos(cur_pos);
+    window->move_children(offset_x, offset_y);
   }
 }
 
-/*---------------------------------------*/
-/*             ScrollableText            */
-/*---------------------------------------*/
-
-ScrollableText::ScrollableText(Size viewport_size, Position pos, Color bg_color,
-                               Text text)
-    : RectWindow(viewport_size, pos, bg_color), text(text), offset(0) {
-  uint16_t n_lines = ScrollableText::get_nlines();
-  whole_block_height = n_lines * (text.character_size * text.line_spacing *
-                                  LINESPACING_COEFF * text.character_size);
-
-  std::unique_ptr<Window> scrollbar(new Scrollbar(
-      Size(viewport_size.width * SCROLLBAR_SIZE_RATIO, viewport_size.height),
-      Position(pos.x + viewport_size.width, pos.y), Color(245, 245, 245),
-      viewport_size.height, whole_block_height, text.character_size, false));
-
-  SUBSCRIBE(scrollbar.get(), this);
-
-  add_child_window(scrollbar);
-}
-
-void ScrollableText::render() {
-  Renderer::draw_scrollable_text(text, size, pos, color, offset);
-  RenderWindow::render();
-}
-
-void ScrollableText::handle_event(Event* event) {
-  assert(event != nullptr);
-
-  switch (event->get_type()) {
-    case SCROLL: {
-      auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset = -(whole_block_height - size.height) * scroll_event->position;
-    }
-  }
-
-  for (auto& subwindow : subwindows) {
-    subwindow->handle_event(event);
-  }
-}
-
-uint16_t ScrollableText::get_nlines() {
-  int16_t n_lines = 1;
-  const char* cur = text.text;
-
-  while (*cur != '\0') {
-    if (*cur == '\n') {
-      ++n_lines;
-    }
-    ++cur;
-  }
-
-  return n_lines;
-}

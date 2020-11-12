@@ -47,11 +47,11 @@ struct Color {
 };
 
 struct Position {
-  uint16_t x;
-  uint16_t y;
+  int16_t x;
+  int16_t y;
 
   Position();
-  Position(uint16_t x, uint16_t y);
+  Position(int16_t x, int16_t y);
 
 #ifdef SFML_ENGINE
   explicit Position(const sf::Vector2f& sfpos);
