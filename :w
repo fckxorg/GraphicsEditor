@@ -6,7 +6,6 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -15,7 +14,6 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <unordered_map>
 #include <cassert>
-#include <stack>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
@@ -24,10 +22,10 @@ struct OffscreenRenderData {
     sf::Sprite* sprite;
     sf::RenderTexture* texture;
 
-    OffscreenRenderData();
-
-    void release(); 
-    
+    void release() {
+        delete sprite;
+        delete texture;
+    }
 };
 
 class Renderer {
@@ -35,10 +33,7 @@ class Renderer {
   static sf::RenderWindow window;
 
   static std::unordered_map<const char*, sf::Font> fonts;
-  static std::vector<OffscreenRenderData> offscreen_resources;
-  static std::stack<OffscreenRenderData> offscreen_render_stack;
-
-  static sf::RenderTarget* get_target();
+  static std::vector<OffscreenRenderData> offscreen_resources
 
   static sf::Text get_sfml_text(Text text);
 
@@ -52,7 +47,7 @@ class Renderer {
   static void init(Size window_size, const char* name);
   static void deinit();
 
-  static void init_offscreen_target(Size target_size, Position target_pos);
+  static void init_offscreen_target();
   static void flush_offscreen_target();
 
   static void clear();

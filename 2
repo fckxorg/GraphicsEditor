@@ -30,7 +30,7 @@ void Renderer::deinit() { window.close(); }
 void Renderer::init_offscreen_target(Size target_size, Position target_pos) {
   OffscreenRenderData target = {};
   target.sprite->setPosition(target_pos);
-  target.texture->create(target_size.width, target_size.height);
+  target.texture->create(target_size);
   target.sprite->setTexture(target.texture->getTexture());
 
   offscreen_resources.push_back(target);
@@ -62,8 +62,6 @@ sf::RenderTarget* Renderer::get_target() {
     if(offscreen_render_stack.empty()) {
         return &window;
     }
-
-    return offscreen_render_stack.top().texture;
 }
 
 void Renderer::show() { window.display(); }
@@ -72,17 +70,13 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   sf::RectangleShape rect = sf::RectangleShape(size);
   rect.setPosition(pos);
   rect.setFillColor(color);
-
-  auto target = get_target();
-  target->draw(rect);
+  window.draw(rect);
 }
 
 void Renderer::draw_text(Text text, Position pos) {
   sf::Text sfml_text = Renderer::get_sfml_text(text);
   sfml_text.setPosition(pos);
-
-  auto target = get_target();
-  target->draw(sfml_text);
+  window.draw(sfml_text);
 }
 
 void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
@@ -100,6 +94,7 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
   sf::Sprite viewport_sprite;
   viewport_sprite.setTexture(viewport_texture.getTexture());
   viewport_sprite.setPosition(pos);
+  window.draw(viewport_sprite);
 }
 
 MouseButtonEvent::MouseButton Renderer::get_mouse_button(

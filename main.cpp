@@ -28,17 +28,25 @@ int main() {
   char roboto_font_path[] = "fonts/Roboto-Thin.ttf";
   Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0),
                       Color(255, 255, 255)};
+  std::unique_ptr<Window> text(new TextWindow(scroll_test, Position(0, 0)));
+  std::unique_ptr<Window> inner_container(new RectWindow(Size(380, 900), Position(0, 0), Color(255, 255, 255)));
+    
+  inner_container->add_child_window(text);
 
   std::unique_ptr<Window> root_window(new RootWindow());
   std::unique_ptr<Window> window(
       new RectWindow(Size(1920, 900), Position(0, 0), Color(255, 255, 255)));
-  std::unique_ptr<Window> scrollable_text(new ScrollableText(
-      Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
+  //std::unique_ptr<Window> scrollable_text(new ScrollableText(
+  //    Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
+
+  std::unique_ptr<Window> scrollable_window(new ScrollableWindow(Size(380, 400), Size(380, 900), Position(100, 100), Color(255, 0, 0)));
+
+  scrollable_window->add_child_window(inner_container);
 
   // should be subscribed before ownership moves to window in hieararchy
-  SUBSCRIBE(root_window.get(), scrollable_text.get());
+  SUBSCRIBE(root_window.get(), scrollable_window.get());
 
-  window->add_child_window(scrollable_text);
+  window->add_child_window(scrollable_window);
   root_window->add_child_window(window);
 
   App::init(Size(1920, 1080), "Test application");

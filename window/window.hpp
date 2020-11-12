@@ -56,9 +56,9 @@ class InterfaceDraggable : public InterfaceClickable {
   virtual void onMouseMove(MouseMoveEvent* event) = 0;
 };
 
-
 /*!
- * Root window of window hierarchy. It is just container, which wouldn't render and is used to send system events.
+ * Root window of window hierarchy. It is just container, which wouldn't render
+ * and is used to send system events.
  * */
 class RootWindow : public Window {
  public:
@@ -185,6 +185,19 @@ class Scrollbar : public RectWindow {
             uint16_t scroll_block_size, uint16_t step, bool horizontal = false);
 };
 
+class ScrollableWindow : public RectWindow {
+    private:
+        float offset_x;
+        float offset_y;
+        Size inner_container_size;
+
+
+    public:
+        ScrollableWindow(Size viewport_size, Size inner_container_size, Position pos, Color bg_color);
+        virtual void render() override;
+        virtual void handle_event(Event* event) override;
+};
+
 class ScrollableText : public RectWindow {
  private:
   Text text;
@@ -198,9 +211,6 @@ class ScrollableText : public RectWindow {
   virtual void render() override;
 
   void handle_event(Event* event) override;
-
-  void onButtonUp();
-  void onButtonDown();
 };
 
 #endif

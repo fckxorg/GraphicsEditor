@@ -348,6 +348,44 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
 }
 
 /*---------------------------------------*/
+/*             ScrollableWindow          */
+/*---------------------------------------*/
+ScrollableWindow::ScrollableWindow(Size viewport_size,
+                                   Size inner_container_size, Position pos,
+                                   Color bg_color)
+    : RectWindow(viewport_size, pos, bg_color),
+      inner_container_size(inner_container_size),
+      offset_x(0),
+      offset_y(0) {}
+
+void ScrollableWindow::render() {
+  Renderer::draw_rectangle(size, pos, color);
+  Renderer::init_offscreen_target(size, pos);
+  RenderWindow::render();
+  Renderer::flush_offscreen_target();
+}
+
+void ScrollableWindow::handle_event(Event* event) {
+  assert(event != nullptr);
+
+  switch (event->get_type()) {
+    case SCROLL: {
+      auto scroll_event = dynamic_cast<ScrollEvent*>(event);
+      offset_y =
+          -(inner_container_size.height - size.height) * scroll_event->position;
+    }
+  }
+
+  for (auto& subwindow : subwindows) {
+    auto window = dynamic_cast<RenderWindow*>(subwindow.get());
+    Position cur_pos = window->get_position();
+    cur_pos.y += offset_y;
+    cur_pos.x += offset_x;
+    window->set_pos(cur_pos);
+  }
+}
+
+/*---------------------------------------*/
 /*             ScrollableText            */
 /*---------------------------------------*/
 
