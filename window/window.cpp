@@ -12,6 +12,7 @@ const float LINESPACING_COEFF = 0.08;
 const float SCROLLBAR_SIZE_RATIO = 0.07;
 
 bool InstrumentManager::application_started = false;
+Position InstrumentManager::last_point = Position(0, 0);
 
 /*---------------------------------------*/
 /*         Interface Clickable           */
@@ -406,7 +407,7 @@ Canvas::Canvas(Size size, Position pos, Color color)
 
 void Canvas::onMousePress(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
-    InstrumentManager::start_applying();
+    InstrumentManager::start_applying(event->pos);
   }
 }
 
