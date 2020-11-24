@@ -8,6 +8,7 @@
 #include "data_classes/data_classes.hpp"
 #include "subscription_manager/subscription_manager.hpp"
 #include "window/window.hpp"
+#include "instruments_manager/instruments_manager.hpp"
 
 int main() {
   FILE* test_file = fopen("test_text.txt", "r");
@@ -45,6 +46,9 @@ int main() {
   // std::unique_ptr<Window> scrollbar(new Scrollbar(Size(27, 400),
   // Position(480, 100), Color(245, 245, 245), 400, 900,
   // scroll_test.character_size));
+  //
+
+  InstrumentManager::init();
 
   std::unique_ptr<Window> canvas(
       new Canvas(Size(1920, 900), Position(0, 0), Color(255, 255, 255)));
