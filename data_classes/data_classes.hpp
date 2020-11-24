@@ -93,6 +93,8 @@ class Image {
   void setPixel(int x, int y, Color color);
   Color getPixel(int x, int y);
   const uint8_t* get_pixel_array();
+
+  Size get_size();
 };
 
 #endif

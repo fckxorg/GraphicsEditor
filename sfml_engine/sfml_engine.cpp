@@ -169,34 +169,45 @@ sf::Text Renderer::get_sfml_text(Text text) {
   return sfml_text;
 }
 
-std::vector<std::vector<Color>> Renderer::load_image(const char* filename) {
-  sf::Image img;
-  img.loadFromFile(filename);
+Image Renderer::load_image(const char* filename) {
+  sf::Image sf_img;
+  sf_img.loadFromFile(filename);
 
-  sf::Vector2u img_size = img.getSize();
+  sf::Vector2u img_size = sf_img.getSize();
 
-  std::vector<std::vector<Color>> buffer(
-      img_size.x, std::vector<Color>(img_size.y, Color()));
+  Image img(Size(img_size.x, img_size.y), Color(255, 255, 255));
 
   for (int x = 0; x < img_size.x; ++x) {
     for (int y = 0; y < img_size.y; ++y) {
-      buffer[x][y] = Color(img.getPixel(x, y));
+      img.setPixel(x, y, sf_img.getPixel(x, y));
     }
   }
 
-  return buffer;
+  return img;
 }
 
-static void save_image(std::vector<Color> buffer,
-                       const char* filename) {
-  sf::Image img;
-  img.create(buffer.size(), buffer[0].size(), sf::Color::Black);
+void Renderer::save_image(Image& img, const char* filename) {
+  sf::Image sf_img;
+  sf_img.create(img.get_size().width, img.get_size().height, sf::Color::Black);
 
-  for (int x = 0; x < buffer.size(); ++x) {
-    for (int y = 0; y < buffer[0].size(); ++y) {
-      img.setPixel(x, y, buffer[x][y]);
+  for (int x = 0; x < img.get_size().width; ++x) {
+    for (int y = 0; y < img.get_size().height; ++y) {
+      img.setPixel(x, y, img.getPixel(x, y));
     }
   }
 
-  img.saveToFile(filename);
+  sf_img.saveToFile(filename);
+}
+
+void Renderer::draw_image(Position pos, Image& img) {
+  sf::Texture img_texture;
+  img_texture.create(img.get_size().width, img.get_size().height);
+  img_texture.update(img.get_pixel_array());
+
+  sf::Sprite img_sprite(img_texture);
+
+  img_sprite.setPosition(pos);
+
+  auto target = get_target();
+  target->draw(img_sprite);
 }
