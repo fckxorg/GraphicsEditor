@@ -29,7 +29,13 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
 
   for (int x = std::min(point.x, last_point.x);
        x <= std::max(point.x, last_point.x); x += 1) {
-    canvas.setPixel(x, k * x + b, color);
+    for (int i = -thickness; i <= thickness; ++i) {
+      for (int j = -thickness; j <= thickness; ++j) {
+        if (i * i + j * j < thickness * thickness) {
+          canvas.setPixel(x + i, k * x + b + j, color);
+        }
+      }
+    }
   }
 
   k = static_cast<float>(point.x - last_point.x) / (point.y - last_point.y);
@@ -37,13 +43,19 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
 
   for (int y = std::min(point.y, last_point.y);
        y <= std::max(point.y, last_point.y); y += 1) {
-    canvas.setPixel(k * y + b, y, color);
+    for (int i = -thickness; i <= thickness; ++i) {
+      for (int j = -thickness; j <= thickness; ++j) {
+        if (i * i + j * j < thickness * thickness) {
+          canvas.setPixel(k * y + b + i, y + j, color);
+        }
+      }
+    }
   }
 }
 
 Eraser::Eraser() {
-    Pencil::set_color(Color(255, 255, 255));
-    Pencil::set_thickness(1);
+  Pencil::set_color(Color(255, 255, 255));
+  Pencil::set_thickness(5);
 }
 
 bool InstrumentManager::application_started = false;
