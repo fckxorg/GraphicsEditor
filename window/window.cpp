@@ -400,8 +400,7 @@ void ScrollableWindow::handle_event(Event* event) {
 /*                 Canvas                */
 /*---------------------------------------*/
 Canvas::Canvas(Size size, Position pos, Color color)
-    : RectWindow(size, pos, color),
-      buffer(size.width, std::vector<Color>(size.height, color)) {}
+    : RectWindow(size, pos, color), img(size, color) {}
 
 void Canvas::onMousePress(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
@@ -422,14 +421,14 @@ void Canvas::onMouseMove(MouseMoveEvent* event) {
 }
 
 void Canvas::load_from_file(const char* filename) {
-  buffer = std::move(Renderer::load_image(filename));
+  img = std::move(Renderer::load_image(filename));
 }
 
 void Canvas::save_to_file(const char* filename) {
-  Renderer::save_image(buffer, filename);
+  Renderer::save_image(img, filename);
 }
 
-void Canvas::render() { Renderer::draw_image(size, pos, buffer); }
+void Canvas::render() { Renderer::draw_image(pos, img); }
 
 void Canvas::handle_event(Event* event) {
   assert(event != nullptr);
