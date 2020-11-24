@@ -11,6 +11,8 @@ const float SCROLLBAR_BUTTON_RATIO = 0.1;
 const float LINESPACING_COEFF = 0.08;
 const float SCROLLBAR_SIZE_RATIO = 0.07;
 
+bool InstrumentManager::application_started = false;
+
 /*---------------------------------------*/
 /*         Interface Clickable           */
 /*---------------------------------------*/
@@ -416,7 +418,7 @@ void Canvas::onMouseRelease(MouseButtonEvent* event) {
 
 void Canvas::onMouseMove(MouseMoveEvent* event) {
   if (InstrumentManager::is_applying() && is_point_inside(event->pos)) {
-    InstrumentManager::apply();
+    InstrumentManager::apply(img, event->pos);
   }
 }
 

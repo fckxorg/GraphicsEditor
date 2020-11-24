@@ -64,7 +64,7 @@ class Renderer {
   static Image load_image(const char* filename);
   static void save_image(Image& img, const char* filename);
 
-  static void draw_image(Size size, Position pos, Image& img);
+  static void draw_image(Position pos, Image& img);
   static void draw_rectangle(Size size, Position pos, Color color);
   static void draw_text(Text text, Position pos);
   static void draw_scrollable_text(Text text, Size size, Position pos,

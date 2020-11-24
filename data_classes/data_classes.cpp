@@ -2,6 +2,8 @@
 
 #include <bits/stdint-uintn.h>
 
+#include <cstdio>
+
 /*---------------- SIZE CLASS -------------------------------*/
 
 Size::Size() = default;
@@ -70,7 +72,9 @@ Viewport::Viewport(Size size, Position pos) : size(size), pos(pos) {}
 /*-------------------- IMAGE -----------------------------*/
 Image::Image(Size size, Color color) : size(size) {
   pixels.assign(size.width * size.height * sizeof(Color), 0);
-  for (int i = 0; i < pixels.size() * sizeof(Color); i += sizeof(Color)) {
+  printf("Image size: %ld\n", pixels.size());
+  fflush(stdout);
+  for (int i = 0; i < pixels.size(); i += sizeof(Color)) {
     pixels[i] = color.r;
     pixels[i + 1] = color.g;
     pixels[i + 2] = color.b;

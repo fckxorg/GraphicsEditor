@@ -222,7 +222,7 @@ class Canvas : public RectWindow, public InterfaceClickable {
 
  public:
   Canvas(Size size, Position pos, Color color);
-   
+
   virtual void handle_event(Event* event) override;
   void load_from_file(const char* filename);
   void save_to_file(const char* filename);
@@ -232,5 +232,21 @@ class Canvas : public RectWindow, public InterfaceClickable {
   void onMouseRelease(MouseButtonEvent* event) override;
   void onMouseMove(MouseMoveEvent* event);
 };
+
+class InstrumentManager {
+ private:
+  static bool application_started;
+
+ public:
+  static void start_applying() { application_started = true; }
+
+  static void stop_applying() { application_started = false; }
+
+  static void apply(Image& canvas, Position pos) {
+    canvas.setPixel(pos.x, pos.y, Color(0, 0, 0));
+  }
+  static bool is_applying() { return application_started; }
+};
+
 
 #endif

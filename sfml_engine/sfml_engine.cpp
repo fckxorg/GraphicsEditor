@@ -179,7 +179,9 @@ Image Renderer::load_image(const char* filename) {
 
   for (int x = 0; x < img_size.x; ++x) {
     for (int y = 0; y < img_size.y; ++y) {
-      img.setPixel(x, y, sf_img.getPixel(x, y));
+      auto sfml_color = sf_img.getPixel(x, y);
+      img.setPixel(
+          x, y, Color(sfml_color.r, sfml_color.g, sfml_color.b, sfml_color.a));
     }
   }
 
