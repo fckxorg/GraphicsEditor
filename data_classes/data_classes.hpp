@@ -1,8 +1,9 @@
 #ifndef DATA_CLASSES_HPP
 #define DATA_CLASSES_HPP
 
-#include <cstdint>
 #include <algorithm>
+#include <cstdint>
+#include <vector>
 
 #ifdef SFML_ENGINE
 #include <SFML/Graphics.hpp>
@@ -75,11 +76,23 @@ struct Text {
 };
 
 struct Viewport {
-    Size size;
-    Position pos;
+  Size size;
+  Position pos;
 
-    Viewport();
-    Viewport(Size size, Position pos);
+  Viewport();
+  Viewport(Size size, Position pos);
+};
+
+class Image {
+ private:
+  std::vector<uint8_t> pixels;
+  Size size;
+
+ public:
+  Image(Size size, Color color);
+  void setPixel(int x, int y, Color color);
+  Color getPixel(int x, int y);
+  const uint8_t* get_pixel_array();
 };
 
 #endif

@@ -396,3 +396,54 @@ void ScrollableWindow::handle_event(Event* event) {
   }
 }
 
+/*---------------------------------------*/
+/*                 Canvas                */
+/*---------------------------------------*/
+Canvas::Canvas(Size size, Position pos, Color color)
+    : RectWindow(size, pos, color),
+      buffer(size.width, std::vector<Color>(size.height, color)) {}
+
+void Canvas::onMousePress(MouseButtonEvent* event) {
+  if (event->button == MouseButtonEvent::MouseButton::LEFT) {
+    InstrumentManager::start_applying();
+  }
+}
+
+void Canvas::onMouseRelease(MouseButtonEvent* event) {
+  if (event->button == MouseButtonEvent::MouseButton::LEFT) {
+    InstrumentManager::stop_applying();
+  }
+}
+
+void Canvas::onMouseMove(MouseMoveEvent* event) {
+  if (InstrumentManager::is_applying() && is_point_inside(event->pos)) {
+    InstrumentManager::apply();
+  }
+}
+
+void Canvas::load_from_file(const char* filename) {
+  buffer = std::move(Renderer::load_image(filename));
+}
+
+void Canvas::save_to_file(const char* filename) {
+  Renderer::save_image(buffer, filename);
+}
+
+void Canvas::render() { Renderer::draw_image(size, pos, buffer); }
+
+void Canvas::handle_event(Event* event) {
+  assert(event != nullptr);
+
+  switch (event->get_type()) {
+    case MOUSE_BUTTON: {
+      handle_mouse_button_event(event);
+      break;
+    }
+
+    case MOUSE_MOVE: {
+      auto move_event = dynamic_cast<MouseMoveEvent*>(event);
+      onMouseMove(move_event);
+      break;
+    }
+  }
+}

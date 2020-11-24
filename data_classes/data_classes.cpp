@@ -1,5 +1,7 @@
 #include "data_classes.hpp"
 
+#include <bits/stdint-uintn.h>
+
 /*---------------- SIZE CLASS -------------------------------*/
 
 Size::Size() = default;
@@ -28,8 +30,8 @@ Color Color::operator+(int delta) {
 }
 
 Color Color::operator-(int delta) {
-   delta = -delta;
-   return *this + delta;
+  delta = -delta;
+  return *this + delta;
 }
 
 #ifdef SFML_ENGINE
@@ -64,3 +66,29 @@ Text::Text(const char* text, uint16_t character_size, const char* font_path,
 /*--------------- VIEWPORT ---------------------------------*/
 Viewport::Viewport() = default;
 Viewport::Viewport(Size size, Position pos) : size(size), pos(pos) {}
+
+/*-------------------- IMAGE -----------------------------*/
+Image::Image(Size size, Color color) : size(size) {
+  pixels.assign(size.width * size.height * sizeof(Color), 0);
+  for (int i = 0; i < pixels.size() * sizeof(Color); i += sizeof(Color)) {
+    pixels[i] = color.r;
+    pixels[i + 1] = color.g;
+    pixels[i + 2] = color.b;
+    pixels[i + 3] = color.a;
+  }
+}
+
+void Image::setPixel(int x, int y, Color color) {
+  int pos = (y * size.width + x) * sizeof(Color);
+  pixels[pos] = color.r;
+  pixels[pos + 1] = color.g;
+  pixels[pos + 2] = color.b;
+  pixels[pos + 3] = color.a;
+}
+
+Color Image::getPixel(int x, int y) {
+  return *reinterpret_cast<Color*>(
+      (pixels.data() + (y * size.width + x) * sizeof(Color)));
+}
+
+const uint8_t* Image::get_pixel_array() { return pixels.data(); }

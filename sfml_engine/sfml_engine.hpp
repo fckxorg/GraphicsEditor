@@ -7,27 +7,26 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/RenderTexture.hpp>
-#include <unordered_map>
 #include <cassert>
 #include <stack>
+#include <unordered_map>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 
 struct OffscreenRenderData {
-    sf::Sprite* sprite;
-    sf::RenderTexture* texture;
+  sf::Sprite* sprite;
+  sf::RenderTexture* texture;
 
-    OffscreenRenderData();
+  OffscreenRenderData();
 
-    void release(); 
-    
+  void release();
 };
 
 class Renderer {
@@ -41,6 +40,8 @@ class Renderer {
   static sf::RenderTarget* get_target();
 
   static sf::Text get_sfml_text(Text text);
+  static sf::Image get_sfml_image(
+      const std::vector<std::vector<Color>>& buffer);
 
   static MouseButtonEvent::MouseButton get_mouse_button(sf::Mouse::Button);
   static Event* translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
@@ -60,10 +61,13 @@ class Renderer {
 
   static Event* poll_event();
 
+  static std::vector<Color> load_image(const char* filename);
+  static void save_image(std::vector<Color> buffer, const char* filename);
+
+  static void draw_image(Size size, Position pos, std::vector<Color> buffer);
   static void draw_rectangle(Size size, Position pos, Color color);
   static void draw_text(Text text, Position pos);
   static void draw_scrollable_text(Text text, Size size, Position pos,
                                    Color color, float relative_offset);
-
 };
 #endif

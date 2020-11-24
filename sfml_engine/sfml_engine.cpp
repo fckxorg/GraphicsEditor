@@ -1,5 +1,4 @@
 #include "sfml_engine.hpp"
-#include <SFML/Graphics/RenderTarget.hpp>
 
 OffscreenRenderData::OffscreenRenderData() {
   sprite = new sf::Sprite();
@@ -59,11 +58,11 @@ void Renderer::clear() {
 }
 
 sf::RenderTarget* Renderer::get_target() {
-    if(offscreen_render_stack.empty()) {
-        return &window;
-    }
+  if (offscreen_render_stack.empty()) {
+    return &window;
+  }
 
-    return offscreen_render_stack.top().texture;
+  return offscreen_render_stack.top().texture;
 }
 
 void Renderer::show() { window.display(); }
@@ -170,3 +169,34 @@ sf::Text Renderer::get_sfml_text(Text text) {
   return sfml_text;
 }
 
+std::vector<std::vector<Color>> Renderer::load_image(const char* filename) {
+  sf::Image img;
+  img.loadFromFile(filename);
+
+  sf::Vector2u img_size = img.getSize();
+
+  std::vector<std::vector<Color>> buffer(
+      img_size.x, std::vector<Color>(img_size.y, Color()));
+
+  for (int x = 0; x < img_size.x; ++x) {
+    for (int y = 0; y < img_size.y; ++y) {
+      buffer[x][y] = Color(img.getPixel(x, y));
+    }
+  }
+
+  return buffer;
+}
+
+static void save_image(std::vector<Color> buffer,
+                       const char* filename) {
+  sf::Image img;
+  img.create(buffer.size(), buffer[0].size(), sf::Color::Black);
+
+  for (int x = 0; x < buffer.size(); ++x) {
+    for (int y = 0; y < buffer[0].size(); ++y) {
+      img.setPixel(x, y, buffer[x][y]);
+    }
+  }
+
+  img.saveToFile(filename);
+}

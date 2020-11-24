@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <list>
 #include <memory>
+#include <vector>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
@@ -188,16 +189,16 @@ class Scrollbar : public RectWindow {
 };
 
 class ScrollableWindow : public RectWindow {
-    private:
-        float offset_x;
-        float offset_y;
-        Size inner_container_size;
+ private:
+  float offset_x;
+  float offset_y;
+  Size inner_container_size;
 
-
-    public:
-        ScrollableWindow(Size viewport_size, Size inner_container_size, Position pos, Color bg_color);
-        virtual void render() override;
-        virtual void handle_event(Event* event) override;
+ public:
+  ScrollableWindow(Size viewport_size, Size inner_container_size, Position pos,
+                   Color bg_color);
+  virtual void render() override;
+  virtual void handle_event(Event* event) override;
 };
 
 class ScrollableText : public RectWindow {
@@ -213,6 +214,23 @@ class ScrollableText : public RectWindow {
   virtual void render() override;
 
   void handle_event(Event* event) override;
+};
+
+class Canvas : public RectWindow, public InterfaceClickable {
+ private:
+  Image img;
+
+ public:
+  Canvas(Size size, Position pos, Color color);
+   
+  virtual void handle_event(Event* event) override;
+  void load_from_file(const char* filename);
+  void save_to_file(const char* filename);
+  virtual void render() override;
+
+  void onMousePress(MouseButtonEvent* event) override;
+  void onMouseRelease(MouseButtonEvent* event) override;
+  void onMouseMove(MouseMoveEvent* event);
 };
 
 #endif
