@@ -6,9 +6,9 @@
 
 #include "app/app.hpp"
 #include "data_classes/data_classes.hpp"
+#include "instruments_manager/instruments_manager.hpp"
 #include "subscription_manager/subscription_manager.hpp"
 #include "window/window.hpp"
-#include "instruments_manager/instruments_manager.hpp"
 
 int main() {
   FILE* test_file = fopen("test_text.txt", "r");
@@ -18,35 +18,22 @@ int main() {
     return -1;
   }
 
-  fseek(test_file, 0, SEEK_END);
-  uint64_t file_size = ftell(test_file);
-  rewind(test_file);
-  std::unique_ptr<char> text_buffer =
-      std::unique_ptr<char>(new char[file_size]());
-  fread(text_buffer.get(), file_size, sizeof(char), test_file);
-  fclose(test_file);
-
-  char roboto_font_path[] = "fonts/Roboto-Thin.ttf";
-  Text scroll_test = {text_buffer.get(), 16, roboto_font_path, Color(0, 0, 0),
-                      Color(255, 255, 255)};
-  std::unique_ptr<Window> text(new TextWindow(scroll_test, Position(0, 0)));
-  std::unique_ptr<Window> inner_container(
-      new RectWindow(Size(380, 900), Position(0, 0), Color(255, 255, 255)));
-
-  inner_container->add_child_window(text);
-
   std::unique_ptr<Window> root_window(new RootWindow());
   std::unique_ptr<Window> window(
       new RectWindow(Size(1920, 900), Position(0, 0), Color(255, 255, 255)));
-  // std::unique_ptr<Window> scrollable_text(new ScrollableText(
-  //    Size(380, 400), Position(100, 100), Color(0, 240, 255), scroll_test));
 
-  // std::unique_ptr<Window> scrollable_window(new ScrollableWindow(Size(380,
-  // 400), Size(380, 900), Position(100, 100), Color(255, 255, 255)));
-  // std::unique_ptr<Window> scrollbar(new Scrollbar(Size(27, 400),
-  // Position(480, 100), Color(245, 245, 245), 400, 900,
-  // scroll_test.character_size));
-  //
+  std::unique_ptr<Window> toolbar_listener(new ToolbarListener());
+
+  std::unique_ptr<Window> pencil_button(
+      new RectButton(Size(50, 50), Position(0, 400), Color(0, 255, 0), PENCIL));
+  std::unique_ptr<Window> eraser_button(
+      new RectButton(Size(50, 50), Position(0, 455), Color(255, 0, 0), ERASER));
+
+  SUBSCRIBE(root_window.get(), pencil_button.get());
+  SUBSCRIBE(root_window.get(), eraser_button.get());
+
+  SUBSCRIBE(pencil_button.get(), toolbar_listener.get());
+  SUBSCRIBE(eraser_button.get(), toolbar_listener.get());
 
   InstrumentManager::init();
 
@@ -55,16 +42,10 @@ int main() {
 
   SUBSCRIBE(root_window.get(), canvas.get());
 
-  // should be subscribed before ownership moves to window in hieararchy
-  // SUBSCRIBE(root_window.get(), scrollbar.get());
-  // SUBSCRIBE(scrollbar.get(), scrollable_window.get());
-
-  // scrollable_window->add_child_window(inner_container);
-  // window->add_child_window(scrollable_window);
-  // window->add_child_window(scrollbar);
-
   window->add_child_window(canvas);
   root_window->add_child_window(window);
+  root_window->add_child_window(pencil_button);
+  root_window->add_child_window(eraser_button);
 
   App::init(Size(1920, 1080), "Test application");
   App::set_root_window(root_window);

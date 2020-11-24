@@ -1,5 +1,14 @@
 #include "instruments_manager.hpp"
 
+void ToolbarListener::handle_event(Event* event) {
+  if (event->get_type() == BUTTON_PRESSED) {
+    auto button_event = dynamic_cast<ButtonPressEvent*>(event);
+    InstrumentManager::set_instrument(button_event->value);
+  }
+}
+
+void ToolbarListener::render() {}
+
 void AbstractInstrument::set_color(Color color) { this->color = color; }
 
 void AbstractInstrument::set_thickness(uint8_t thickness) {
@@ -20,7 +29,7 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
 
   for (int x = std::min(point.x, last_point.x);
        x <= std::max(point.x, last_point.x); x += 1) {
-    canvas.setPixel(x, k * x + b, Color(0, 0, 0));
+    canvas.setPixel(x, k * x + b, color);
   }
 
   k = static_cast<float>(point.x - last_point.x) / (point.y - last_point.y);
@@ -28,18 +37,19 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
 
   for (int y = std::min(point.y, last_point.y);
        y <= std::max(point.y, last_point.y); y += 1) {
-    canvas.setPixel(k * y + b, y, Color(0, 0, 0));
+    canvas.setPixel(k * y + b, y, color);
   }
 }
 
 Eraser::Eraser() {
-  set_color(Color(255, 255, 255));
-  set_thickness(1);
+    Pencil::set_color(Color(255, 255, 255));
+    Pencil::set_thickness(1);
 }
 
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(0, 0);
-std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(COUNT);
+std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
+    COUNT);
 int InstrumentManager::current_instrument = PENCIL;
 
 void InstrumentManager::init() {

@@ -6,11 +6,18 @@
 #include <vector>
 
 #include "../data_classes/data_classes.hpp"
+#include "../window_base/window_base.hpp"
+
+class ToolbarListener : public Window {
+ public:
+  void handle_event(Event* event) override;
+  void render() override;
+};
 
 enum INSTRUMENTS { ERASER, PENCIL, COUNT };
 
 class AbstractInstrument {
- private:
+ protected:
   Color color;
   uint8_t thickness;
 
