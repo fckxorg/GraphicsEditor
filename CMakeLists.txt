@@ -34,6 +34,7 @@ add_subdirectory(event_queue)
 add_subdirectory(event)
 add_subdirectory(window_base)
 add_subdirectory(subscription_manager)
+add_subdirectory(instruments_manager)
 
 if(NCURSES_ENGINE)
     message(STATUS "Builidng with ncurses")
@@ -49,11 +50,12 @@ if(NCURSES_ENGINE)
                               PUBLIC "${PROJECT_SOURCE_DIR}/event"
                               PUBLIC "${PROJECT_SOURCE_DIR}/window_base"
                               PUBLIC "${PROJECT_SOURCE_DIR}/subscription_manager"
+                              PUBLIC "${PROJECT_SOURCE_DIR}/instruments_manager"
                               PUBLIC "${CURSES_INCLUDE_DIR}")
 
     include_directories(${CURSES_INCLUDE_DIR})
 
-    target_link_libraries(Main PUBLIC ${CURSES_LIBRARIES} data_classes window_base window subscription_manager ncurses_engine app event_queue event)
+    target_link_libraries(Main PUBLIC ${CURSES_LIBRARIES} data_classes window_base window instrument_manager subscription_manager ncurses_engine app event_queue event)
 endif(NCURSES_ENGINE)
 
 if(SFML_ENGINE)
@@ -67,10 +69,11 @@ if(SFML_ENGINE)
                               PUBLIC "${PROJECT_SOURCE_DIR}/event"
                               PUBLIC "${PROJECT_SOURCE_DIR}/window_base"
                               PUBLIC "${PROJECT_SOURCE_DIR}/subscription_manager"
-                              PUBLIC "${PROJECT_SOURCE_DIR}/sfml_engine")
+                              PUBLIC "${PROJECT_SOURCE_DIR}/sfml_engine"
+                              PUBLIC "${PROJECT_SOURCE_DIR}/instruments_manager")
     set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/SFML/cmake-modules/")
     find_package(SFML REQUIRED system window graphics)
-    target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window_base window subscription_manager sfml_engine app event_queue event)
+    target_link_libraries(Main PUBLIC sfml-system sfml-window sfml-graphics data_classes window_base window instrument_manager subscription_manager sfml_engine app event_queue event)
 endif(SFML_ENGINE)
 
 unset(SFML_ENGINE CACHE)

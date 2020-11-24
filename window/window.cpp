@@ -11,9 +11,6 @@ const float SCROLLBAR_BUTTON_RATIO = 0.1;
 const float LINESPACING_COEFF = 0.08;
 const float SCROLLBAR_SIZE_RATIO = 0.07;
 
-bool InstrumentManager::application_started = false;
-Position InstrumentManager::last_point = Position(0, 0);
-
 /*---------------------------------------*/
 /*         Interface Clickable           */
 /*---------------------------------------*/
