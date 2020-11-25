@@ -197,7 +197,7 @@ void Renderer::save_image(Image& img, const char* filename) {
 
   for (int x = 0; x < img.get_size().width; ++x) {
     for (int y = 0; y < img.get_size().height; ++y) {
-      img.setPixel(x, y, img.getPixel(x, y));
+      sf_img.setPixel(x, y, img.getPixel(x, y));
     }
   }
 

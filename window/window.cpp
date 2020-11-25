@@ -1,10 +1,5 @@
 #include "window.hpp"
 
-#include <bits/stdint-uintn.h>
-
-#include <cstdio>
-#include <list>
-
 const uint8_t PRESS_FADE_DELTA = 50;
 const uint8_t CONTROLS_COLOR_DELTA = 30;
 const float SCROLLBAR_BUTTON_RATIO = 0.1;
@@ -117,12 +112,13 @@ void RectButton::onMousePress(MouseButtonEvent* event) {
   if (!is_point_inside(event->pos)) return;
 
   this->color = RectWindow::get_color() - PRESS_FADE_DELTA;
-
-  SEND(this, new ButtonPressEvent(value));
 }
 
 void RectButton::onMouseRelease(MouseButtonEvent* event) {
   assert(event != nullptr);
+  if (is_point_inside(event->pos)) {
+    SEND(this, new ButtonPressEvent(value));
+  }
   this->color = default_color;
 }
 
@@ -443,6 +439,13 @@ void Canvas::handle_event(Event* event) {
       auto move_event = dynamic_cast<MouseMoveEvent*>(event);
       onMouseMove(move_event);
       break;
+    }
+
+    case BUTTON_PRESSED: {
+      auto button_event = dynamic_cast<ButtonPressEvent*>(event);
+      if (button_event->value == SAVE) {
+        save_to_file("sketch.png");  // TODO dialog window
+      }
     }
   }
 }

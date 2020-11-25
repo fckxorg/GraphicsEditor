@@ -10,6 +10,7 @@
 #include <list>
 #include <memory>
 #include <vector>
+#include <unistd.h>
 
 #include "../color_utilities/hsvrgb.hpp"
 #include "../data_classes/data_classes.hpp"
@@ -223,6 +224,8 @@ class Canvas : public RectWindow, public InterfaceClickable {
   Image img;
 
  public:
+  enum ACTIONS { SAVE };
+
   Canvas(Size size, Position pos, Color color);
 
   virtual void handle_event(Event* event) override;
