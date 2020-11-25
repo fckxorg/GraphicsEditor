@@ -1,9 +1,17 @@
 #include "instruments_manager.hpp"
 
+#include <stdio.h>
+
 void ToolbarListener::handle_event(Event* event) {
   if (event->get_type() == BUTTON_PRESSED) {
     auto button_event = dynamic_cast<ButtonPressEvent*>(event);
     InstrumentManager::set_instrument(button_event->value);
+  }
+  if (event->get_type() == COLOR_CHANGED) {
+    auto color_event = dynamic_cast<ColorChangedEvent*>(event);
+
+
+    InstrumentManager::set_color(color_event->color);
   }
 }
 
@@ -105,5 +113,9 @@ bool InstrumentManager::is_applying() { return application_started; }
 
 void InstrumentManager::set_instrument(uint8_t instrument) {
   current_instrument = instrument;
+}
+
+void InstrumentManager::set_color(Color color) {
+  instruments[current_instrument]->set_color(color);
 }
 

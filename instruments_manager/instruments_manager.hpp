@@ -58,6 +58,7 @@ class InstrumentManager {
   static bool is_applying();
 
   static void set_instrument(uint8_t instrument);
+  static void set_color(Color color);
 };
 
 #endif

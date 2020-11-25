@@ -23,3 +23,9 @@ SliderMoveEvent::SliderMoveEvent(float position)
     : Event(SLIDER_MOVE), position(position) {}
 
 HueChangedEvent::HueChangedEvent(float hue) : Event(HUE_CHANGED), hue(hue) {}
+
+ColorChangedEvent::ColorChangedEvent(Color color)
+    : Event(COLOR_CHANGED), color(color) {}
+
+FaderMoveEvent::FaderMoveEvent(float pos_x, float pos_y)
+    : Event(FADER_MOVE), pos_x(pos_x), pos_y(pos_y) {}

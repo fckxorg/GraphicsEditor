@@ -12,7 +12,9 @@ enum SYSTEM_EVENT {
   BUTTON_PRESSED,
   SCROLL,
   SLIDER_MOVE,
-  HUE_CHANGED
+  HUE_CHANGED,
+  COLOR_CHANGED,
+  FADER_MOVE
 };
 
 class Event {
@@ -74,4 +76,16 @@ class HueChangedEvent : public Event {
   HueChangedEvent(float hue);
 };
 
+class ColorChangedEvent : public Event {
+ public:
+  Color color;
+  ColorChangedEvent(Color color);
+};
+
+class FaderMoveEvent : public Event {
+ public:
+  float pos_x;
+  float pos_y;
+  FaderMoveEvent(float pos_x, float pos_y);
+};
 #endif

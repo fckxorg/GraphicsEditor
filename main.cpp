@@ -55,6 +55,8 @@ int main() {
                 Position(1545, 635), Position(1905, 995)));
 
   SUBSCRIBE(root_window.get(), sv_fader.get());
+  SUBSCRIBE(sv_fader.get(), sv_selector.get());
+  SUBSCRIBE(sv_selector.get(), toolbar_listener.get());
 
   SUBSCRIBE(root_window.get(), hue_slider.get());
 
