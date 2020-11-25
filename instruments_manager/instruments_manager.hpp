@@ -59,6 +59,7 @@ class InstrumentManager {
 
   static void set_instrument(uint8_t instrument);
   static void set_color(Color color);
+  static void set_thickness(uint8_t thickness);
 };
 
 #endif

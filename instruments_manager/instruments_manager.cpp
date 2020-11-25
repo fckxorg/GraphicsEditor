@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+const int MAX_THICKNESS = 40;
+
 void ToolbarListener::handle_event(Event* event) {
   if (event->get_type() == BUTTON_PRESSED) {
     auto button_event = dynamic_cast<ButtonPressEvent*>(event);
@@ -9,9 +11,12 @@ void ToolbarListener::handle_event(Event* event) {
   }
   if (event->get_type() == COLOR_CHANGED) {
     auto color_event = dynamic_cast<ColorChangedEvent*>(event);
-
-
     InstrumentManager::set_color(color_event->color);
+  }
+
+  if (event->get_type() == SLIDER_MOVE) {
+    auto slider_event = dynamic_cast<SliderMoveEvent*>(event);
+    InstrumentManager::set_thickness(slider_event->position * MAX_THICKNESS);
   }
 }
 
@@ -56,9 +61,11 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
       for (int j = -thickness; j <= thickness; ++j) {
         if (i * i + j * j < thickness * thickness) {
           if (x_diff > y_diff) {
-            canvas.setPixel(x + i, k * x + b + j, color);
+            canvas.setPixel(std::max(x + i, 0), std::max(k * x + b + j, 0.f),
+                            color);
           } else {
-            canvas.setPixel(k * x + b + i, x + j, color);
+            canvas.setPixel(std::max(k * x + b + i, 0.f), std::max(x + j, 0),
+                            color);
           }
         }
       }
@@ -117,5 +124,9 @@ void InstrumentManager::set_instrument(uint8_t instrument) {
 
 void InstrumentManager::set_color(Color color) {
   instruments[current_instrument]->set_color(color);
+}
+
+void InstrumentManager::set_thickness(uint8_t thickness) {
+  instruments[current_instrument]->set_thickness(thickness);
 }
 
