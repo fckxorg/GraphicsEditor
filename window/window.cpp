@@ -455,3 +455,71 @@ Sprite::Sprite(Texture text, Position pos) : texture(text), pos(pos) {}
 void Sprite::render() { Renderer::draw_sprite(texture, pos); }
 
 void Sprite::handle_event(Event* event) {}
+
+/*---------------------------------------*/
+/*                 HUESelector           */
+/*---------------------------------------*/
+
+HUEselector::HUEselector(Size size, Position pos) {
+  auto canvas = new Canvas(size, pos, Color(255, 255, 255));
+  float scale = size.width / 360;
+
+  float r = 0;
+  float g = 0;
+  float b = 0;
+
+  float h = 0;
+  float s = 1;
+  float v = 1;
+
+  for (int i = 0; i < 360; ++i) {
+    h = i;
+    HSVtoRGB(r, g, b, h, s, v);
+
+    Color cur_color = Color(r * 255, g * 255, b * 255);
+
+    for (int j = 0; j < size.height; ++j) {
+      canvas->img.setPixel(i * scale, j, cur_color);
+    }
+  }
+
+  std::unique_ptr<Window> canvas_ptr(canvas);
+  this->add_child_window(canvas_ptr);
+}
+
+void HUEselector::handle_event(Event* event) {}
+
+/*---------------------------------------*/
+/*                 SVelector             */
+/*---------------------------------------*/
+SVselector::SVselector(Size size, Position pos) {
+  auto canvas = new Canvas(size, pos, Color(255, 255, 255));
+  // value - y axis
+  // sat - x axis
+
+  float r = 0;
+  float g = 0;
+  float b = 0;
+
+  float h = 0;
+  float s = 1;
+  float v = 1;
+
+  for (int x = 0; x < size.width; ++x) {
+    for (int y = 0; y < size.height; ++y) {
+      s = static_cast<float>(x) / size.width;
+      v = 1.f - static_cast<float>(y) / size.height;
+
+      HSVtoRGB(r, g, b, h, s, v);
+
+      Color cur_color = Color(r * 255, g * 255, b * 255);
+
+      canvas->img.setPixel(x, y, cur_color);
+    }
+  }
+
+  std::unique_ptr<Window> canvas_ptr(canvas);
+  this->add_child_window(canvas_ptr);
+}
+
+void SVselector::handle_event(Event* event) {}

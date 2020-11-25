@@ -11,6 +11,7 @@
 #include <memory>
 #include <vector>
 
+#include "../color_utilities/hsvrgb.hpp"
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 #include "../instruments_manager/instruments_manager.hpp"
@@ -232,16 +233,32 @@ class Canvas : public RectWindow, public InterfaceClickable {
   void onMousePress(MouseButtonEvent* event) override;
   void onMouseRelease(MouseButtonEvent* event) override;
   void onMouseMove(MouseMoveEvent* event);
+
+  friend class HUEselector;
+  friend class SVselector;
 };
 
 class Sprite : public RenderWindow {
-    private:
-     Texture texture;   
-     Position pos;
-    public:
-     Sprite(Texture text, Position pos);
-     virtual void render() override;
-     virtual void handle_event(Event* event) override;
+ private:
+  Texture texture;
+  Position pos;
+
+ public:
+  Sprite(Texture text, Position pos);
+  virtual void render() override;
+  virtual void handle_event(Event* event) override;
+};
+
+class HUEselector : public RenderWindow {
+ public:
+  HUEselector(Size size, Position pos);
+  virtual void handle_event(Event* event) override;
+};
+
+class SVselector : public RenderWindow {
+ public:
+  SVselector(Size size, Position pos);
+  virtual void handle_event(Event* event) override;
 };
 
 #endif
