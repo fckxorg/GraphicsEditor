@@ -50,7 +50,7 @@ int main() {
       Size(50, 50), Position(1515, 15), Color(236, 236, 236), Canvas::SAVE));
 
   std::unique_ptr<Window> thickness_slider_base(
-      new RectWindow(Size(360, 2), Position(1545, 94), Color(80, 90, 91)));
+      new RectWindow(Size(360, 2), Position(1545, 609), Color(80, 90, 91)));
 
   std::unique_ptr<Window> hue_selector(
       new HUEselector(Size(360, 30), Position(1545, 1015)));
@@ -60,7 +60,7 @@ int main() {
   std::unique_ptr<Window> hue_slider(new Slider(
       Size(3, 30), Position(1545, 1015), Color(0, 0, 0), 1545, 1905, 1, true));
   std::unique_ptr<Window> thickness_slider(new Slider(
-      Size(5, 30), Position(1545, 80), Color(0, 0, 0), 1545, 1905, 1, true));
+      Size(5, 30), Position(1545, 595), Color(0, 0, 0), 1545, 1905, 1, true));
 
   std::unique_ptr<Window> sv_fader(
       new Fader(Size(8, 8), Position(1896, 986), Color(0, 0, 0),
