@@ -547,7 +547,7 @@ void SVselector::handle_event(Event* event) {
 }
 
 /*---------------------------------------*/
-/*                 SVelector             */
+/*                 Fader                 */
 /*---------------------------------------*/
 
 Fader::Fader(Size size, Position pos, Color color, Position lower_bound,
@@ -594,4 +594,11 @@ void Fader::onMouseMove(MouseMoveEvent* event) {
   if (!pressed) return;
 
   this->pos = event->pos;
+}
+
+void Fader::render() {
+  Renderer::draw_rectangle(size, pos, color);
+  Size inline_size = Size(size.width - 4, size.height - 4);
+  Position inline_pos = Position(pos.x + 2, pos.y + 2);
+  Renderer::draw_rectangle(inline_size, inline_pos, Color(255, 255, 255));
 }

@@ -51,7 +51,7 @@ int main() {
   std::unique_ptr<Window> hue_slider(new Slider(
       Size(3, 30), Position(1545, 1015), Color(0, 0, 0), 1545, 1905, 1, true));
   std::unique_ptr<Window> sv_fader(
-      new Fader(Size(5, 5), Position(1545, 635), Color(0, 0, 0),
+      new Fader(Size(8, 8), Position(1545, 635), Color(0, 0, 0),
                 Position(1545, 635), Position(1905, 995)));
 
   SUBSCRIBE(root_window.get(), sv_fader.get());
@@ -81,7 +81,7 @@ int main() {
   InstrumentManager::init();
 
   std::unique_ptr<Window> canvas(
-      new Canvas(Size(1920, 890), Position(0, 0), Color(255, 255, 255)));
+      new Canvas(Size(1500, 890), Position(0, 0), Color(255, 255, 255)));
 
   SUBSCRIBE(root_window.get(), canvas.get());
 
