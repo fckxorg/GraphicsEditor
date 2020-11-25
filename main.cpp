@@ -48,6 +48,11 @@ int main() {
   std::unique_ptr<Window> sv_selector(
       new SVselector(Size(360, 360), Position(1545, 635)));
 
+  std::unique_ptr<Window> hue_slider(new Slider(
+      Size(3, 30), Position(1545, 1015), Color(0, 0, 0), 1545, 1905, 1, true));
+
+  SUBSCRIBE(root_window.get(), hue_slider.get());
+
   pencil_button->add_child_window(pencil_button_sprite);
   eraser_button->add_child_window(eraser_button_sprite);
 
@@ -57,9 +62,12 @@ int main() {
   SUBSCRIBE(pencil_button.get(), toolbar_listener.get());
   SUBSCRIBE(eraser_button.get(), toolbar_listener.get());
 
+  SUBSCRIBE(hue_slider.get(), hue_selector.get());
+
   pencil_button_outline->add_child_window(pencil_button);
   eraser_button_outline->add_child_window(eraser_button);
   hue_selector_outline->add_child_window(hue_selector);
+  hue_selector_outline->add_child_window(hue_slider);
   sv_selector_outline->add_child_window(sv_selector);
 
   InstrumentManager::init();

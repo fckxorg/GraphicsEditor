@@ -487,7 +487,16 @@ HUEselector::HUEselector(Size size, Position pos) {
   this->add_child_window(canvas_ptr);
 }
 
-void HUEselector::handle_event(Event* event) {}
+void HUEselector::handle_event(Event* event) {
+  assert(event != nullptr);
+
+  switch (event->get_type()) {
+    case SCROLL: {
+      fflush(stdout);
+      break;
+    }
+  }
+}
 
 /*---------------------------------------*/
 /*                 SVelector             */
