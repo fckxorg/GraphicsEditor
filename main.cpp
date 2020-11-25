@@ -65,32 +65,33 @@ int main() {
   CREATE(sv_fader, Fader, Size(8, 8), Position(1896, 986), Color(0, 0, 0),
          Position(1545, 635), Position(1896, 986));
 
-
   CREATE(canvas, Canvas, Size(1500, 890), Position(0, 0), Color(255, 255, 255));
 
+  /* SUBSCRIPTIONS */
+
   SUBSCRIBE(root_window.get(), sv_fader.get());
-  SUBSCRIBE(hue_selector.get(), sv_fader.get());
-  SUBSCRIBE(sv_fader.get(), sv_selector.get());
-  SUBSCRIBE(sv_selector.get(), toolbar_listener.get());
   SUBSCRIBE(root_window.get(), thickness_slider.get());
-  SUBSCRIBE(thickness_slider.get(), toolbar_listener.get());
-
   SUBSCRIBE(root_window.get(), hue_slider.get());
-
-  pencil_button->add_child_window(pencil_button_sprite);
-  eraser_button->add_child_window(eraser_button_sprite);
-  save_button->add_child_window(save_button_sprite);
-
   SUBSCRIBE(root_window.get(), pencil_button.get());
   SUBSCRIBE(root_window.get(), eraser_button.get());
   SUBSCRIBE(root_window.get(), save_button.get());
+  SUBSCRIBE(root_window.get(), canvas.get());
+
+  SUBSCRIBE(hue_selector.get(), sv_fader.get());
+  SUBSCRIBE(hue_selector.get(), sv_selector.get());
+  SUBSCRIBE(sv_selector.get(), toolbar_listener.get());
+
+  SUBSCRIBE(thickness_slider.get(), toolbar_listener.get());
+  SUBSCRIBE(hue_slider.get(), hue_selector.get());
+  SUBSCRIBE(sv_fader.get(), sv_selector.get());
 
   SUBSCRIBE(pencil_button.get(), toolbar_listener.get());
   SUBSCRIBE(eraser_button.get(), toolbar_listener.get());
   SUBSCRIBE(save_button.get(), canvas.get());
 
-  SUBSCRIBE(hue_slider.get(), hue_selector.get());
-  SUBSCRIBE(hue_selector.get(), sv_selector.get());
+  pencil_button->add_child_window(pencil_button_sprite);
+  eraser_button->add_child_window(eraser_button_sprite);
+  save_button->add_child_window(save_button_sprite);
 
   sv_selector->add_child_window(sv_fader);
 
@@ -104,9 +105,6 @@ int main() {
 
   InstrumentManager::init();
 
-  SUBSCRIBE(root_window.get(), canvas.get());
-
-  window->add_child_window(canvas);
 
   root_window->add_child_window(window);
   root_window->add_child_window(pencil_button_outline);
@@ -115,6 +113,7 @@ int main() {
   root_window->add_child_window(sv_selector_outline);
   root_window->add_child_window(save_button_outline);
   root_window->add_child_window(thickness_slider_base);
+  root_window->add_child_window(canvas);
 
   App::init(Size(1920, 1080), "Test application");
   App::set_root_window(root_window);
