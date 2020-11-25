@@ -250,12 +250,21 @@ class Sprite : public RenderWindow {
 };
 
 class HUEselector : public RenderWindow {
+ private:
+  Size size;
+
  public:
   HUEselector(Size size, Position pos);
   virtual void handle_event(Event* event) override;
 };
 
 class SVselector : public RenderWindow {
+ private:
+  Size size;
+  Canvas* canvas;
+
+  void redraw_canvas(float hue);
+
  public:
   SVselector(Size size, Position pos);
   virtual void handle_event(Event* event) override;

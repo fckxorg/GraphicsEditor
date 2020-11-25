@@ -460,7 +460,7 @@ void Sprite::handle_event(Event* event) {}
 /*                 HUESelector           */
 /*---------------------------------------*/
 
-HUEselector::HUEselector(Size size, Position pos) {
+HUEselector::HUEselector(Size size, Position pos) : size(size) {
   auto canvas = new Canvas(size, pos, Color(255, 255, 255));
   float scale = size.width / 360;
 
@@ -491,8 +491,10 @@ void HUEselector::handle_event(Event* event) {
   assert(event != nullptr);
 
   switch (event->get_type()) {
-    case SCROLL: {
-      fflush(stdout);
+    case SLIDER_MOVE: {
+      auto slider_event = dynamic_cast<SliderMoveEvent*>(event);
+      float new_hue = size.width * slider_event->position;
+      SEND(this, new HueChangedEvent(new_hue));
       break;
     }
   }
@@ -501,8 +503,14 @@ void HUEselector::handle_event(Event* event) {
 /*---------------------------------------*/
 /*                 SVelector             */
 /*---------------------------------------*/
-SVselector::SVselector(Size size, Position pos) {
-  auto canvas = new Canvas(size, pos, Color(255, 255, 255));
+SVselector::SVselector(Size size, Position pos) : size(size){
+  canvas = new Canvas(size, pos, Color(255, 255, 255));
+  redraw_canvas(0);
+  std::unique_ptr<Window> canvas_ptr(canvas);
+  this->add_child_window(canvas_ptr);
+}
+
+void SVselector::redraw_canvas(float hue) {
   // value - y axis
   // sat - x axis
 
@@ -510,7 +518,7 @@ SVselector::SVselector(Size size, Position pos) {
   float g = 0;
   float b = 0;
 
-  float h = 0;
+  float h = hue;
   float s = 1;
   float v = 1;
 
@@ -526,9 +534,14 @@ SVselector::SVselector(Size size, Position pos) {
       canvas->img.setPixel(x, y, cur_color);
     }
   }
-
-  std::unique_ptr<Window> canvas_ptr(canvas);
-  this->add_child_window(canvas_ptr);
 }
 
-void SVselector::handle_event(Event* event) {}
+void SVselector::handle_event(Event* event) {
+  switch (event->get_type()) {
+    case HUE_CHANGED: {
+      auto hue_event = dynamic_cast<HueChangedEvent*>(event);
+      redraw_canvas(hue_event->hue);
+      break;
+    }
+  }
+}

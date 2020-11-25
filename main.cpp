@@ -63,6 +63,7 @@ int main() {
   SUBSCRIBE(eraser_button.get(), toolbar_listener.get());
 
   SUBSCRIBE(hue_slider.get(), hue_selector.get());
+  SUBSCRIBE(hue_selector.get(), sv_selector.get());
 
   pencil_button_outline->add_child_window(pencil_button);
   eraser_button_outline->add_child_window(eraser_button);

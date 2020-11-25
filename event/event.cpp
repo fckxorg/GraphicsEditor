@@ -21,3 +21,5 @@ ScrollEvent::ScrollEvent(float position) : Event(SCROLL), position(position) {}
 
 SliderMoveEvent::SliderMoveEvent(float position)
     : Event(SLIDER_MOVE), position(position) {}
+
+HueChangedEvent::HueChangedEvent(float hue) : Event(HUE_CHANGED), hue(hue) {}

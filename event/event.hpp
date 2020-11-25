@@ -11,7 +11,8 @@ enum SYSTEM_EVENT {
   WINDOW_CLOSED,
   BUTTON_PRESSED,
   SCROLL,
-  SLIDER_MOVE
+  SLIDER_MOVE,
+  HUE_CHANGED
 };
 
 class Event {
@@ -65,6 +66,12 @@ class SliderMoveEvent : public Event {
  public:
   float position;
   SliderMoveEvent(float position);
+};
+
+class HueChangedEvent : public Event {
+ public:
+  float hue;
+  HueChangedEvent(float hue);
 };
 
 #endif
