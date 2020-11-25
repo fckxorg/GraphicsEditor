@@ -1,5 +1,7 @@
 #include "sfml_engine.hpp"
 
+#include <SFML/Graphics/Texture.hpp>
+
 OffscreenRenderData::OffscreenRenderData() {
   sprite = new sf::Sprite();
   texture = new sf::RenderTexture();
@@ -12,6 +14,7 @@ void OffscreenRenderData::release() {
 
 std::stack<OffscreenRenderData> Renderer::offscreen_render_stack;
 std::vector<OffscreenRenderData> Renderer::offscreen_resources;
+std::unordered_map<const char*, sf::Texture> Renderer::textures;
 
 sf::RenderWindow Renderer::window;
 std::unordered_map<const char*, sf::Font>
@@ -212,4 +215,17 @@ void Renderer::draw_image(Position pos, Image& img) {
 
   auto target = get_target();
   target->draw(img_sprite);
+}
+
+void Renderer::draw_sprite(Texture texture, Position pos) {
+  if (!textures.contains(texture.path)) {
+    sf::Texture new_texture;
+    new_texture.loadFromFile(texture.path);
+    textures.insert({texture.path, new_texture});
+  }
+
+  sf::Sprite sfml_sprite(textures[texture.path]);
+  sfml_sprite.setPosition(pos);
+  auto target = get_target();
+  target->draw(sfml_sprite);
 }

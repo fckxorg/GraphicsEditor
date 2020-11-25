@@ -10,6 +10,7 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -34,6 +35,7 @@ class Renderer {
   static sf::RenderWindow window;
 
   static std::unordered_map<const char*, sf::Font> fonts;
+  static std::unordered_map<const char*, sf::Texture> textures;
   static std::vector<OffscreenRenderData> offscreen_resources;
   static std::stack<OffscreenRenderData> offscreen_render_stack;
 
@@ -69,5 +71,7 @@ class Renderer {
   static void draw_text(Text text, Position pos);
   static void draw_scrollable_text(Text text, Size size, Position pos,
                                    Color color, float relative_offset);
+
+  static void draw_sprite(Texture texture, Position pos);
 };
 #endif

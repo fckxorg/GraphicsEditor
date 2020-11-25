@@ -446,3 +446,12 @@ void Canvas::handle_event(Event* event) {
     }
   }
 }
+
+/*---------------------------------------*/
+/*                 Sprite                */
+/*---------------------------------------*/
+
+Sprite::Sprite(Texture text, Position pos) : texture(text), pos(pos) {}
+void Sprite::render() { Renderer::draw_sprite(texture, pos); }
+
+void Sprite::handle_event(Event* event) {}

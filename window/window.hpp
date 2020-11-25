@@ -234,4 +234,14 @@ class Canvas : public RectWindow, public InterfaceClickable {
   void onMouseMove(MouseMoveEvent* event);
 };
 
+class Sprite : public RenderWindow {
+    private:
+     Texture texture;   
+     Position pos;
+    public:
+     Sprite(Texture text, Position pos);
+     virtual void render() override;
+     virtual void handle_event(Event* event) override;
+};
+
 #endif

@@ -97,4 +97,12 @@ class Image {
   Size get_size();
 };
 
+struct Texture {
+  const char* path;
+  Size size;
+
+  Texture();
+  Texture(const char* path, Size size);
+};
+
 #endif

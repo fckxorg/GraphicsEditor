@@ -98,3 +98,7 @@ Color Image::getPixel(int x, int y) {
 const uint8_t* Image::get_pixel_array() { return pixels.data(); }
 
 Size Image::get_size() { return size; }
+
+/*------------------------- TEXTURE -------------------------------*/
+Texture::Texture() = default;
+Texture::Texture(const char* path, Size size) : path(path), size(size) {}
