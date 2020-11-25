@@ -13,6 +13,8 @@
 #define CREATE(WINDOW_NAME, WINDOW_TYPE, ...) \
   std::unique_ptr<Window> WINDOW_NAME(new WINDOW_TYPE(__VA_ARGS__))
 
+#define ADOPT(PARENT, CHILD) (PARENT)->add_child_window((CHILD))
+
 int main() {
   FILE* test_file = fopen("test_text.txt", "r");
 
@@ -89,32 +91,33 @@ int main() {
   SUBSCRIBE(eraser_button.get(), toolbar_listener.get());
   SUBSCRIBE(save_button.get(), canvas.get());
 
-  pencil_button->add_child_window(pencil_button_sprite);
-  eraser_button->add_child_window(eraser_button_sprite);
-  save_button->add_child_window(save_button_sprite);
 
-  sv_selector->add_child_window(sv_fader);
+  ADOPT(pencil_button, pencil_button_sprite);
+  ADOPT(eraser_button, eraser_button_sprite);
+  ADOPT(save_button, save_button_sprite);
 
-  pencil_button_outline->add_child_window(pencil_button);
-  eraser_button_outline->add_child_window(eraser_button);
-  hue_selector_outline->add_child_window(hue_selector);
-  hue_selector_outline->add_child_window(hue_slider);
-  sv_selector_outline->add_child_window(sv_selector);
-  save_button_outline->add_child_window(save_button);
-  thickness_slider_base->add_child_window(thickness_slider);
+  ADOPT(sv_selector, sv_fader);
+
+
+  ADOPT(pencil_button_outline, pencil_button);
+  ADOPT(eraser_button_outline, eraser_button);
+  ADOPT(hue_selector_outline, hue_selector);
+  ADOPT(hue_selector_outline, hue_slider);
+  ADOPT(sv_selector_outline, sv_selector);
+  ADOPT(save_button_outline, save_button);
+
+  ADOPT(thickness_slider_base, thickness_slider);
+
+  ADOPT(root_window, window);
+  ADOPT(root_window, pencil_button_outline);
+  ADOPT(root_window, eraser_button_outline);
+  ADOPT(root_window, hue_selector_outline);
+  ADOPT(root_window, sv_selector_outline);
+  ADOPT(root_window, save_button_outline);
+  ADOPT(root_window, thickness_slider_base);
+  ADOPT(root_window, canvas);
 
   InstrumentManager::init();
-
-
-  root_window->add_child_window(window);
-  root_window->add_child_window(pencil_button_outline);
-  root_window->add_child_window(eraser_button_outline);
-  root_window->add_child_window(hue_selector_outline);
-  root_window->add_child_window(sv_selector_outline);
-  root_window->add_child_window(save_button_outline);
-  root_window->add_child_window(thickness_slider_base);
-  root_window->add_child_window(canvas);
-
   App::init(Size(1920, 1080), "Test application");
   App::set_root_window(root_window);
   App::run();
