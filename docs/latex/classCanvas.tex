@@ -1,0 +1,58 @@
+\hypertarget{classCanvas}{}\doxysection{Canvas Class Reference}
+\label{classCanvas}\index{Canvas@{Canvas}}
+Inheritance diagram for Canvas\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classCanvas}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCanvas_ac45aea009b70c5fd7037fb3aa73516a3}\label{classCanvas_ac45aea009b70c5fd7037fb3aa73516a3}} 
+enum {\bfseries A\+C\+T\+I\+O\+NS} \{ {\bfseries S\+A\+VE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCanvas_a32f7ce89addee0fb82acfbcea38f179b}\label{classCanvas_a32f7ce89addee0fb82acfbcea38f179b}} 
+{\bfseries Canvas} (\mbox{\hyperlink{structSize}{Size}} size, \mbox{\hyperlink{structPosition}{Position}} pos, \mbox{\hyperlink{structColor}{Color}} color)
+\item 
+\mbox{\Hypertarget{classCanvas_a0269c8acecfc587f62f9afed4a213659}\label{classCanvas_a0269c8acecfc587f62f9afed4a213659}} 
+virtual void {\bfseries handle\+\_\+event} (\mbox{\hyperlink{classEvent}{Event}} $\ast$event) override
+\item 
+\mbox{\Hypertarget{classCanvas_a4ec4ff1aeabee02c10c02a61299dd4bc}\label{classCanvas_a4ec4ff1aeabee02c10c02a61299dd4bc}} 
+void {\bfseries load\+\_\+from\+\_\+file} (const char $\ast$filename)
+\item 
+\mbox{\Hypertarget{classCanvas_a815e03fc7bea4caec250ac01909b5bdb}\label{classCanvas_a815e03fc7bea4caec250ac01909b5bdb}} 
+void {\bfseries save\+\_\+to\+\_\+file} (const char $\ast$filename)
+\item 
+\mbox{\Hypertarget{classCanvas_a82f189e813704efc635f27e420e5c134}\label{classCanvas_a82f189e813704efc635f27e420e5c134}} 
+virtual void {\bfseries render} () override
+\item 
+\mbox{\Hypertarget{classCanvas_a2f1b6bd9adaec286b6d5b368ab2eb1c2}\label{classCanvas_a2f1b6bd9adaec286b6d5b368ab2eb1c2}} 
+void {\bfseries on\+Mouse\+Press} (\mbox{\hyperlink{classMouseButtonEvent}{Mouse\+Button\+Event}} $\ast$event) override
+\item 
+\mbox{\Hypertarget{classCanvas_a7839ca4feae2685771424d422d45603c}\label{classCanvas_a7839ca4feae2685771424d422d45603c}} 
+void {\bfseries on\+Mouse\+Release} (\mbox{\hyperlink{classMouseButtonEvent}{Mouse\+Button\+Event}} $\ast$event) override
+\item 
+\mbox{\Hypertarget{classCanvas_a859f47b3f6b1a096231390ca2ad529a3}\label{classCanvas_a859f47b3f6b1a096231390ca2ad529a3}} 
+void {\bfseries on\+Mouse\+Move} (\mbox{\hyperlink{classMouseMoveEvent}{Mouse\+Move\+Event}} $\ast$event)
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCanvas_a0f211dfc5c1ff087de27ea9b410c32be}\label{classCanvas_a0f211dfc5c1ff087de27ea9b410c32be}} 
+class {\bfseries H\+U\+Eselector}
+\item 
+\mbox{\Hypertarget{classCanvas_a6af6e553dd593d18e41903f1fb7ce0ff}\label{classCanvas_a6af6e553dd593d18e41903f1fb7ce0ff}} 
+class {\bfseries S\+Vselector}
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+window/window.\+hpp\item 
+window/window.\+cpp\end{DoxyCompactItemize}

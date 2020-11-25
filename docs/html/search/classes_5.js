@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['mousebuttonevent_33',['MouseButtonEvent',['../classMouseButtonEvent.html',1,'']]],
-  ['mousemoveevent_34',['MouseMoveEvent',['../classMouseMoveEvent.html',1,'']]]
+  ['huechangedevent_56',['HueChangedEvent',['../classHueChangedEvent.html',1,'']]],
+  ['hueselector_57',['HUEselector',['../classHUEselector.html',1,'']]]
 ];

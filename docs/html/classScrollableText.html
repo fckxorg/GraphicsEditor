@@ -87,18 +87,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a806e76b317f5de6900ccbc81d41ab345"><td class="memItemLeft" align="right" valign="top"><a id="a806e76b317f5de6900ccbc81d41ab345"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ScrollableText</b> (<a class="el" href="structSize.html">Size</a> viewport_size, <a class="el" href="structPosition.html">Position</a> pos, <a class="el" href="structColor.html">Color</a> bg_color, <a class="el" href="structText.html">Text</a> text)</td></tr>
 <tr class="separator:a806e76b317f5de6900ccbc81d41ab345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2450d9d3e20b9a12a2c58231ce9ec96d"><td class="memItemLeft" align="right" valign="top"><a id="a2450d9d3e20b9a12a2c58231ce9ec96d"></a>
+<tr class="memitem:abfa18bec7c61ff6963148cc14559175c"><td class="memItemLeft" align="right" valign="top"><a id="abfa18bec7c61ff6963148cc14559175c"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> () override</td></tr>
-<tr class="separator:a2450d9d3e20b9a12a2c58231ce9ec96d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:abfa18bec7c61ff6963148cc14559175c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea88360bbec72043fbd544797565b7d3"><td class="memItemLeft" align="right" valign="top"><a id="aea88360bbec72043fbd544797565b7d3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>handle_event</b> (<a class="el" href="classEvent.html">Event</a> *event) override</td></tr>
 <tr class="separator:aea88360bbec72043fbd544797565b7d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdb6a495197cfb276477bf8a60d2a1e0"><td class="memItemLeft" align="right" valign="top"><a id="afdb6a495197cfb276477bf8a60d2a1e0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onButtonUp</b> ()</td></tr>
-<tr class="separator:afdb6a495197cfb276477bf8a60d2a1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93b90e2c9b3ff6fbc1a9b640c75c559b"><td class="memItemLeft" align="right" valign="top"><a id="a93b90e2c9b3ff6fbc1a9b640c75c559b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onButtonDown</b> ()</td></tr>
-<tr class="separator:a93b90e2c9b3ff6fbc1a9b640c75c559b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classRectWindow"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classRectWindow')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classRectWindow.html">RectWindow</a></td></tr>
 <tr class="memitem:a63ff64983e9fee5c680c993e2856a7b1 inherit pub_methods_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a63ff64983e9fee5c680c993e2856a7b1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>RectWindow</b> (<a class="el" href="structSize.html">Size</a> size, <a class="el" href="structPosition.html">Position</a> pos, <a class="el" href="structColor.html">Color</a> color)</td></tr>
@@ -128,6 +122,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_rotation</b> (con
 <tr class="memitem:ab9780b47321d69e7dcb12f7bb9dbfa31 inherit pub_methods_classRenderWindow"><td class="memItemLeft" align="right" valign="top"><a id="ab9780b47321d69e7dcb12f7bb9dbfa31"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>get_rotation</b> () const</td></tr>
 <tr class="separator:ab9780b47321d69e7dcb12f7bb9dbfa31 inherit pub_methods_classRenderWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75a45b35625ab42547b7a604eb55de57 inherit pub_methods_classRenderWindow"><td class="memItemLeft" align="right" valign="top"><a id="a75a45b35625ab42547b7a604eb55de57"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>move_children</b> (float offset_x, float offset_y)</td></tr>
+<tr class="separator:a75a45b35625ab42547b7a604eb55de57 inherit pub_methods_classRenderWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWindow"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWindow')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWindow.html">Window</a></td></tr>
 <tr class="memitem:aeed39eb021bb09eff9d921323fb60a4c inherit pub_methods_classWindow"><td class="memItemLeft" align="right" valign="top"><a id="aeed39eb021bb09eff9d921323fb60a4c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add_child_window</b> (std::unique_ptr&lt; <a class="el" href="classWindow.html">Window</a> &gt; &amp;child)</td></tr>
@@ -158,9 +155,8 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_point_insi
 float&#160;</td><td class="memItemRight" valign="bottom"><b>rotation</b></td></tr>
 <tr class="separator:a7b71900755f3115e7509362b5fccc8b2 inherit pro_attribs_classRenderWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>window/<a class="el" href="window_8hpp_source.html">window.hpp</a></li>
-<li>window/window.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

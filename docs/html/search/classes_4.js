@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['interfaceclickable_31',['InterfaceClickable',['../classInterfaceClickable.html',1,'']]],
-  ['interfacedraggable_32',['InterfaceDraggable',['../classInterfaceDraggable.html',1,'']]]
+  ['fader_54',['Fader',['../classFader.html',1,'']]],
+  ['fadermoveevent_55',['FaderMoveEvent',['../classFaderMoveEvent.html',1,'']]]
 ];

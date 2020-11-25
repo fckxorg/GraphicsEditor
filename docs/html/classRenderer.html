@@ -100,6 +100,12 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a c
 <tr class="memitem:a0f6f674216c4c98416220bfbad69d078"><td class="memItemLeft" align="right" valign="top"><a id="a0f6f674216c4c98416220bfbad69d078"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>deinit</b> ()</td></tr>
 <tr class="separator:a0f6f674216c4c98416220bfbad69d078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af04f119e3c6cb4c51adf0dc47132cefa"><td class="memItemLeft" align="right" valign="top"><a id="af04f119e3c6cb4c51adf0dc47132cefa"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>init_offscreen_target</b> (<a class="el" href="structSize.html">Size</a> target_size, <a class="el" href="structPosition.html">Position</a> target_pos)</td></tr>
+<tr class="separator:af04f119e3c6cb4c51adf0dc47132cefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f4939e8c4d0945f3c6def891a9f3335"><td class="memItemLeft" align="right" valign="top"><a id="a5f4939e8c4d0945f3c6def891a9f3335"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>flush_offscreen_target</b> ()</td></tr>
+<tr class="separator:a5f4939e8c4d0945f3c6def891a9f3335"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcf4772932afe179eeb1d0e627ba2822"><td class="memItemLeft" align="right" valign="top"><a id="afcf4772932afe179eeb1d0e627ba2822"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="separator:afcf4772932afe179eeb1d0e627ba2822"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,6 +115,15 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>show</b> ()</t
 <tr class="memitem:a0a0bd2c0dc43d71f3ca1716e8da6e6f0"><td class="memItemLeft" align="right" valign="top"><a id="a0a0bd2c0dc43d71f3ca1716e8da6e6f0"></a>
 static <a class="el" href="classEvent.html">Event</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>poll_event</b> ()</td></tr>
 <tr class="separator:a0a0bd2c0dc43d71f3ca1716e8da6e6f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2c7d7afc83ffdfa8c6c0afed03fbda6"><td class="memItemLeft" align="right" valign="top"><a id="ad2c7d7afc83ffdfa8c6c0afed03fbda6"></a>
+static <a class="el" href="classImage.html">Image</a>&#160;</td><td class="memItemRight" valign="bottom"><b>load_image</b> (const char *filename)</td></tr>
+<tr class="separator:ad2c7d7afc83ffdfa8c6c0afed03fbda6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefc7f722d5baf4c454edb37a786aada6"><td class="memItemLeft" align="right" valign="top"><a id="aefc7f722d5baf4c454edb37a786aada6"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>save_image</b> (<a class="el" href="classImage.html">Image</a> &amp;img, const char *filename)</td></tr>
+<tr class="separator:aefc7f722d5baf4c454edb37a786aada6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1934c1089f237611a7f102f9141fbf1"><td class="memItemLeft" align="right" valign="top"><a id="af1934c1089f237611a7f102f9141fbf1"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>draw_image</b> (<a class="el" href="structPosition.html">Position</a> pos, <a class="el" href="classImage.html">Image</a> &amp;img)</td></tr>
+<tr class="separator:af1934c1089f237611a7f102f9141fbf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f82f122f1aca2d5ad747d6b6254e84"><td class="memItemLeft" align="right" valign="top"><a id="ad3f82f122f1aca2d5ad747d6b6254e84"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>draw_rectangle</b> (<a class="el" href="structSize.html">Size</a> size, <a class="el" href="structPosition.html">Position</a> pos, <a class="el" href="structColor.html">Color</a> color)</td></tr>
 <tr class="separator:ad3f82f122f1aca2d5ad747d6b6254e84"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,6 +133,9 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>draw_text</b> 
 <tr class="memitem:aa0ee8e074384d9849e49a501cb14f005"><td class="memItemLeft" align="right" valign="top"><a id="aa0ee8e074384d9849e49a501cb14f005"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>draw_scrollable_text</b> (<a class="el" href="structText.html">Text</a> text, <a class="el" href="structSize.html">Size</a> size, <a class="el" href="structPosition.html">Position</a> pos, <a class="el" href="structColor.html">Color</a> color, float relative_offset)</td></tr>
 <tr class="separator:aa0ee8e074384d9849e49a501cb14f005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5323385762d0883cb78b05884c44b88"><td class="memItemLeft" align="right" valign="top"><a id="ad5323385762d0883cb78b05884c44b88"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>draw_sprite</b> (<a class="el" href="structTexture.html">Texture</a> texture, <a class="el" href="structPosition.html">Position</a> pos)</td></tr>
+<tr class="separator:ad5323385762d0883cb78b05884c44b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>ncurses_engine/<a class="el" href="ncurses__engine_8hpp_source.html">ncurses_engine.hpp</a></li>

@@ -550,7 +550,6 @@ void SVselector::handle_event(Event* event) {
       auto fader_event = dynamic_cast<FaderMoveEvent*>(event);
       Color selected_color = canvas->img.getPixel(
           fader_event->pos_x * size.width, fader_event->pos_y * size.height);
-      printf("Fader event pos %f %f\n", fader_event->pos_x, fader_event->pos_y);
 
       SEND(this, new ColorChangedEvent(selected_color));
       break;
@@ -579,6 +578,17 @@ void Fader::handle_event(Event* event) {
     case MOUSE_MOVE: {
       auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
       onMouseMove(mouse_move_event);
+      break;
+    }
+
+    case HUE_CHANGED: {
+      auto hue_event = dynamic_cast<HueChangedEvent*>(event);
+
+      float pos_x = static_cast<float>(pos.x - lower_bound.x) /
+                    (upper_bound.x - lower_bound.x);
+      float pos_y = static_cast<float>(pos.y - lower_bound.y) /
+                    (upper_bound.y - lower_bound.y);
+      SEND(this, new FaderMoveEvent(pos_x, pos_y));
       break;
     }
   }

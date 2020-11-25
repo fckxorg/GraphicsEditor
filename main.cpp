@@ -57,13 +57,14 @@ int main() {
   std::unique_ptr<Window> hue_slider(new Slider(
       Size(3, 30), Position(1545, 1015), Color(0, 0, 0), 1545, 1905, 1, true));
   std::unique_ptr<Window> sv_fader(
-      new Fader(Size(8, 8), Position(1545, 635), Color(0, 0, 0),
-                Position(1545, 635), Position(1905, 995)));
+      new Fader(Size(8, 8), Position(1896, 986), Color(0, 0, 0),
+                Position(1545, 635), Position(1896, 986)));
 
   std::unique_ptr<Window> canvas(
       new Canvas(Size(1500, 890), Position(0, 0), Color(255, 255, 255)));
 
   SUBSCRIBE(root_window.get(), sv_fader.get());
+  SUBSCRIBE(hue_selector.get(), sv_fader.get());
   SUBSCRIBE(sv_fader.get(), sv_selector.get());
   SUBSCRIBE(sv_selector.get(), toolbar_listener.get());
 
