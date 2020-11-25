@@ -270,4 +270,18 @@ class SVselector : public RenderWindow {
   virtual void handle_event(Event* event) override;
 };
 
+class Fader : public RectWindow, public InterfaceDraggable {
+ private:
+  bool pressed;
+  Position lower_bound;
+  Position upper_bound;
+
+ public:
+  Fader(Size size, Position pos, Color color, Position lower_bound, Position upper_bound);
+  virtual void handle_event(Event* event) override;
+  virtual void onMousePress(MouseButtonEvent* event) override;
+  virtual void onMouseRelease(MouseButtonEvent* event) override;
+  virtual void onMouseMove(MouseMoveEvent* event) override;
+};
+
 #endif

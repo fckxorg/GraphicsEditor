@@ -50,6 +50,11 @@ int main() {
 
   std::unique_ptr<Window> hue_slider(new Slider(
       Size(3, 30), Position(1545, 1015), Color(0, 0, 0), 1545, 1905, 1, true));
+  std::unique_ptr<Window> sv_fader(
+      new Fader(Size(5, 5), Position(1545, 635), Color(0, 0, 0),
+                Position(1545, 635), Position(1905, 995)));
+
+  SUBSCRIBE(root_window.get(), sv_fader.get());
 
   SUBSCRIBE(root_window.get(), hue_slider.get());
 
@@ -64,6 +69,8 @@ int main() {
 
   SUBSCRIBE(hue_slider.get(), hue_selector.get());
   SUBSCRIBE(hue_selector.get(), sv_selector.get());
+
+  sv_selector->add_child_window(sv_fader);
 
   pencil_button_outline->add_child_window(pencil_button);
   eraser_button_outline->add_child_window(eraser_button);

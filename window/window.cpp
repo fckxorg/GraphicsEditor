@@ -503,7 +503,7 @@ void HUEselector::handle_event(Event* event) {
 /*---------------------------------------*/
 /*                 SVelector             */
 /*---------------------------------------*/
-SVselector::SVselector(Size size, Position pos) : size(size){
+SVselector::SVselector(Size size, Position pos) : size(size) {
   canvas = new Canvas(size, pos, Color(255, 255, 255));
   redraw_canvas(0);
   std::unique_ptr<Window> canvas_ptr(canvas);
@@ -544,4 +544,54 @@ void SVselector::handle_event(Event* event) {
       break;
     }
   }
+}
+
+/*---------------------------------------*/
+/*                 SVelector             */
+/*---------------------------------------*/
+
+Fader::Fader(Size size, Position pos, Color color, Position lower_bound,
+             Position upper_bound)
+    : RectWindow(size, pos, color),
+      lower_bound(lower_bound),
+      upper_bound(upper_bound) {}
+
+void Fader::handle_event(Event* event) {
+  assert(event != nullptr);
+  switch (event->get_type()) {
+    case MOUSE_BUTTON: {
+      handle_mouse_button_event(event);
+      break;
+    }
+
+    case MOUSE_MOVE: {
+      auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
+      onMouseMove(mouse_move_event);
+      break;
+    }
+  }
+}
+
+void Fader::onMousePress(MouseButtonEvent* event) {
+  if (event->pos.x < lower_bound.x || event->pos.y < lower_bound.y) return;
+  if (event->pos.x > upper_bound.x || event->pos.y > upper_bound.y) return;
+
+  if (event->button == MouseButtonEvent::MouseButton::LEFT) {
+    pressed = true;
+    this->pos = event->pos;
+  }
+}
+
+void Fader::onMouseRelease(MouseButtonEvent* event) {
+  if (event->button == MouseButtonEvent::MouseButton::LEFT) {
+    pressed = false;
+  }
+}
+
+void Fader::onMouseMove(MouseMoveEvent* event) {
+  if (event->pos.x < lower_bound.x || event->pos.y < lower_bound.y) return;
+  if (event->pos.x > upper_bound.x || event->pos.y > upper_bound.y) return;
+  if (!pressed) return;
+
+  this->pos = event->pos;
 }
