@@ -23,30 +23,35 @@ Pencil::Pencil() {
 }
 
 void Pencil::apply(Image& canvas, Position point, Position last_point) {
-  float k =
-      static_cast<float>(point.y - last_point.y) / (point.x - last_point.x);
-  float b = point.y - k * point.x;
+  int16_t Position::*primary_axis = nullptr;
+  int16_t Position::*secondary_axis = nullptr;
 
-  for (int x = std::min(point.x, last_point.x);
-       x <= std::max(point.x, last_point.x); x += 1) {
-    for (int i = -thickness; i <= thickness; ++i) {
-      for (int j = -thickness; j <= thickness; ++j) {
-        if (i * i + j * j < thickness * thickness) {
-          canvas.setPixel(x + i, k * x + b + j, color);
-        }
-      }
-    }
+  int16_t x_diff = abs(point.x - last_point.x);
+  int16_t y_diff = abs(point.y - last_point.y);
+
+  if (x_diff > y_diff) {
+    primary_axis = &Position::x;
+    secondary_axis = &Position::y;
+  } else {
+    primary_axis = &Position::y;
+    secondary_axis = &Position::x;
   }
 
-  k = static_cast<float>(point.x - last_point.x) / (point.y - last_point.y);
-  b = point.x - k * point.y;
+  float k =
+      static_cast<float>(point.*secondary_axis - last_point.*secondary_axis) /
+      (point.*primary_axis - last_point.*primary_axis);
+  float b = point.*secondary_axis - k * point.*primary_axis;
 
-  for (int y = std::min(point.y, last_point.y);
-       y <= std::max(point.y, last_point.y); y += 1) {
+  for (int x = std::min(point.*primary_axis, last_point.*primary_axis);
+       x <= std::max(point.*primary_axis, last_point.*primary_axis); x += 1) {
     for (int i = -thickness; i <= thickness; ++i) {
       for (int j = -thickness; j <= thickness; ++j) {
         if (i * i + j * j < thickness * thickness) {
-          canvas.setPixel(k * y + b + i, y + j, color);
+          if (x_diff > y_diff) {
+            canvas.setPixel(x + i, k * x + b + j, color);
+          } else {
+            canvas.setPixel(k * x + b + i, x + j, color);
+          }
         }
       }
     }
