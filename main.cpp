@@ -10,6 +10,9 @@
 #include "subscription_manager/subscription_manager.hpp"
 #include "window/window.hpp"
 
+#define CREATE(WINDOW_NAME, WINDOW_TYPE, ...) \
+  std::unique_ptr<Window> WINDOW_NAME(new WINDOW_TYPE(__VA_ARGS__))
+
 int main() {
   FILE* test_file = fopen("test_text.txt", "r");
 
@@ -18,18 +21,17 @@ int main() {
     return -1;
   }
 
-  std::unique_ptr<Window> root_window(new RootWindow());
-  std::unique_ptr<Window> window(
-      new RectWindow(Size(1920, 1080), Position(0, 0), Color(212, 212, 212)));
 
-  std::unique_ptr<Window> pencil_button_sprite(
-      new Sprite(Texture("icons/pencil.png", Size(50, 50)), Position(15, 910)));
-  std::unique_ptr<Window> eraser_button_sprite(
-      new Sprite(Texture("icons/eraser.png", Size(50, 50)), Position(15, 980)));
-  std::unique_ptr<Window> save_button_sprite(
-      new Sprite(Texture("icons/save.png", Size(50, 50)), Position(1515, 15)));
+  CREATE(root_window, RootWindow);
+  CREATE(window, RectWindow, Size(1920, 1080), Position(0, 0),
+         Color(212, 212, 212));
 
-  std::unique_ptr<Window> toolbar_listener(new ToolbarListener());
+  CREATE(pencil_button_sprite, Sprite,
+         Texture("icons/pencil.png", Size(50, 50)), Position(15, 910));
+  CREATE(eraser_button_sprite, Sprite, Texture("icons/eraser.png", Size(50, 50)), Position(15, 980));
+  CREATE(save_button_sprite, Sprite, Texture("icons/save.png", Size(50, 50)), Position(1515, 15));
+
+  CREATE(toolbar_listener, ToolbarListener);
 
   std::unique_ptr<Window> pencil_button_outline(
       new RectWindow(Size(60, 60), Position(10, 905), Color(80, 90, 91)));
