@@ -50,6 +50,9 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
     secondary_axis = &Position::x;
   }
 
+  // TODO splines
+  // if there is not enough points for approximation (usually 4) you can
+  // duplicate points
   float k =
       static_cast<float>(point.*secondary_axis - last_point.*secondary_axis) /
       (point.*primary_axis - last_point.*primary_axis);
