@@ -610,6 +610,26 @@ Fader::Fader(Size size, Position pos, Color color, Position lower_bound,
 void Fader::handle_event(Event* event) {
   assert(event != nullptr);
   switch (event->get_type()) {
+    case DROPPER_APPLIED: {
+      Color new_color = dynamic_cast<DropperEvent*>(event)->color;
+      float r_prep = static_cast<float>(new_color.r) / 255;
+      float g_prep = static_cast<float>(new_color.g) / 255;
+      float b_prep = static_cast<float>(new_color.b) / 255;
+
+      float h = 0;
+      float s = 0;
+      float v = 0;
+
+      RGBtoHSV(r_prep, g_prep, b_prep, h, s, v);
+      float pos_x = s * (upper_bound.x - lower_bound.x);
+      float pos_y = (1.f - v) * (upper_bound.y - lower_bound.y);
+
+      pos.x = lower_bound.x + pos_x;
+      pos.y = lower_bound.y + pos_y;
+
+      SEND(this, new FaderMoveEvent(pos_x, pos_y));
+      break;
+    }
     case MOUSE_BUTTON: {
       handle_mouse_button_event(event);
       break;

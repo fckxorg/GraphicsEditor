@@ -108,8 +108,8 @@ void Brush::apply(Image& canvas, Position point, Position last_point,
 void Dropper::apply(Image& canvas, Position point, Position last_point,
                     Color color, uint8_t thickness) {
   Color pixel = canvas.getPixel(point.x, point.y);
-  InstrumentManager::set_color(pixel);
   SEND(nullptr, new DropperEvent(pixel));
+  // TODO add fictive sender to subscription_manager instead of nullptr
 }
 
 bool InstrumentManager::application_started = false;

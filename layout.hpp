@@ -52,6 +52,7 @@ SUBSCRIBE(hue_selector.get(),       sv_selector.get());
 SUBSCRIBE(sv_selector.get(),        toolbar_listener.get());
 
 SUBSCRIBE(nullptr,                  hue_slider.get());
+SUBSCRIBE(nullptr,                  sv_fader.get());
 
 SUBSCRIBE(thickness_slider.get(),   toolbar_listener.get());
 SUBSCRIBE(hue_slider.get(),         hue_selector.get());
