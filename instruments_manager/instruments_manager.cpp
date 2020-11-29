@@ -1,4 +1,5 @@
 #include "instruments_manager.hpp"
+#include <stdio.h>
 
 const int MAX_THICKNESS = 40;
 
@@ -105,13 +106,15 @@ void Brush::apply(Image& canvas, Position point, Position last_point,
 }
 
 void Dropper::apply(Image& canvas, Position point, Position last_point,
-                  Color color, uint8_t thickness) {
-    InstrumentManager::set_color(canvas.getPixel(point.x, point.y));
-    // TODO sending event to palette
+                    Color color, uint8_t thickness) {
+  InstrumentManager::set_color(canvas.getPixel(point.x, point.y));
+  Color pixel = canvas.getPixel(point.x, point.y);
+  printf("Got color %d %d %d\n", pixel.r, pixel.g, pixel.b);
+  // TODO sending event to palette
 }
 
 bool InstrumentManager::application_started = false;
-Position InstrumentManager::last_point = Position(0, 0);
+Position InstrumentManager::last_point = Position(-1, -1);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
     COUNT);
 int InstrumentManager::current_instrument = PENCIL;
@@ -131,7 +134,8 @@ void InstrumentManager::init() {
 
 void InstrumentManager::start_applying(Position pos) {
   application_started = true;
-  last_point = pos;
+  last_point.x = pos.x + 1;
+  last_point.y = pos.y;
 }
 
 void InstrumentManager::stop_applying() { application_started = false; }

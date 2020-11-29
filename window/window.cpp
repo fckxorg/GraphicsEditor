@@ -399,8 +399,10 @@ Canvas::Canvas(Size size, Position pos, Color color)
     : RectWindow(size, pos, color), img(size, color) {}
 
 void Canvas::onMousePress(MouseButtonEvent* event) {
+  if(!is_point_inside(event->pos)) return;
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     InstrumentManager::start_applying(event->pos);
+    InstrumentManager::apply(img, event->pos);
   }
 }
 
