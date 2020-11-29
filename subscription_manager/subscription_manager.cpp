@@ -8,7 +8,6 @@ void SubscriptionManager::add_subscription(Window* sender, Window* recipient) {
 }
 
 void SubscriptionManager::unsubscribe(Window* sender, Window* recipient) {
-
   subscriptions[sender].erase(recipient);
 }
 

@@ -588,6 +588,8 @@ void HueSlider::handle_event(Event* event) {
 
     RGBtoHSV(r_prep, g_prep, b_prep, h, s, v);
     move_relative(h / 360);
+
+    SEND(this, new SliderMoveEvent(get_relative_pos()));
   }
 }
 

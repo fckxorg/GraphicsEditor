@@ -162,12 +162,12 @@ class Slider : public RectWindow, public InterfaceDraggable {
 
   int16_t Position::*primary_axis;
 
-  float get_relative_pos();
-
   void move(int delta);
 
  protected:
   void move_relative(float offset);
+  float get_relative_pos();
+
   uint16_t lower_bound;
   uint16_t upper_bound;
 
