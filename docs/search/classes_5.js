@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['huechangedevent_56',['HueChangedEvent',['../classHueChangedEvent.html',1,'']]],
-  ['hueselector_57',['HUEselector',['../classHUEselector.html',1,'']]]
+  ['fader_62',['Fader',['../classFader.html',1,'']]],
+  ['fadermoveevent_63',['FaderMoveEvent',['../classFaderMoveEvent.html',1,'']]]
 ];

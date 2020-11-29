@@ -116,7 +116,7 @@ void Dropper::apply(Image& canvas, Position point, Position last_point,
 }
 
 void Spray::apply(Image& canvas, Position point, Position last_point,
-                   Color color, uint8_t thickness) {
+                  Color color, uint8_t thickness) {
   int16_t Position::*primary_axis = nullptr;
   int16_t Position::*secondary_axis = nullptr;
 
@@ -131,7 +131,7 @@ void Spray::apply(Image& canvas, Position point, Position last_point,
     secondary_axis = &Position::x;
   }
 
-  std::minstd_rand randomizer; 
+  std::minstd_rand randomizer;
 
   // TODO splines
   // if there is not enough points for approximation (usually 4) you can
@@ -160,6 +160,14 @@ void Spray::apply(Image& canvas, Position point, Position last_point,
   }
 }
 
+void Clear::apply(Image& canvas, Position point, Position last_point,
+                  Color color, uint8_t thickness) {
+  for (int x = 0; x < canvas.get_size().width; ++x) {
+    for (int y = 0; y < canvas.get_size().height; ++y) {
+      canvas.setPixel(x, y, color);
+    }
+  }
+}
 
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(-1, -1);
@@ -180,6 +188,8 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Dropper()));
   instruments[SPRAY] =
       std::move(std::unique_ptr<AbstractInstrument>(new Spray()));
+  instruments[CLEAR] =
+      std::move(std::unique_ptr<AbstractInstrument>(new Clear()));
 }
 
 void InstrumentManager::start_applying(Position pos) {
@@ -193,6 +203,12 @@ void InstrumentManager::stop_applying() { application_started = false; }
 void InstrumentManager::apply(Image& canvas, Position pos) {
   switch (current_instrument) {
     case ERASER: {
+      instruments[current_instrument]->apply(canvas, pos, last_point,
+                                             Color(255, 255, 255), thickness);
+      break;
+    }
+
+    case CLEAR: {
       instruments[current_instrument]->apply(canvas, pos, last_point,
                                              Color(255, 255, 255), thickness);
       break;

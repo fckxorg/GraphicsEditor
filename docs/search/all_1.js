@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['buttonpressevent_2',['ButtonPressEvent',['../classButtonPressEvent.html',1,'']]]
+  ['brush_2',['Brush',['../classBrush.html',1,'']]],
+  ['buttonpressevent_3',['ButtonPressEvent',['../classButtonPressEvent.html',1,'']]]
 ];

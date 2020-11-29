@@ -65,10 +65,9 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classAbstractInstrument-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">AbstractInstrument Class Reference</div>  </div>
+<div class="title">AbstractInstrument Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
@@ -77,28 +76,19 @@ Inheritance diagram for AbstractInstrument:</div>
  <div class="center">
   <img src="classAbstractInstrument.png" usemap="#AbstractInstrument_map" alt=""/>
   <map id="AbstractInstrument_map" name="AbstractInstrument_map">
-<area href="classPencil.html" alt="Pencil" shape="rect" coords="0,56,116,80"/>
-<area href="classEraser.html" alt="Eraser" shape="rect" coords="0,112,116,136"/>
+<area href="classBrush.html" alt="Brush" shape="rect" coords="0,56,116,80"/>
+<area href="classDropper.html" alt="Dropper" shape="rect" coords="126,56,242,80"/>
+<area href="classPencil.html" alt="Pencil" shape="rect" coords="252,56,368,80"/>
+<area href="classSpray.html" alt="Spray" shape="rect" coords="378,56,494,80"/>
+<area href="classEraser.html" alt="Eraser" shape="rect" coords="252,112,368,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3e5b873d7477777c71b9180c8eef6524"><td class="memItemLeft" align="right" valign="top"><a id="a3e5b873d7477777c71b9180c8eef6524"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="structColor.html">Color</a> color)</td></tr>
-<tr class="separator:a3e5b873d7477777c71b9180c8eef6524"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c20e378ddc4ca041653ab11bb7b1d3a"><td class="memItemLeft" align="right" valign="top"><a id="a2c20e378ddc4ca041653ab11bb7b1d3a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_thickness</b> (uint8_t thickness)</td></tr>
-<tr class="separator:a2c20e378ddc4ca041653ab11bb7b1d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a7f7386a919eb111f3a4b3f0d265be27c"><td class="memItemLeft" align="right" valign="top"><a id="a7f7386a919eb111f3a4b3f0d265be27c"></a>
-<a class="el" href="structColor.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
-<tr class="separator:a7f7386a919eb111f3a4b3f0d265be27c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9f05f24ced15d44280a6eb1bff4ae70"><td class="memItemLeft" align="right" valign="top"><a id="ad9f05f24ced15d44280a6eb1bff4ae70"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>thickness</b></td></tr>
-<tr class="separator:ad9f05f24ced15d44280a6eb1bff4ae70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b3567938e0127fb60719421b0ff84bb"><td class="memItemLeft" align="right" valign="top"><a id="a6b3567938e0127fb60719421b0ff84bb"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>apply</b> (<a class="el" href="classImage.html">Image</a> &amp;canvas, <a class="el" href="structPosition.html">Position</a> point, <a class="el" href="structPosition.html">Position</a> last_point, <a class="el" href="structColor.html">Color</a> color, uint8_t thickness)=0</td></tr>
+<tr class="separator:a6b3567938e0127fb60719421b0ff84bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>instruments_manager/<a class="el" href="instruments__manager_8hpp_source.html">instruments_manager.hpp</a></li>

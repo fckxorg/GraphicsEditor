@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['image_14',['Image',['../classImage.html',1,'']]],
-  ['instrumentmanager_15',['InstrumentManager',['../classInstrumentManager.html',1,'']]],
-  ['interfaceclickable_16',['InterfaceClickable',['../classInterfaceClickable.html',1,'']]],
-  ['interfacedraggable_17',['InterfaceDraggable',['../classInterfaceDraggable.html',1,'']]]
+  ['handle_5fmouse_5fbutton_5fevent_14',['handle_mouse_button_event',['../classInterfaceClickable.html#a7e140610d3de6c47a655e988aa751fdf',1,'InterfaceClickable']]],
+  ['huechangedevent_15',['HueChangedEvent',['../classHueChangedEvent.html',1,'']]],
+  ['hueselector_16',['HUEselector',['../classHUEselector.html',1,'']]],
+  ['hueslider_17',['HueSlider',['../classHueSlider.html',1,'']]]
 ];

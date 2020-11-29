@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['fader_54',['Fader',['../classFader.html',1,'']]],
-  ['fadermoveevent_55',['FaderMoveEvent',['../classFaderMoveEvent.html',1,'']]]
+  ['eraser_59',['Eraser',['../classEraser.html',1,'']]],
+  ['event_60',['Event',['../classEvent.html',1,'']]],
+  ['eventqueue_61',['EventQueue',['../classEventQueue.html',1,'']]]
 ];
