@@ -1,5 +1,4 @@
 #include "instruments_manager.hpp"
-#include <stdio.h>
 
 const int MAX_THICKNESS = 40;
 
@@ -8,6 +7,7 @@ void ToolbarListener::handle_event(Event* event) {
     auto button_event = dynamic_cast<ButtonPressEvent*>(event);
     InstrumentManager::set_instrument(button_event->value);
   }
+
   if (event->get_type() == COLOR_CHANGED) {
     auto color_event = dynamic_cast<ColorChangedEvent*>(event);
     InstrumentManager::set_color(color_event->color);
@@ -107,10 +107,9 @@ void Brush::apply(Image& canvas, Position point, Position last_point,
 
 void Dropper::apply(Image& canvas, Position point, Position last_point,
                     Color color, uint8_t thickness) {
-  InstrumentManager::set_color(canvas.getPixel(point.x, point.y));
   Color pixel = canvas.getPixel(point.x, point.y);
-  printf("Got color %d %d %d\n", pixel.r, pixel.g, pixel.b);
-  // TODO sending event to palette
+  InstrumentManager::set_color(pixel);
+  SEND(nullptr, new DropperEvent(pixel));
 }
 
 bool InstrumentManager::application_started = false;
@@ -167,6 +166,8 @@ void InstrumentManager::set_instrument(uint8_t instrument) {
 void InstrumentManager::set_color(Color color) {
   InstrumentManager::color = color;
 }
+
+Color InstrumentManager::get_color() { return InstrumentManager::color; }
 
 void InstrumentManager::set_thickness(uint8_t thickness) {
   InstrumentManager::thickness = thickness;

@@ -3,6 +3,7 @@
 
 #include <bits/stdint-uintn.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <cassert>
 #include <cmath>
@@ -10,7 +11,6 @@
 #include <list>
 #include <memory>
 #include <vector>
-#include <unistd.h>
 
 #include "../color_utilities/hsvrgb.hpp"
 #include "../data_classes/data_classes.hpp"
@@ -110,6 +110,8 @@ class RectWindow : public RenderWindow {
 
   void set_color(Color color);
 
+  Size get_size();
+
   Color get_color();
 
   virtual void render() override;
@@ -157,13 +159,17 @@ class Slider : public RectWindow, public InterfaceDraggable {
   uint16_t step;
 
   bool horizontal;
-  uint16_t lower_bound;
-  uint16_t upper_bound;
 
   int16_t Position::*primary_axis;
 
-  void move(int delta);
   float get_relative_pos();
+
+  void move(int delta);
+
+ protected:
+  void move_relative(float offset);
+  uint16_t lower_bound;
+  uint16_t upper_bound;
 
  public:
   Slider();
@@ -287,6 +293,14 @@ class Fader : public RectWindow, public InterfaceDraggable {
   virtual void onMouseRelease(MouseButtonEvent* event) override;
   virtual void onMouseMove(MouseMoveEvent* event) override;
   virtual void render() override;
+};
+
+class HueSlider : public Slider {
+ public:
+  HueSlider(Size size, Position pos, Color color, uint16_t lower_bound,
+            uint16_t upper_bound, uint16_t step, bool horizontal = false);
+
+  void handle_event(Event* event) override;
 };
 
 #endif

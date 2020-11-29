@@ -29,3 +29,6 @@ ColorChangedEvent::ColorChangedEvent(Color color)
 
 FaderMoveEvent::FaderMoveEvent(float pos_x, float pos_y)
     : Event(FADER_MOVE), pos_x(pos_x), pos_y(pos_y) {}
+
+DropperEvent::DropperEvent(Color color)
+    : Event(DROPPER_APPLIED), color(color) {}

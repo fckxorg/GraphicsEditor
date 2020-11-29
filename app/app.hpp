@@ -13,7 +13,7 @@
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 #include "../event_queue/event_queue.hpp"
-#include "../window/window.hpp"
+#include "../window_base/window_base.hpp"
 
 class App {
  private:

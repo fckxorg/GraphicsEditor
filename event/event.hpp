@@ -14,7 +14,8 @@ enum SYSTEM_EVENT {
   SLIDER_MOVE,
   HUE_CHANGED,
   COLOR_CHANGED,
-  FADER_MOVE
+  FADER_MOVE,
+  DROPPER_APPLIED
 };
 
 class Event {
@@ -88,4 +89,11 @@ class FaderMoveEvent : public Event {
   float pos_y;
   FaderMoveEvent(float pos_x, float pos_y);
 };
+
+class DropperEvent : public Event {
+ public:
+  Color color;
+  DropperEvent(Color color);
+};
+
 #endif

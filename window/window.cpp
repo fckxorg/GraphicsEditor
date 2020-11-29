@@ -86,6 +86,8 @@ void RectWindow::render() {
 
 void RectWindow::set_color(Color color) { this->color = color; }
 
+Size RectWindow::get_size() { return this->size; }
+
 Color RectWindow::get_color() { return color; }
 
 bool RectWindow::is_point_inside(Position point) {
@@ -179,6 +181,15 @@ Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
     primary_axis = &Position::y;
     this->upper_bound = std::max(upper_bound - size.height, 0);
   }
+}
+
+void Slider::move_relative(float offset) {
+  pos.*primary_axis = lower_bound + (upper_bound - lower_bound) * offset;
+  pos.*primary_axis =
+      std::max(pos.*primary_axis, static_cast<int16_t>(lower_bound));
+  pos.*primary_axis =
+      std::min(pos.*primary_axis, static_cast<int16_t>(upper_bound));
+  printf("New position %d\n", pos.*primary_axis);
 }
 
 void Slider::move(int delta) {
@@ -399,7 +410,7 @@ Canvas::Canvas(Size size, Position pos, Color color)
     : RectWindow(size, pos, color), img(size, color) {}
 
 void Canvas::onMousePress(MouseButtonEvent* event) {
-  if(!is_point_inside(event->pos)) return;
+  if (!is_point_inside(event->pos)) return;
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     InstrumentManager::start_applying(event->pos);
     InstrumentManager::apply(img, event->pos);
@@ -558,6 +569,31 @@ void SVselector::handle_event(Event* event) {
     }
   }
 }
+
+/*---------------------------------------*/
+/*                 HueSlider             */
+/*---------------------------------------*/
+
+void HueSlider::handle_event(Event* event) {
+  Slider::handle_event(event);
+  if (event->get_type() == DROPPER_APPLIED) {
+    Color new_color = dynamic_cast<DropperEvent*>(event)->color;
+    float r_prep = static_cast<float>(new_color.r) / 255;
+    float g_prep = static_cast<float>(new_color.g) / 255;
+    float b_prep = static_cast<float>(new_color.b) / 255;
+
+    float h = 0;
+    float s = 0;
+    float v = 0;
+
+    RGBtoHSV(r_prep, g_prep, b_prep, h, s, v);
+    move_relative(h / 360);
+  }
+}
+
+HueSlider::HueSlider(Size size, Position pos, Color color, uint16_t lower_bound,
+                     uint16_t upper_bound, uint16_t step, bool horizontal)
+    : Slider(size, pos, color, lower_bound, upper_bound, step, horizontal){};
 
 /*---------------------------------------*/
 /*                 Fader                 */

@@ -28,7 +28,7 @@ CREATE(hue_selector,            HUEselector,    Size(360, 30),      Position(154
 CREATE(sv_selector,             SVselector,     Size(360, 360),     Position(1545, 635));
 CREATE(thickness_slider_base,   RectWindow,     Size(360, 2),       Position(1545, 609),    Color(80, 90, 91));
 
-CREATE(hue_slider,              Slider,         Size(3, 30),        Position(1545, 1015),   Color(0, 0, 0),         1545,       1905,       1,      true);
+CREATE(hue_slider,              HueSlider,      Size(3, 30),        Position(1545, 1015),   Color(0, 0, 0),         1545,       1905,       1,      true);
 CREATE(thickness_slider,        Slider,         Size(5, 30),        Position(1545, 595),    Color(0, 0, 0),         1545,       1905,       1,      true);
 
 CREATE(sv_fader,                Fader,          Size(8, 8),         Position(1896, 986),    Color(0, 0, 0),         Position(1545, 635),    Position(1896, 986));
@@ -50,6 +50,8 @@ SUBSCRIBE(root_window.get(),        dropper_button.get());
 SUBSCRIBE(hue_selector.get(),       sv_fader.get());
 SUBSCRIBE(hue_selector.get(),       sv_selector.get());
 SUBSCRIBE(sv_selector.get(),        toolbar_listener.get());
+
+SUBSCRIBE(nullptr,                  hue_slider.get());
 
 SUBSCRIBE(thickness_slider.get(),   toolbar_listener.get());
 SUBSCRIBE(hue_slider.get(),         hue_selector.get());

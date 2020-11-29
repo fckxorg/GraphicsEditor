@@ -6,6 +6,8 @@
 #include <vector>
 
 #include "../data_classes/data_classes.hpp"
+#include "../event/event.hpp"
+#include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
 
 class ToolbarListener : public Window {
@@ -72,6 +74,8 @@ class InstrumentManager {
   static void set_instrument(uint8_t instrument);
   static void set_color(Color color);
   static void set_thickness(uint8_t thickness);
+
+  static Color get_color();
 };
 
 #endif
