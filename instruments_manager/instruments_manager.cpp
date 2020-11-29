@@ -1,6 +1,9 @@
 #include "instruments_manager.hpp"
 
+#include <random>
+
 const int MAX_THICKNESS = 40;
+const int SPRAY_DENSITY = 20;
 
 void ToolbarListener::handle_event(Event* event) {
   if (event->get_type() == BUTTON_PRESSED) {
@@ -112,6 +115,52 @@ void Dropper::apply(Image& canvas, Position point, Position last_point,
   // TODO add fictive sender to subscription_manager instead of nullptr
 }
 
+void Spray::apply(Image& canvas, Position point, Position last_point,
+                   Color color, uint8_t thickness) {
+  int16_t Position::*primary_axis = nullptr;
+  int16_t Position::*secondary_axis = nullptr;
+
+  int16_t x_diff = abs(point.x - last_point.x);
+  int16_t y_diff = abs(point.y - last_point.y);
+
+  if (x_diff > y_diff) {
+    primary_axis = &Position::x;
+    secondary_axis = &Position::y;
+  } else {
+    primary_axis = &Position::y;
+    secondary_axis = &Position::x;
+  }
+
+  std::minstd_rand randomizer; 
+
+  // TODO splines
+  // if there is not enough points for approximation (usually 4) you can
+  // duplicate points
+  float k =
+      static_cast<float>(point.*secondary_axis - last_point.*secondary_axis) /
+      (point.*primary_axis - last_point.*primary_axis);
+  float b = point.*secondary_axis - k * point.*primary_axis;
+
+  for (int x = std::min(point.*primary_axis, last_point.*primary_axis);
+       x <= std::max(point.*primary_axis, last_point.*primary_axis); x += 1) {
+    for (int i = -thickness; i <= thickness; ++i) {
+      for (int j = -thickness; j <= thickness; ++j) {
+        bool not_colored = randomizer() % SPRAY_DENSITY;
+        if (i * i + j * j < thickness * thickness && !not_colored) {
+          if (x_diff > y_diff) {
+            canvas.setPixel(std::max(x + i, 0), std::max(k * x + b + j, 0.f),
+                            color);
+          } else {
+            canvas.setPixel(std::max(k * x + b + i, 0.f), std::max(x + j, 0),
+                            color);
+          }
+        }
+      }
+    }
+  }
+}
+
+
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(-1, -1);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
@@ -129,6 +178,8 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Brush()));
   instruments[DROPPER] =
       std::move(std::unique_ptr<AbstractInstrument>(new Dropper()));
+  instruments[SPRAY] =
+      std::move(std::unique_ptr<AbstractInstrument>(new Spray()));
 }
 
 void InstrumentManager::start_applying(Position pos) {

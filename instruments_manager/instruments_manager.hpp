@@ -4,6 +4,7 @@
 #include <cstdarg>
 #include <memory>
 #include <vector>
+#include <random>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
@@ -16,7 +17,7 @@ class ToolbarListener : public Window {
   void render() override;
 };
 
-enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, COUNT };
+enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, COUNT };
 
 class AbstractInstrument {
  public:
@@ -39,6 +40,12 @@ class Eraser : public Pencil {
 };
 
 class Brush : public AbstractInstrument {
+ public:
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
+};
+
+class Spray : public AbstractInstrument {
  public:
   virtual void apply(Image& canvas, Position point, Position last_point,
                      Color color, uint8_t thickness) override;
