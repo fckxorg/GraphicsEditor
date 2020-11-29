@@ -14,7 +14,7 @@ class ToolbarListener : public Window {
   void render() override;
 };
 
-enum INSTRUMENTS { ERASER, PENCIL, BRUSH, COUNT };
+enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, COUNT };
 
 class AbstractInstrument {
  public:
@@ -37,8 +37,15 @@ class Eraser : public Pencil {
 };
 
 class Brush : public AbstractInstrument {
-    public:
-        virtual void apply(Image& canvas, Position point, Position last_point, Color color, uint8_t thickness) override;
+ public:
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
+};
+
+class Dropper : public AbstractInstrument {
+ public:
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
 };
 
 class InstrumentManager {

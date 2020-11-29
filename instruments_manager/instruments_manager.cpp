@@ -104,6 +104,12 @@ void Brush::apply(Image& canvas, Position point, Position last_point,
   }
 }
 
+void Dropper::apply(Image& canvas, Position point, Position last_point,
+                  Color color, uint8_t thickness) {
+    InstrumentManager::set_color(canvas.getPixel(point.x, point.y));
+    // TODO sending event to palette
+}
+
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(0, 0);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
@@ -119,6 +125,8 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Pencil()));
   instruments[BRUSH] =
       std::move(std::unique_ptr<AbstractInstrument>(new Brush()));
+  instruments[DROPPER] =
+      std::move(std::unique_ptr<AbstractInstrument>(new Dropper()));
 }
 
 void InstrumentManager::start_applying(Position pos) {
