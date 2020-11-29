@@ -17,13 +17,9 @@ class ToolbarListener : public Window {
 enum INSTRUMENTS { ERASER, PENCIL, COUNT };
 
 class AbstractInstrument {
- protected:
-  Color color;
-  uint8_t thickness;
-
  public:
-  void set_color(Color color);
-  void set_thickness(uint8_t thickness);
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) = 0;
 
   virtual ~AbstractInstrument();
 };
@@ -31,7 +27,8 @@ class AbstractInstrument {
 class Pencil : public AbstractInstrument {
  public:
   Pencil();
-  virtual void apply(Image& canvas, Position point, Position last_point);
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
 };
 
 class Eraser : public Pencil {
@@ -45,6 +42,9 @@ class InstrumentManager {
   static Position last_point;
   static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
   static int current_instrument;
+
+  static uint8_t thickness;
+  static Color color;
 
  public:
   static void init();

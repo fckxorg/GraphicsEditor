@@ -1,6 +1,5 @@
 #include "instruments_manager.hpp"
 
-#include <stdio.h>
 
 const int MAX_THICKNESS = 40;
 
@@ -22,20 +21,12 @@ void ToolbarListener::handle_event(Event* event) {
 
 void ToolbarListener::render() {}
 
-void AbstractInstrument::set_color(Color color) { this->color = color; }
-
-void AbstractInstrument::set_thickness(uint8_t thickness) {
-  this->thickness = thickness;
-}
-
 AbstractInstrument::~AbstractInstrument() = default;
 
-Pencil::Pencil() {
-  set_color(Color(0, 0, 0));
-  set_thickness(1);
-}
+Pencil::Pencil() = default;
 
-void Pencil::apply(Image& canvas, Position point, Position last_point) {
+void Pencil::apply(Image& canvas, Position point, Position last_point,
+                   Color color, uint8_t thickness) {
   int16_t Position::*primary_axis = nullptr;
   int16_t Position::*secondary_axis = nullptr;
 
@@ -76,16 +67,15 @@ void Pencil::apply(Image& canvas, Position point, Position last_point) {
   }
 }
 
-Eraser::Eraser() {
-  Pencil::set_color(Color(255, 255, 255));
-  Pencil::set_thickness(5);
-}
+Eraser::Eraser() = default;
 
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(0, 0);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
     COUNT);
 int InstrumentManager::current_instrument = PENCIL;
+uint8_t InstrumentManager::thickness = 1;
+Color InstrumentManager::color = Color(0, 0, 0);
 
 void InstrumentManager::init() {
   instruments[ERASER] =
@@ -105,13 +95,13 @@ void InstrumentManager::apply(Image& canvas, Position pos) {
   switch (current_instrument) {
     case PENCIL: {
       dynamic_cast<Pencil*>(instruments[PENCIL].get())
-          ->apply(canvas, pos, last_point);
+          ->apply(canvas, pos, last_point, color, thickness);
       break;
     }
 
     case ERASER: {
       dynamic_cast<Eraser*>(instruments[ERASER].get())
-          ->apply(canvas, pos, last_point);
+          ->apply(canvas, pos, last_point, Color(255, 255, 255), thickness);
       break;
     }
   }
@@ -126,10 +116,10 @@ void InstrumentManager::set_instrument(uint8_t instrument) {
 }
 
 void InstrumentManager::set_color(Color color) {
-  instruments[current_instrument]->set_color(color);
+  InstrumentManager::color = color;
 }
 
 void InstrumentManager::set_thickness(uint8_t thickness) {
-  instruments[current_instrument]->set_thickness(thickness);
+  InstrumentManager::thickness = thickness;
 }
 
