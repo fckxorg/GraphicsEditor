@@ -111,6 +111,7 @@ class RectWindow : public RenderWindow {
   void set_color(Color color);
 
   Size get_size();
+  void set_size(Size size);
 
   Color get_color();
 
@@ -301,12 +302,6 @@ class HueSlider : public Slider {
             uint16_t upper_bound, uint16_t step, bool horizontal = false);
 
   void handle_event(Event* event) override;
-};
-
-class RectShape : public RectWindow {
-  public:
-      RectShape(Size size, Position pos, Color color);
-      virtual void handle_event(Event* event) override;
 };
 
 #endif

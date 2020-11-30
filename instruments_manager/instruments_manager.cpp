@@ -169,6 +169,13 @@ void Clear::apply(Image& canvas, Position point, Position last_point,
   }
 }
 
+void Rect::apply(Image& canvas, Position point, Position last_point,
+                 Color color, uint8_t thickness) {
+  rect_data.size.width = point.x - rect_data.pos.x;
+  rect_data.size.height = point.y - rect_data.pos.y;
+  Renderer::add_delayed(rect_data);
+}
+
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(-1, -1);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
@@ -176,9 +183,8 @@ std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
 int InstrumentManager::current_instrument = PENCIL;
 uint8_t InstrumentManager::thickness = 1;
 Color InstrumentManager::color = Color(0, 0, 0);
-Window* InstrumentManager::canvas_window = nullptr;
 
-void InstrumentManager::init(Window* canvas_window) {
+void InstrumentManager::init() {
   instruments[ERASER] =
       std::move(std::unique_ptr<AbstractInstrument>(new Eraser()));
   instruments[PENCIL] =
@@ -191,17 +197,33 @@ void InstrumentManager::init(Window* canvas_window) {
       std::move(std::unique_ptr<AbstractInstrument>(new Spray()));
   instruments[CLEAR] =
       std::move(std::unique_ptr<AbstractInstrument>(new Clear()));
-
-  InstrumentManager::canvas_window = canvas_window;
+  instruments[RECT_INSTRUMENT] =
+      std::move(std::unique_ptr<AbstractInstrument>(new Rect()));
 }
 
 void InstrumentManager::start_applying(Position pos) {
   application_started = true;
   last_point.x = pos.x + 1;
   last_point.y = pos.y;
+
+  if (current_instrument == RECT_INSTRUMENT) {
+    auto instrument = dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get());
+    instrument->rect_data.pos = pos;
+    instrument->rect_data.color = color;
+  }
 }
 
-void InstrumentManager::stop_applying() { application_started = false; }
+void InstrumentManager::stop_applying(Image& canvas) {
+  application_started = false;
+  if (current_instrument == RECT_INSTRUMENT) {
+    DelayedRenderData rect_data = dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get())->rect_data;
+    for(int x = 0; x < rect_data.size.width; ++x) {
+        for(int y = 0; y < rect_data.size.height; ++y) {
+            canvas.setPixel(x + rect_data.pos.x, y + rect_data.pos.y, color);
+        }
+    } 
+  }
+}
 
 void InstrumentManager::apply(Image& canvas, Position pos) {
   switch (current_instrument) {

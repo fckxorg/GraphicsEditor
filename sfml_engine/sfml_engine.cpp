@@ -15,6 +15,9 @@ void OffscreenRenderData::release() {
 std::stack<OffscreenRenderData> Renderer::offscreen_render_stack;
 std::vector<OffscreenRenderData> Renderer::offscreen_resources;
 std::unordered_map<const char*, sf::Texture> Renderer::textures;
+bool Renderer::has_delayed = false;
+
+DelayedRenderData Renderer::delayed_render = {};
 
 sf::RenderWindow Renderer::window;
 std::unordered_map<const char*, sf::Font>
@@ -58,6 +61,7 @@ void Renderer::clear() {
   }
   offscreen_resources.clear();
   window.clear();
+  has_delayed = false;
 }
 
 sf::RenderTarget* Renderer::get_target() {
@@ -228,4 +232,15 @@ void Renderer::draw_sprite(Texture texture, Position pos) {
   sfml_sprite.setPosition(pos);
   auto target = get_target();
   target->draw(sfml_sprite);
+}
+
+void Renderer::draw_delayed() {
+  if (delayed_render.type == RECT) {
+    Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
+                             delayed_render.color);
+  }
+}
+
+void Renderer::add_delayed(DelayedRenderData delayed_data) {
+    Renderer::delayed_render = delayed_data;
 }

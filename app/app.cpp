@@ -19,6 +19,7 @@ void App::run() {
     }
 
     root_window->render();
+    Renderer::draw_delayed();
     Renderer::show();
     Renderer::clear();
   }

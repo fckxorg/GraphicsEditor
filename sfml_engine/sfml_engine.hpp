@@ -21,6 +21,17 @@
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 
+enum DELAYED_RENDER_TYPES {
+    RECT
+};
+
+struct DelayedRenderData {
+    int type;
+    Size size;
+    Position pos;
+    Color color;
+};
+
 struct OffscreenRenderData {
   sf::Sprite* sprite;
   sf::RenderTexture* texture;
@@ -33,6 +44,9 @@ struct OffscreenRenderData {
 class Renderer {
  private:
   static sf::RenderWindow window;
+
+  static DelayedRenderData delayed_render; 
+  static bool has_delayed;
 
   static std::unordered_map<const char*, sf::Font> fonts;
   static std::unordered_map<const char*, sf::Texture> textures;
@@ -73,5 +87,8 @@ class Renderer {
                                    Color color, float relative_offset);
 
   static void draw_sprite(Texture texture, Position pos);
+
+  static void add_delayed(DelayedRenderData delayed_data);
+  static void draw_delayed();
 };
 #endif

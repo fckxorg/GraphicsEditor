@@ -88,6 +88,8 @@ void RectWindow::set_color(Color color) { this->color = color; }
 
 Size RectWindow::get_size() { return this->size; }
 
+void RectWindow::set_size(Size size) { this->size = size; }
+
 Color RectWindow::get_color() { return color; }
 
 bool RectWindow::is_point_inside(Position point) {
@@ -419,7 +421,7 @@ void Canvas::onMousePress(MouseButtonEvent* event) {
 
 void Canvas::onMouseRelease(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
-    InstrumentManager::stop_applying();
+    InstrumentManager::stop_applying(img);
   }
 }
 
@@ -693,17 +695,5 @@ void Fader::render() {
   Size inline_size = Size(size.width - 4, size.height - 4);
   Position inline_pos = Position(pos.x + 2, pos.y + 2);
   Renderer::draw_rectangle(inline_size, inline_pos, Color(255, 255, 255));
-}
-
-RectShape::RectShape(Size size, Position pos, Color color)
-    : RectWindow(size, pos, color) {}
-
-void RectShape::handle_event(Event* event) {
-  if (event->get_type() == MOUSE_MOVE) {
-    auto mouse_event = dynamic_cast<MouseMoveEvent*>(event);
-
-    size.width = mouse_event->pos.x - pos.x;
-    size.height = mouse_event->pos.y - pos.y;
-  }
 }
 

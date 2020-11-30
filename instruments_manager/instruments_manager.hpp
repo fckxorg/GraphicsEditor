@@ -10,6 +10,7 @@
 #include "../event/event.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
+#include "../sfml_engine/sfml_engine.hpp"
 
 class ToolbarListener : public Window {
  public:
@@ -17,7 +18,7 @@ class ToolbarListener : public Window {
   void render() override;
 };
 
-enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, CLEAR, COUNT };
+enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, CLEAR, RECT_INSTRUMENT, COUNT };
 
 class AbstractInstrument {
  public:
@@ -63,23 +64,32 @@ class Clear : public AbstractInstrument {
                      Color color, uint8_t thickness) override;
 };
 
+class Rect : public AbstractInstrument {
+ private:
+  DelayedRenderData rect_data;
+
+ public:
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
+  friend class InstrumentManager;
+};
+
 class InstrumentManager {
  private:
   static bool application_started;
   static Position last_point;
   static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
   static int current_instrument;
-  static Window* canvas_window;
 
   static uint8_t thickness;
   static Color color;
 
  public:
-  static void init(Window* canvas_window);
+  static void init();
 
   static void start_applying(Position pos);
 
-  static void stop_applying();
+  static void stop_applying(Image& canvas);
 
   static void apply(Image& canvas, Position pos);
 
