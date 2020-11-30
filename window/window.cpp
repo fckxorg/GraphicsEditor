@@ -612,26 +612,6 @@ Fader::Fader(Size size, Position pos, Color color, Position lower_bound,
 void Fader::handle_event(Event* event) {
   assert(event != nullptr);
   switch (event->get_type()) {
-    case DROPPER_APPLIED: {
-      Color new_color = dynamic_cast<DropperEvent*>(event)->color;
-      float r_prep = static_cast<float>(new_color.r) / 255;
-      float g_prep = static_cast<float>(new_color.g) / 255;
-      float b_prep = static_cast<float>(new_color.b) / 255;
-
-      float h = 0;
-      float s = 0;
-      float v = 0;
-
-      RGBtoHSV(r_prep, g_prep, b_prep, h, s, v);
-      float pos_x = s * (upper_bound.x - lower_bound.x);
-      float pos_y = (1.f - v) * (upper_bound.y - lower_bound.y);
-
-      pos.x = lower_bound.x + pos_x;
-      pos.y = lower_bound.y + pos_y;
-
-      SEND(this, new FaderMoveEvent(pos_x, pos_y));
-      break;
-    }
     case MOUSE_BUTTON: {
       handle_mouse_button_event(event);
       break;
@@ -640,17 +620,6 @@ void Fader::handle_event(Event* event) {
     case MOUSE_MOVE: {
       auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
       onMouseMove(mouse_move_event);
-      break;
-    }
-
-    case HUE_CHANGED: {
-      auto hue_event = dynamic_cast<HueChangedEvent*>(event);
-
-      float pos_x = static_cast<float>(pos.x - lower_bound.x) /
-                    (upper_bound.x - lower_bound.x);
-      float pos_y = static_cast<float>(pos.y - lower_bound.y) /
-                    (upper_bound.y - lower_bound.y);
-      SEND(this, new FaderMoveEvent(pos_x, pos_y));
       break;
     }
   }
@@ -695,5 +664,46 @@ void Fader::render() {
   Size inline_size = Size(size.width - 4, size.height - 4);
   Position inline_pos = Position(pos.x + 2, pos.y + 2);
   Renderer::draw_rectangle(inline_size, inline_pos, Color(255, 255, 255));
+}
+
+SVFader::SVFader(Size size, Position pos, Color color, Position lower_bound,
+                 Position upper_bound)
+    : Fader(size, pos, color, lower_bound, upper_bound) {}
+
+void SVFader::handle_event(Event* event) {
+  Fader::handle_event(event);
+
+  switch (event->get_type()) {
+    case DROPPER_APPLIED: {
+      Color new_color = dynamic_cast<DropperEvent*>(event)->color;
+      float r_prep = static_cast<float>(new_color.r) / 255;
+      float g_prep = static_cast<float>(new_color.g) / 255;
+      float b_prep = static_cast<float>(new_color.b) / 255;
+
+      float h = 0;
+      float s = 0;
+      float v = 0;
+
+      RGBtoHSV(r_prep, g_prep, b_prep, h, s, v);
+      float pos_x = s * (upper_bound.x - lower_bound.x);
+      float pos_y = (1.f - v) * (upper_bound.y - lower_bound.y);
+
+      pos.x = lower_bound.x + pos_x;
+      pos.y = lower_bound.y + pos_y;
+
+      SEND(this, new FaderMoveEvent(pos_x, pos_y));
+      break;
+    }
+    case HUE_CHANGED: {
+      auto hue_event = dynamic_cast<HueChangedEvent*>(event);
+
+      float pos_x = static_cast<float>(pos.x - lower_bound.x) /
+                    (upper_bound.x - lower_bound.x);
+      float pos_y = static_cast<float>(pos.y - lower_bound.y) /
+                    (upper_bound.y - lower_bound.y);
+      SEND(this, new FaderMoveEvent(pos_x, pos_y));
+      break;
+    }
+  }
 }
 

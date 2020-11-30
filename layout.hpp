@@ -50,7 +50,7 @@ CREATE(thickness_slider_base,   RectWindow,     Size(360, 2),       Position(154
 CREATE(hue_slider,              HueSlider,      Size(3, 30),        Position(1545, 1015),   Color(0, 0, 0),         1545,       1905,       1,      true);
 CREATE(thickness_slider,        Slider,         Size(5, 30),        Position(1545, 595),    Color(0, 0, 0),         1545,       1905,       1,      true);
 
-CREATE(sv_fader,                Fader,          Size(8, 8),         Position(1896, 986),    Color(0, 0, 0),         Position(1545, 635),    Position(1896, 986));
+CREATE(sv_fader,                SVFader,          Size(8, 8),         Position(1896, 986),    Color(0, 0, 0),         Position(1545, 635),    Position(1896, 986));
 
 CREATE(canvas,                  Canvas,         Size(1500, 890),    Position(0, 0),         Color(255, 255, 255));
 

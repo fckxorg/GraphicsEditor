@@ -283,6 +283,8 @@ class SVselector : public RenderWindow {
 class Fader : public RectWindow, public InterfaceDraggable {
  private:
   bool pressed;
+
+ protected:
   Position lower_bound;
   Position upper_bound;
 
@@ -294,6 +296,13 @@ class Fader : public RectWindow, public InterfaceDraggable {
   virtual void onMouseRelease(MouseButtonEvent* event) override;
   virtual void onMouseMove(MouseMoveEvent* event) override;
   virtual void render() override;
+};
+
+class SVFader : public Fader {
+ public:
+  SVFader(Size size, Position pos, Color color, Position lower_bound,
+          Position upper_bound);
+  virtual void handle_event(Event* event) override;
 };
 
 class HueSlider : public Slider {
