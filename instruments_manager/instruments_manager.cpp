@@ -1,5 +1,7 @@
 #include "instruments_manager.hpp"
 
+#include <bits/stdint-intn.h>
+
 #include <random>
 
 const int MAX_THICKNESS = 40;
@@ -28,6 +30,25 @@ AbstractInstrument::~AbstractInstrument() = default;
 
 void AbstractInstrument::init(Position pos) {}
 void AbstractInstrument::deinit(Image& canvas, Color color) {}
+
+void AbstractShapeInstrument::default_axis_preparation(
+    int16_t Position::*pos_axis, int16_t Size::*size_axis) {
+  if (render_data.size.*size_axis < 0) {
+    render_data.pos.*pos_axis += render_data.size.*size_axis;
+    render_data.size.*size_axis = -(render_data.size.*size_axis);
+  }
+}
+
+void AbstractShapeInstrument::prepare_render_data() {
+  default_axis_preparation(&Position::x, &Size::width);
+  default_axis_preparation(&Position::y, &Size::height);
+}
+
+void AbstractShapeInstrument::clear_render_data() {
+  render_data.pos = Position(-1, -1);
+  render_data.size = Size(0, 0);
+  Renderer::remove_delayed();
+}
 
 Pencil::Pencil() = default;
 
@@ -174,81 +195,61 @@ void Clear::apply(Image& canvas, Position point, Position last_point,
 
 void Rect::apply(Image& canvas, Position point, Position last_point,
                  Color color, uint8_t thickness) {
-  rect_data.size.width = point.x - rect_data.pos.x;
-  rect_data.size.height = point.y - rect_data.pos.y;
-  rect_data.color = color;
-  Renderer::add_delayed(rect_data);
+  render_data.size.width = point.x - render_data.pos.x;
+  render_data.size.height = point.y - render_data.pos.y;
+  render_data.color = color;
+  Renderer::add_delayed(render_data);
 }
 
 void Rect::init(Position pos) {
-  rect_data.pos = pos;
-  rect_data.type = RECT;
+  render_data.pos = pos;
+  render_data.type = RECT;
 }
 
 void Rect::deinit(Image& canvas, Color color) {
-  if (rect_data.size.width < 0) {
-    rect_data.pos.x += rect_data.size.width;
-    rect_data.size.width = -rect_data.size.width;
-  }
+  prepare_render_data();
 
-  if (rect_data.size.height < 0) {
-    rect_data.pos.y += rect_data.size.height;
-    rect_data.size.height = -rect_data.size.height;
-  }
-
-  for (int x = 0; x < rect_data.size.width; ++x) {
-    for (int y = 0; y < rect_data.size.height; ++y) {
-      canvas.setPixel(x + rect_data.pos.x, y + rect_data.pos.y, color);
+  for (int x = 0; x < render_data.size.width; ++x) {
+    for (int y = 0; y < render_data.size.height; ++y) {
+      canvas.setPixel(x + render_data.pos.x, y + render_data.pos.y, color);
     }
   }
 
-  rect_data.pos = Position(-1, -1);
-  rect_data.size = Size(0, 0);
-  Renderer::remove_delayed();
+  clear_render_data();
 }
 
 void Ellipse::apply(Image& canvas, Position point, Position last_point,
                     Color color, uint8_t thickness) {
-  ellipse_data.size.width = point.x - ellipse_data.pos.x;
-  ellipse_data.size.height = point.y - ellipse_data.pos.y;
-  ellipse_data.color = color;
-  Renderer::add_delayed(ellipse_data);
+  render_data.size.width = point.x - render_data.pos.x;
+  render_data.size.height = point.y - render_data.pos.y;
+  render_data.color = color;
+  Renderer::add_delayed(render_data);
 }
 
 void Ellipse::init(Position pos) {
-  ellipse_data.pos = pos;
-  ellipse_data.type = ELLIPSE;
+  render_data.pos = pos;
+  render_data.type = ELLIPSE;
 }
 
 void Ellipse::deinit(Image& canvas, Color color) {
-  if (ellipse_data.size.width < 0) {
-    ellipse_data.pos.x += ellipse_data.size.width;
-    ellipse_data.size.width = -ellipse_data.size.width;
-  }
+  prepare_render_data();
+  
+  float radius_hor = static_cast<float>(render_data.size.width) / 2;
+  float radius_vert = static_cast<float>(render_data.size.height) / 2;
 
-  if (ellipse_data.size.height < 0) {
-    ellipse_data.pos.y += ellipse_data.size.height;
-    ellipse_data.size.height = -ellipse_data.size.height;
-  }
-
-  float radius_hor = static_cast<float>(ellipse_data.size.width) / 2;
-  float radius_vert = static_cast<float>(ellipse_data.size.height) / 2;
-
-  for (int x = 0; x < ellipse_data.size.width; ++x) {
-    for (int y = 0; y < ellipse_data.size.height; ++y) {
+  for (int x = 0; x < render_data.size.width; ++x) {
+    for (int y = 0; y < render_data.size.height; ++y) {
       float x_eq_part =
           (x - radius_hor) * (x - radius_hor) / (radius_hor * radius_hor);
       float y_eq_part =
           (y - radius_vert) * (y - radius_vert) / (radius_vert * radius_vert);
       if (x_eq_part + y_eq_part <= 1) {
-        canvas.setPixel(x + ellipse_data.pos.x, y + ellipse_data.pos.y, color);
+        canvas.setPixel(x + render_data.pos.x, y + render_data.pos.y, color);
       }
     }
   }
-
-  ellipse_data.pos = Position(-1, -1);
-  ellipse_data.size = Size(0, 0);
-  Renderer::remove_delayed();
+  
+  clear_render_data();
 }
 
 bool InstrumentManager::application_started = false;

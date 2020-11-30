@@ -8,9 +8,9 @@
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
+#include "../sfml_engine/sfml_engine.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
-#include "../sfml_engine/sfml_engine.hpp"
 
 class ToolbarListener : public Window {
  public:
@@ -18,7 +18,17 @@ class ToolbarListener : public Window {
   void render() override;
 };
 
-enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, CLEAR, RECT_INSTRUMENT, ELLIPSE_INSTRUMENT, COUNT };
+enum INSTRUMENTS {
+  ERASER,
+  PENCIL,
+  BRUSH,
+  DROPPER,
+  SPRAY,
+  CLEAR,
+  RECT_INSTRUMENT,
+  ELLIPSE_INSTRUMENT,
+  COUNT
+};
 
 class AbstractInstrument {
  public:
@@ -28,6 +38,15 @@ class AbstractInstrument {
                      Color color, uint8_t thickness) = 0;
 
   virtual ~AbstractInstrument();
+};
+
+class AbstractShapeInstrument : public AbstractInstrument {
+ private:
+    void default_axis_preparation(int16_t Position::* pos_axis,int16_t Size::* size_axis);
+ protected:
+  DelayedRenderData render_data;
+  virtual void prepare_render_data();
+  virtual void clear_render_data();
 };
 
 class Pencil : public AbstractInstrument {
@@ -66,10 +85,7 @@ class Clear : public AbstractInstrument {
                      Color color, uint8_t thickness) override;
 };
 
-class Rect : public AbstractInstrument {
- private:
-  DelayedRenderData rect_data;
-
+class Rect : public AbstractShapeInstrument {
  public:
   virtual void init(Position pos) override;
   virtual void deinit(Image& canvas, Color color) override;
@@ -78,10 +94,7 @@ class Rect : public AbstractInstrument {
   friend class InstrumentManager;
 };
 
-class Ellipse : public AbstractInstrument {
- private:
-  DelayedRenderData ellipse_data;
-
+class Ellipse : public AbstractShapeInstrument {
  public:
   virtual void init(Position pos) override;
   virtual void deinit(Image& canvas, Color color) override;
@@ -89,7 +102,6 @@ class Ellipse : public AbstractInstrument {
                      Color color, uint8_t thickness) override;
   friend class InstrumentManager;
 };
-
 
 class InstrumentManager {
  private:
