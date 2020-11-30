@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['huechangedevent_64',['HueChangedEvent',['../classHueChangedEvent.html',1,'']]],
-  ['hueselector_65',['HUEselector',['../classHUEselector.html',1,'']]],
-  ['hueslider_66',['HueSlider',['../classHueSlider.html',1,'']]]
+  ['huechangedevent_74',['HueChangedEvent',['../classHueChangedEvent.html',1,'']]],
+  ['hueselector_75',['HUEselector',['../classHUEselector.html',1,'']]],
+  ['hueslider_76',['HueSlider',['../classHueSlider.html',1,'']]]
 ];

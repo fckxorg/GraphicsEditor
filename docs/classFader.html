@@ -65,6 +65,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classFader-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Fader Class Reference</div>  </div>
@@ -81,6 +82,7 @@ Inheritance diagram for Fader:</div>
 <area href="classRenderWindow.html" alt="RenderWindow" shape="rect" coords="0,56,121,80"/>
 <area href="classInterfaceClickable.html" alt="InterfaceClickable" shape="rect" coords="131,56,252,80"/>
 <area href="classWindow.html" alt="Window" shape="rect" coords="0,0,121,24"/>
+<area href="classSVFader.html" alt="SVFader" shape="rect" coords="65,224,186,248"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -114,6 +116,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a cla
 <tr class="memitem:a47f20551aa932ff71dd07d2226b02018 inherit pub_methods_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a47f20551aa932ff71dd07d2226b02018"></a>
 <a class="el" href="structSize.html">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_size</b> ()</td></tr>
 <tr class="separator:a47f20551aa932ff71dd07d2226b02018 inherit pub_methods_classRectWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42aebd18acab71872feb5cfbf496539e inherit pub_methods_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a42aebd18acab71872feb5cfbf496539e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_size</b> (<a class="el" href="structSize.html">Size</a> size)</td></tr>
+<tr class="separator:a42aebd18acab71872feb5cfbf496539e inherit pub_methods_classRectWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c0a8b8088a7ff241d6b0cb7619a2a6d inherit pub_methods_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a3c0a8b8088a7ff241d6b0cb7619a2a6d"></a>
 <a class="el" href="structColor.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_color</b> ()</td></tr>
 <tr class="separator:a3c0a8b8088a7ff241d6b0cb7619a2a6d inherit pub_methods_classRectWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,16 +152,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>add_child_window</b> 
 <tr class="memitem:a7e140610d3de6c47a655e988aa751fdf inherit pub_methods_classInterfaceClickable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInterfaceClickable.html#a7e140610d3de6c47a655e988aa751fdf">handle_mouse_button_event</a> (<a class="el" href="classEvent.html">Event</a> *event)</td></tr>
 <tr class="separator:a7e140610d3de6c47a655e988aa751fdf inherit pub_methods_classInterfaceClickable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_classWindow"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classWindow')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classWindow.html">Window</a></td></tr>
-<tr class="memitem:a1536bdcbe08b4921b92af24595c551df inherit pub_attribs_classWindow"><td class="memItemLeft" align="right" valign="top"><a id="a1536bdcbe08b4921b92af24595c551df"></a>
-std::list&lt; std::unique_ptr&lt; <a class="el" href="classWindow.html">Window</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>subwindows</b></td></tr>
-<tr class="separator:a1536bdcbe08b4921b92af24595c551df inherit pub_attribs_classWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classRectWindow"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classRectWindow')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classRectWindow.html">RectWindow</a></td></tr>
-<tr class="memitem:a8be869e89d7cc354dc7a294b1f778ac8 inherit pro_methods_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a8be869e89d7cc354dc7a294b1f778ac8"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_point_inside</b> (<a class="el" href="structPosition.html">Position</a> point)</td></tr>
-<tr class="separator:a8be869e89d7cc354dc7a294b1f778ac8 inherit pro_methods_classRectWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a372db9e9de2678a23f659c53af5e3465"><td class="memItemLeft" align="right" valign="top"><a id="a372db9e9de2678a23f659c53af5e3465"></a>
+<a class="el" href="structPosition.html">Position</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lower_bound</b></td></tr>
+<tr class="separator:a372db9e9de2678a23f659c53af5e3465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19c255c6584cc13e100fa4c74a496a14"><td class="memItemLeft" align="right" valign="top"><a id="a19c255c6584cc13e100fa4c74a496a14"></a>
+<a class="el" href="structPosition.html">Position</a>&#160;</td><td class="memItemRight" valign="bottom"><b>upper_bound</b></td></tr>
+<tr class="separator:a19c255c6584cc13e100fa4c74a496a14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classRectWindow"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classRectWindow')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classRectWindow.html">RectWindow</a></td></tr>
 <tr class="memitem:a86407f141c7d71519a80650dc6fbbacb inherit pro_attribs_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a86407f141c7d71519a80650dc6fbbacb"></a>
 <a class="el" href="structColor.html">Color</a>&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
@@ -171,6 +174,17 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_point_insi
 <tr class="memitem:a7b71900755f3115e7509362b5fccc8b2 inherit pro_attribs_classRenderWindow"><td class="memItemLeft" align="right" valign="top"><a id="a7b71900755f3115e7509362b5fccc8b2"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>rotation</b></td></tr>
 <tr class="separator:a7b71900755f3115e7509362b5fccc8b2 inherit pro_attribs_classRenderWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_attribs_classWindow"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classWindow')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classWindow.html">Window</a></td></tr>
+<tr class="memitem:a1536bdcbe08b4921b92af24595c551df inherit pub_attribs_classWindow"><td class="memItemLeft" align="right" valign="top"><a id="a1536bdcbe08b4921b92af24595c551df"></a>
+std::list&lt; std::unique_ptr&lt; <a class="el" href="classWindow.html">Window</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>subwindows</b></td></tr>
+<tr class="separator:a1536bdcbe08b4921b92af24595c551df inherit pub_attribs_classWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classRectWindow"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classRectWindow')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classRectWindow.html">RectWindow</a></td></tr>
+<tr class="memitem:a8be869e89d7cc354dc7a294b1f778ac8 inherit pro_methods_classRectWindow"><td class="memItemLeft" align="right" valign="top"><a id="a8be869e89d7cc354dc7a294b1f778ac8"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_point_inside</b> (<a class="el" href="structPosition.html">Position</a> point)</td></tr>
+<tr class="separator:a8be869e89d7cc354dc7a294b1f778ac8 inherit pro_methods_classRectWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>window/<a class="el" href="window_8hpp_source.html">window.hpp</a></li>

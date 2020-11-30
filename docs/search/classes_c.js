@@ -1,14 +1,15 @@
 var searchData=
 [
-  ['scrollabletext_81',['ScrollableText',['../classScrollableText.html',1,'']]],
-  ['scrollablewindow_82',['ScrollableWindow',['../classScrollableWindow.html',1,'']]],
-  ['scrollbar_83',['Scrollbar',['../classScrollbar.html',1,'']]],
-  ['scrollevent_84',['ScrollEvent',['../classScrollEvent.html',1,'']]],
-  ['size_85',['Size',['../structSize.html',1,'']]],
-  ['slider_86',['Slider',['../classSlider.html',1,'']]],
-  ['slidermoveevent_87',['SliderMoveEvent',['../classSliderMoveEvent.html',1,'']]],
-  ['spray_88',['Spray',['../classSpray.html',1,'']]],
-  ['sprite_89',['Sprite',['../classSprite.html',1,'']]],
-  ['subscriptionmanager_90',['SubscriptionManager',['../classSubscriptionManager.html',1,'']]],
-  ['svselector_91',['SVselector',['../classSVselector.html',1,'']]]
+  ['scrollabletext_92',['ScrollableText',['../classScrollableText.html',1,'']]],
+  ['scrollablewindow_93',['ScrollableWindow',['../classScrollableWindow.html',1,'']]],
+  ['scrollbar_94',['Scrollbar',['../classScrollbar.html',1,'']]],
+  ['scrollevent_95',['ScrollEvent',['../classScrollEvent.html',1,'']]],
+  ['size_96',['Size',['../structSize.html',1,'']]],
+  ['slider_97',['Slider',['../classSlider.html',1,'']]],
+  ['slidermoveevent_98',['SliderMoveEvent',['../classSliderMoveEvent.html',1,'']]],
+  ['spray_99',['Spray',['../classSpray.html',1,'']]],
+  ['sprite_100',['Sprite',['../classSprite.html',1,'']]],
+  ['subscriptionmanager_101',['SubscriptionManager',['../classSubscriptionManager.html',1,'']]],
+  ['svfader_102',['SVFader',['../classSVFader.html',1,'']]],
+  ['svselector_103',['SVselector',['../classSVselector.html',1,'']]]
 ];
