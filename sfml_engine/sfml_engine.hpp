@@ -90,5 +90,6 @@ class Renderer {
 
   static void add_delayed(DelayedRenderData delayed_data);
   static void draw_delayed();
+  static void remove_delayed();
 };
 #endif

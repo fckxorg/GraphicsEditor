@@ -61,7 +61,6 @@ void Renderer::clear() {
   }
   offscreen_resources.clear();
   window.clear();
-  has_delayed = false;
 }
 
 sf::RenderTarget* Renderer::get_target() {
@@ -72,7 +71,9 @@ sf::RenderTarget* Renderer::get_target() {
   return offscreen_render_stack.top().texture;
 }
 
-void Renderer::show() { window.display(); }
+void Renderer::show() {
+  window.display();
+}
 
 void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   sf::RectangleShape rect = sf::RectangleShape(size);
@@ -235,12 +236,19 @@ void Renderer::draw_sprite(Texture texture, Position pos) {
 }
 
 void Renderer::draw_delayed() {
-  if (delayed_render.type == RECT) {
-    Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
-                             delayed_render.color);
+  if (has_delayed) {
+    if (delayed_render.type == RECT) {
+      Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
+                               delayed_render.color);
+    }
   }
 }
 
 void Renderer::add_delayed(DelayedRenderData delayed_data) {
-    Renderer::delayed_render = delayed_data;
+  has_delayed = true;
+  Renderer::delayed_render = delayed_data;
+}
+
+void Renderer::remove_delayed() {
+    has_delayed = false;
 }

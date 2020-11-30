@@ -216,12 +216,26 @@ void InstrumentManager::start_applying(Position pos) {
 void InstrumentManager::stop_applying(Image& canvas) {
   application_started = false;
   if (current_instrument == RECT_INSTRUMENT) {
-    DelayedRenderData rect_data = dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get())->rect_data;
-    for(int x = 0; x < rect_data.size.width; ++x) {
-        for(int y = 0; y < rect_data.size.height; ++y) {
-            canvas.setPixel(x + rect_data.pos.x, y + rect_data.pos.y, color);
+    DelayedRenderData* rect_data = &(dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get())->rect_data);
+    if(rect_data->size.width < 0) {
+        rect_data->pos.x += rect_data->size.width;
+        rect_data->size.width = -rect_data->size.width;
+    }
+
+    if(rect_data->size.height < 0) {
+        rect_data->pos.y += rect_data->size.height;
+        rect_data->size.height = -rect_data->size.height;
+    }
+
+    for(int x = 0; x < rect_data->size.width; ++x) {
+        for(int y = 0; y < rect_data->size.height; ++y) {
+            canvas.setPixel(x + rect_data->pos.x, y + rect_data->pos.y, color);
         }
     } 
+
+    rect_data->pos = Position(-1, -1);
+    rect_data->size = Size(0, 0);
+    Renderer::remove_delayed();
   }
 }
 
