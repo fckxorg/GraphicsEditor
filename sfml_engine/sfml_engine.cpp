@@ -233,13 +233,18 @@ void Renderer::draw_sprite(Texture texture, Position pos) {
 
 void Renderer::draw_delayed() {
   if (has_delayed) {
-    if (delayed_render.type == RECT) {
-      Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
+    switch (delayed_render.type) {
+      case RECT: {
+        Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
+                                 delayed_render.color);
+        break;
+      }
+
+      case ELLIPSE: {
+        Renderer::draw_ellipse(delayed_render.size, delayed_render.pos,
                                delayed_render.color);
-    }
-    if (delayed_render.type == ELLIPSE) {
-      Renderer::draw_ellipse(delayed_render.size, delayed_render.pos,
-                             delayed_render.color);
+        break;
+      }
     }
   }
 }
@@ -254,11 +259,11 @@ void Renderer::remove_delayed() { has_delayed = false; }
 void Renderer::draw_ellipse(Size size, Position pos, Color color) {
   sf::CircleShape ellipse(std::max(abs(size.width), abs(size.height)) / 2);
 
-  if(size.width < 0) {
+  if (size.width < 0) {
     pos.x += size.width;
   }
 
-  if(size.height < 0) {
+  if (size.height < 0) {
     pos.y += size.height;
   }
 
