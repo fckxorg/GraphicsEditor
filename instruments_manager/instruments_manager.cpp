@@ -26,6 +26,9 @@ void ToolbarListener::render() {}
 
 AbstractInstrument::~AbstractInstrument() = default;
 
+void AbstractInstrument::init(Position pos) {}
+void AbstractInstrument::deinit() {}
+
 Pencil::Pencil() = default;
 
 void Pencil::apply(Image& canvas, Position point, Position last_point,
@@ -173,14 +176,26 @@ void Rect::apply(Image& canvas, Position point, Position last_point,
                  Color color, uint8_t thickness) {
   rect_data.size.width = point.x - rect_data.pos.x;
   rect_data.size.height = point.y - rect_data.pos.y;
+  rect_data.color = color;
   Renderer::add_delayed(rect_data);
+}
+
+void Rect::init(Position pos) {
+    rect_data.pos = pos;
+    rect_data.type = RECT;
 }
 
 void Ellipse::apply(Image& canvas, Position point, Position last_point,
                     Color color, uint8_t thickness) {
   ellipse_data.size.width = point.x - ellipse_data.pos.x;
   ellipse_data.size.height = point.y - ellipse_data.pos.y;
+  ellipse_data.color = color;
   Renderer::add_delayed(ellipse_data);
+}
+
+void Ellipse::init(Position pos) {
+    ellipse_data.pos = pos;
+    ellipse_data.type = ELLIPSE;
 }
 
 bool InstrumentManager::application_started = false;
@@ -214,21 +229,8 @@ void InstrumentManager::start_applying(Position pos) {
   application_started = true;
   last_point.x = pos.x + 1;
   last_point.y = pos.y;
-
-  if (current_instrument == RECT_INSTRUMENT) {
-    auto instrument = dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get());
-    instrument->rect_data.pos = pos;
-    instrument->rect_data.color = color;
-    instrument->rect_data.type = RECT;
-  }
-
-  if (current_instrument == ELLIPSE_INSTRUMENT) {
-    auto instrument =
-        dynamic_cast<Ellipse*>(instruments[ELLIPSE_INSTRUMENT].get());
-    instrument->ellipse_data.pos = pos;
-    instrument->ellipse_data.color = color;
-    instrument->ellipse_data.type = ELLIPSE;
-  }
+    
+  instruments[current_instrument]->init(pos);
 }
 
 void InstrumentManager::stop_applying(Image& canvas) {

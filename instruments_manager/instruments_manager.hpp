@@ -22,6 +22,8 @@ enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, CLEAR, RECT_INSTRUMENT
 
 class AbstractInstrument {
  public:
+  virtual void init(Position pos);
+  virtual void deinit();
   virtual void apply(Image& canvas, Position point, Position last_point,
                      Color color, uint8_t thickness) = 0;
 
@@ -69,6 +71,7 @@ class Rect : public AbstractInstrument {
   DelayedRenderData rect_data;
 
  public:
+  virtual void init(Position pos) override;
   virtual void apply(Image& canvas, Position point, Position last_point,
                      Color color, uint8_t thickness) override;
   friend class InstrumentManager;
@@ -79,6 +82,7 @@ class Ellipse : public AbstractInstrument {
   DelayedRenderData ellipse_data;
 
  public:
+  virtual void init(Position pos) override;
   virtual void apply(Image& canvas, Position point, Position last_point,
                      Color color, uint8_t thickness) override;
   friend class InstrumentManager;
