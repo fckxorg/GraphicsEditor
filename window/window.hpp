@@ -119,7 +119,7 @@ class RectWindow : public RenderWindow {
 };
 
 class TextWindow : public RenderWindow {
- private:
+ protected:
   Text text;
 
  public:
@@ -311,6 +311,17 @@ class HueSlider : public Slider {
             uint16_t upper_bound, uint16_t step, bool horizontal = false);
 
   void handle_event(Event* event) override;
+};
+
+class Inputbox : public TextWindow, public InterfaceClickable {
+    private:
+        std::string input_value;
+    public:
+       Inputbox(uint16_t character_size, const char* font_path, Color color, Position pos); 
+
+       virtual void handle_event(Event* event) override;
+       virtual void onMousePress(MouseButtonEvent* event) override;
+       virtual void onMouseRelease(MouseButtonEvent* event) override;
 };
 
 #endif
