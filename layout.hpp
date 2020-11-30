@@ -1,6 +1,11 @@
 /* LAYOUT DEFENITION */
-#include "subscription_manager/subscription_manager.hpp"
-#include "window/window.hpp"
+#define CREATE(WINDOW_NAME, WINDOW_TYPE, ...) \
+  std::unique_ptr<Window> WINDOW_NAME(new WINDOW_TYPE(__VA_ARGS__))
+
+#define ADOPT(PARENT, CHILD) (PARENT)->add_child_window((CHILD))
+#define SUBS(SENDER, RECIPIENT) SUBSCRIBE((SENDER).get(), (RECIPIENT).get())
+
+
 CREATE(root_window,             RootWindow);
 CREATE(window,                  RectWindow, Size(1920, 1080), Position(0, 0), Color(212, 212, 212));
 
@@ -52,40 +57,40 @@ CREATE(canvas,                  Canvas,         Size(1500, 890),    Position(0, 
 
 /* SUBSCRIPTIONS */
 
-SUBSCRIBE(root_window.get(),        sv_fader.get());
-SUBSCRIBE(root_window.get(),        thickness_slider.get());
-SUBSCRIBE(root_window.get(),        hue_slider.get());
-SUBSCRIBE(root_window.get(),        pencil_button.get());
-SUBSCRIBE(root_window.get(),        eraser_button.get());
-SUBSCRIBE(root_window.get(),        save_button.get());
-SUBSCRIBE(root_window.get(),        canvas.get());
-SUBSCRIBE(root_window.get(),        brush_button.get());
-SUBSCRIBE(root_window.get(),        dropper_button.get());
-SUBSCRIBE(root_window.get(),        spray_button.get());
-SUBSCRIBE(root_window.get(),        clear_button.get());
-SUBSCRIBE(root_window.get(),        rect_button.get());
-SUBSCRIBE(root_window.get(),        ellipse_button.get());
+SUBS(root_window,        sv_fader);
+SUBS(root_window,        thickness_slider);
+SUBS(root_window,        hue_slider);
+SUBS(root_window,        pencil_button);
+SUBS(root_window,        eraser_button);
+SUBS(root_window,        save_button);
+SUBS(root_window,        canvas);
+SUBS(root_window,        brush_button);
+SUBS(root_window,        dropper_button);
+SUBS(root_window,        spray_button);
+SUBS(root_window,        clear_button);
+SUBS(root_window,        rect_button);
+SUBS(root_window,        ellipse_button);
 
-SUBSCRIBE(hue_selector.get(),       sv_fader.get());
-SUBSCRIBE(hue_selector.get(),       sv_selector.get());
-SUBSCRIBE(sv_selector.get(),        toolbar_listener.get());
+SUBS(hue_selector,       sv_fader);
+SUBS(hue_selector,       sv_selector);
+SUBS(sv_selector,        toolbar_listener);
 
-SUBSCRIBE(nullptr,                  hue_slider.get());
-SUBSCRIBE(nullptr,                  sv_fader.get());
+SUBSCRIBE(nullptr,       hue_slider.get());
+SUBSCRIBE(nullptr,       sv_fader.get());
 
-SUBSCRIBE(thickness_slider.get(),   toolbar_listener.get());
-SUBSCRIBE(hue_slider.get(),         hue_selector.get());
-SUBSCRIBE(sv_fader.get(),           sv_selector.get());
+SUBS(thickness_slider,   toolbar_listener);
+SUBS(hue_slider,         hue_selector);
+SUBS(sv_fader,           sv_selector);
 
-SUBSCRIBE(pencil_button.get(),      toolbar_listener.get());
-SUBSCRIBE(eraser_button.get(),      toolbar_listener.get());
-SUBSCRIBE(save_button.get(),        canvas.get());
-SUBSCRIBE(brush_button.get(),       toolbar_listener.get());
-SUBSCRIBE(dropper_button.get(),     toolbar_listener.get());
-SUBSCRIBE(spray_button.get(),       toolbar_listener.get());
-SUBSCRIBE(clear_button.get(),       toolbar_listener.get());
-SUBSCRIBE(rect_button.get(),        toolbar_listener.get());
-SUBSCRIBE(ellipse_button.get(),     toolbar_listener.get());
+SUBS(pencil_button,      toolbar_listener);
+SUBS(eraser_button,      toolbar_listener);
+SUBS(save_button,        canvas);
+SUBS(brush_button,       toolbar_listener);
+SUBS(dropper_button,     toolbar_listener);
+SUBS(spray_button,       toolbar_listener);
+SUBS(clear_button,       toolbar_listener);
+SUBS(rect_button,        toolbar_listener);
+SUBS(ellipse_button,     toolbar_listener);
 
 /* ADOPTIONS */
 

@@ -10,11 +10,6 @@
 #include "subscription_manager/subscription_manager.hpp"
 #include "window/window.hpp"
 
-#define CREATE(WINDOW_NAME, WINDOW_TYPE, ...) \
-  std::unique_ptr<Window> WINDOW_NAME(new WINDOW_TYPE(__VA_ARGS__))
-
-#define ADOPT(PARENT, CHILD) (PARENT)->add_child_window((CHILD))
-
 int main() {
  
   #include "layout.hpp"
