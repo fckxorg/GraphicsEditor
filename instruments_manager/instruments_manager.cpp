@@ -176,8 +176,9 @@ std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
 int InstrumentManager::current_instrument = PENCIL;
 uint8_t InstrumentManager::thickness = 1;
 Color InstrumentManager::color = Color(0, 0, 0);
+Window* InstrumentManager::canvas_window = nullptr;
 
-void InstrumentManager::init() {
+void InstrumentManager::init(Window* canvas_window) {
   instruments[ERASER] =
       std::move(std::unique_ptr<AbstractInstrument>(new Eraser()));
   instruments[PENCIL] =
@@ -190,6 +191,8 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Spray()));
   instruments[CLEAR] =
       std::move(std::unique_ptr<AbstractInstrument>(new Clear()));
+
+  InstrumentManager::canvas_window = canvas_window;
 }
 
 void InstrumentManager::start_applying(Position pos) {

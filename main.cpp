@@ -19,7 +19,7 @@ int main() {
  
   #include "layout.hpp"
 
-  InstrumentManager::init();
+  InstrumentManager::init(canvas_ptr);
   App::init(Size(1920, 1080), "Test application");
   App::set_root_window(root_window);
   App::run();

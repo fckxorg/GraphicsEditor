@@ -303,4 +303,10 @@ class HueSlider : public Slider {
   void handle_event(Event* event) override;
 };
 
+class RectShape : public RectWindow {
+  public:
+      RectShape(Size size, Position pos, Color color);
+      virtual void handle_event(Event* event) override;
+};
+
 #endif

@@ -41,6 +41,10 @@ CREATE(sv_fader,                Fader,          Size(8, 8),         Position(189
 
 CREATE(canvas,                  Canvas,         Size(1500, 890),    Position(0, 0),         Color(255, 255, 255));
 
+CREATE(test_shape,              RectShape,      Size(100, 100),     Position(200, 200),     Color(255, 0, 0));
+
+Window* canvas_ptr = canvas.get();
+
 /* SUBSCRIPTIONS */
 
 SUBSCRIBE(root_window.get(),        sv_fader.get());
@@ -54,6 +58,7 @@ SUBSCRIBE(root_window.get(),        brush_button.get());
 SUBSCRIBE(root_window.get(),        dropper_button.get());
 SUBSCRIBE(root_window.get(),        spray_button.get());
 SUBSCRIBE(root_window.get(),        clear_button.get());
+SUBSCRIBE(root_window.get(),        test_shape.get());
 
 SUBSCRIBE(hue_selector.get(),       sv_fader.get());
 SUBSCRIBE(hue_selector.get(),       sv_selector.get());
@@ -99,6 +104,7 @@ ADOPT(clear_button_outline,     clear_button);
 
 ADOPT(thickness_slider_base,    thickness_slider);
 
+
 ADOPT(root_window,              window);
 ADOPT(root_window,              pencil_button_outline);
 ADOPT(root_window,              eraser_button_outline);
@@ -111,3 +117,4 @@ ADOPT(root_window,              dropper_button_outline);
 ADOPT(root_window,              spray_button_outline);
 ADOPT(root_window,              clear_button_outline);
 ADOPT(root_window,              canvas);
+ADOPT(root_window,              test_shape);

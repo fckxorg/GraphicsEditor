@@ -315,8 +315,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   int16_t Position::*primary_axis = &Position::y;
   int16_t Position::*secondary_axis = &Position::x;
 
-  uint16_t Size::*primary_size = &Size::height;
-  uint16_t Size::*secondary_size = &Size::width;
+  int16_t Size::*primary_size = &Size::height;
+  int16_t Size::*secondary_size = &Size::width;
 
   if (horizontal) {
     std::swap(primary_axis, secondary_axis);
@@ -694,3 +694,16 @@ void Fader::render() {
   Position inline_pos = Position(pos.x + 2, pos.y + 2);
   Renderer::draw_rectangle(inline_size, inline_pos, Color(255, 255, 255));
 }
+
+RectShape::RectShape(Size size, Position pos, Color color)
+    : RectWindow(size, pos, color) {}
+
+void RectShape::handle_event(Event* event) {
+  if (event->get_type() == MOUSE_MOVE) {
+    auto mouse_event = dynamic_cast<MouseMoveEvent*>(event);
+
+    size.width = mouse_event->pos.x - pos.x;
+    size.height = mouse_event->pos.y - pos.y;
+  }
+}
+

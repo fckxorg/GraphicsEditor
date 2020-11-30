@@ -7,12 +7,12 @@
 /*---------------- SIZE CLASS -------------------------------*/
 
 Size::Size() = default;
-Size::Size(uint16_t width, uint16_t height) : width(width), height(height) {}
+Size::Size(int16_t width, int16_t height) : width(width), height(height) {}
 
 #ifdef SFML_ENGINE
 Size::Size(const sf::Vector2f& sfsize)
-    : width(static_cast<uint16_t>(sfsize.x)),
-      height(static_cast<uint16_t>(sfsize.y)) {}
+    : width(static_cast<int16_t>(sfsize.x)),
+      height(static_cast<int16_t>(sfsize.y)) {}
 
 Size::operator sf::Vector2f() const { return sf::Vector2f(width, height); }
 #endif

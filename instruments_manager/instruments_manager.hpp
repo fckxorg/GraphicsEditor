@@ -69,12 +69,13 @@ class InstrumentManager {
   static Position last_point;
   static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
   static int current_instrument;
+  static Window* canvas_window;
 
   static uint8_t thickness;
   static Color color;
 
  public:
-  static void init();
+  static void init(Window* canvas_window);
 
   static void start_applying(Position pos);
 
