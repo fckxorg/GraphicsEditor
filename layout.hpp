@@ -54,6 +54,7 @@ CREATE(sv_fader,                SVFader,          Size(8, 8),         Position(1
 
 CREATE(canvas,                  Canvas,         Size(1500, 890),    Position(0, 0),         Color(255, 255, 255));
 
+CREATE(input,                   Inputbox);
 
 /* SUBSCRIPTIONS */
 
@@ -70,6 +71,7 @@ SUBS(root_window,        spray_button);
 SUBS(root_window,        clear_button);
 SUBS(root_window,        rect_button);
 SUBS(root_window,        ellipse_button);
+SUBS(root_window,        input);
 
 SUBS(hue_selector,       sv_fader);
 SUBS(hue_selector,       sv_selector);
@@ -136,3 +138,4 @@ ADOPT(root_window,              clear_button_outline);
 ADOPT(root_window,              canvas);
 ADOPT(root_window,              rect_button_outline);
 ADOPT(root_window,              ellipse_button_outline);
+ADOPT(root_window,              input);

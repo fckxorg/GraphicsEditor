@@ -61,6 +61,7 @@ class Renderer {
   static MouseButtonEvent::MouseButton get_mouse_button(sf::Mouse::Button);
   static Event* translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
                                     MouseButtonEvent::Action action);
+  static Event* translateKeyboardEvent(sf::Event::KeyEvent sf_key_data);
 
   Renderer();
 

@@ -15,7 +15,8 @@ enum SYSTEM_EVENT {
   HUE_CHANGED,
   COLOR_CHANGED,
   FADER_MOVE,
-  DROPPER_APPLIED
+  DROPPER_APPLIED,
+  KEY_PRESSED,
 };
 
 class Event {
@@ -94,6 +95,12 @@ class DropperEvent : public Event {
  public:
   Color color;
   DropperEvent(Color color);
+};
+
+class KeyPressedEvent : public Event {
+ public:
+  char key;
+  KeyPressedEvent(char key);
 };
 
 #endif

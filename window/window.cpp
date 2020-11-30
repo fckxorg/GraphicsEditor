@@ -714,16 +714,13 @@ void SVFader::handle_event(Event* event) {
 /*---------------------------------------*/
 /*              Inputbox                 */
 /*---------------------------------------*/
-
-Inputbox::Inputbox(uint16_t character_size, const char* font_path, Color color, Position pos) {
-    text.character_size = character_size;
-    text.bg_color = Color(255, 255, 255);
-    text.color = color;
-    text.font_path = font_path;
-    text.line_spacing = 1;
-    this->pos = pos;
-}
+Inputbox::Inputbox() = default;
 
 void Inputbox::handle_event(Event *event) {
-    
+   if(event->get_type() == KEY_PRESSED) {
+    auto key_event = dynamic_cast<KeyPressedEvent*>(event);
+    printf("Prssed key %c\n", key_event->key);
+   } 
 }
+
+void Inputbox::render() {}

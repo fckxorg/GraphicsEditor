@@ -32,3 +32,5 @@ FaderMoveEvent::FaderMoveEvent(float pos_x, float pos_y)
 
 DropperEvent::DropperEvent(Color color)
     : Event(DROPPER_APPLIED), color(color) {}
+
+KeyPressedEvent::KeyPressedEvent(char key) : Event(KEY_PRESSED), key(key) {}

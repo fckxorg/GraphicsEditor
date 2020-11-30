@@ -131,6 +131,15 @@ Event* Renderer::translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
   return event;
 }
 
+Event* Renderer::translateKeyboardEvent(sf::Event::KeyEvent sf_key_data) {
+  if (sf_key_data.code == sf::Keyboard::Key::Enter) {
+    return new KeyPressedEvent('\n');
+  } else if (sf_key_data.code < 26) {
+    char symbol = sf_key_data.shift ? 'A' : 'a' + sf_key_data.code;
+    return new KeyPressedEvent(symbol);
+  }
+}
+
 Event* Renderer::poll_event() {
   sf::Event sf_event;
 
@@ -153,6 +162,10 @@ Event* Renderer::poll_event() {
     case sf::Event::MouseMoved: {
       Position pos(sf_event.mouseMove.x, sf_event.mouseMove.y);
       return new MouseMoveEvent(pos);
+    }
+
+    case sf::Event::KeyPressed: {
+        return translateKeyboardEvent(sf_event.key);
     }
   }
 

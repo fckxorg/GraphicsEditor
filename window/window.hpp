@@ -313,15 +313,14 @@ class HueSlider : public Slider {
   void handle_event(Event* event) override;
 };
 
-class Inputbox : public TextWindow, public InterfaceClickable {
+class Inputbox : public Window {
     private:
+        Text input_text;
         std::string input_value;
     public:
-       Inputbox(uint16_t character_size, const char* font_path, Color color, Position pos); 
-
+       Inputbox();
        virtual void handle_event(Event* event) override;
-       virtual void onMousePress(MouseButtonEvent* event) override;
-       virtual void onMouseRelease(MouseButtonEvent* event) override;
+       virtual void render() override;
 };
 
 #endif
