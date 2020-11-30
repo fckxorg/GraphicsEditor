@@ -50,6 +50,14 @@ void AbstractShapeInstrument::clear_render_data() {
   Renderer::remove_delayed();
 }
 
+void AbstractShapeInstrument::apply(Image& canvas, Position point,
+                                    Position last_point, Color color,
+                                    uint8_t thickness) {
+  render_data.size.width = point.x - render_data.pos.x;
+  render_data.size.height = point.y - render_data.pos.y;
+  render_data.color = color;
+  Renderer::add_delayed(render_data);
+}
 Pencil::Pencil() = default;
 
 void Pencil::apply(Image& canvas, Position point, Position last_point,
@@ -193,13 +201,6 @@ void Clear::apply(Image& canvas, Position point, Position last_point,
   }
 }
 
-void Rect::apply(Image& canvas, Position point, Position last_point,
-                 Color color, uint8_t thickness) {
-  render_data.size.width = point.x - render_data.pos.x;
-  render_data.size.height = point.y - render_data.pos.y;
-  render_data.color = color;
-  Renderer::add_delayed(render_data);
-}
 
 void Rect::init(Position pos) {
   render_data.pos = pos;
@@ -218,14 +219,6 @@ void Rect::deinit(Image& canvas, Color color) {
   clear_render_data();
 }
 
-void Ellipse::apply(Image& canvas, Position point, Position last_point,
-                    Color color, uint8_t thickness) {
-  render_data.size.width = point.x - render_data.pos.x;
-  render_data.size.height = point.y - render_data.pos.y;
-  render_data.color = color;
-  Renderer::add_delayed(render_data);
-}
-
 void Ellipse::init(Position pos) {
   render_data.pos = pos;
   render_data.type = ELLIPSE;
@@ -233,7 +226,7 @@ void Ellipse::init(Position pos) {
 
 void Ellipse::deinit(Image& canvas, Color color) {
   prepare_render_data();
-  
+
   float radius_hor = static_cast<float>(render_data.size.width) / 2;
   float radius_vert = static_cast<float>(render_data.size.height) / 2;
 
@@ -248,7 +241,7 @@ void Ellipse::deinit(Image& canvas, Color color) {
       }
     }
   }
-  
+
   clear_render_data();
 }
 

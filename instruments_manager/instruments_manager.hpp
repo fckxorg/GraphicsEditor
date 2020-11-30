@@ -47,6 +47,8 @@ class AbstractShapeInstrument : public AbstractInstrument {
   DelayedRenderData render_data;
   virtual void prepare_render_data();
   virtual void clear_render_data();
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
 };
 
 class Pencil : public AbstractInstrument {
@@ -89,8 +91,6 @@ class Rect : public AbstractShapeInstrument {
  public:
   virtual void init(Position pos) override;
   virtual void deinit(Image& canvas, Color color) override;
-  virtual void apply(Image& canvas, Position point, Position last_point,
-                     Color color, uint8_t thickness) override;
   friend class InstrumentManager;
 };
 
@@ -98,8 +98,6 @@ class Ellipse : public AbstractShapeInstrument {
  public:
   virtual void init(Position pos) override;
   virtual void deinit(Image& canvas, Color color) override;
-  virtual void apply(Image& canvas, Position point, Position last_point,
-                     Color color, uint8_t thickness) override;
   friend class InstrumentManager;
 };
 
