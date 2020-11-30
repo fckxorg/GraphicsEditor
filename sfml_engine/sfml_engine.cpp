@@ -1,7 +1,5 @@
 #include "sfml_engine.hpp"
 
-#include <SFML/Graphics/Texture.hpp>
-
 OffscreenRenderData::OffscreenRenderData() {
   sprite = new sf::Sprite();
   texture = new sf::RenderTexture();
@@ -71,9 +69,7 @@ sf::RenderTarget* Renderer::get_target() {
   return offscreen_render_stack.top().texture;
 }
 
-void Renderer::show() {
-  window.display();
-}
+void Renderer::show() { window.display(); }
 
 void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   sf::RectangleShape rect = sf::RectangleShape(size);
@@ -241,6 +237,10 @@ void Renderer::draw_delayed() {
       Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
                                delayed_render.color);
     }
+    if (delayed_render.type == ELLIPSE) {
+      Renderer::draw_ellipse(delayed_render.size, delayed_render.pos,
+                             delayed_render.color);
+    }
   }
 }
 
@@ -249,6 +249,32 @@ void Renderer::add_delayed(DelayedRenderData delayed_data) {
   Renderer::delayed_render = delayed_data;
 }
 
-void Renderer::remove_delayed() {
-    has_delayed = false;
+void Renderer::remove_delayed() { has_delayed = false; }
+
+void Renderer::draw_ellipse(Size size, Position pos, Color color) {
+  sf::CircleShape ellipse(std::max(abs(size.width), abs(size.height)) / 2);
+
+  if(size.width < 0) {
+    pos.x += size.width;
+  }
+
+  if(size.height < 0) {
+    pos.y += size.height;
+  }
+
+  ellipse.setFillColor(color);
+  ellipse.setPosition(pos);
+
+  float scale = 0;
+
+  if (abs(size.width) > abs(size.height)) {
+    scale = fabs(static_cast<float>(size.height) / size.width);
+    ellipse.setScale(1.f, scale);
+  } else {
+    scale = fabs(static_cast<float>(size.width) / size.height);
+    ellipse.setScale(scale, 1.f);
+  }
+
+  auto target = get_target();
+  target->draw(ellipse);
 }

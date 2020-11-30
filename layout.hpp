@@ -1,4 +1,6 @@
 /* LAYOUT DEFENITION */
+#include "subscription_manager/subscription_manager.hpp"
+#include "window/window.hpp"
 CREATE(root_window,             RootWindow);
 CREATE(window,                  RectWindow, Size(1920, 1080), Position(0, 0), Color(212, 212, 212));
 
@@ -12,6 +14,7 @@ CREATE(dropper_button_sprite,   Sprite, Texture("icons/dropper.png", Size(50, 50
 CREATE(spray_button_sprite,     Sprite, Texture("icons/spray.png", Size(50, 50)), Position(155, 910));
 CREATE(clear_button_sprite,     Sprite, Texture("icons/clear.png", Size(50, 50)), Position(155, 980));
 CREATE(rect_button_sprite,      Sprite, Texture("icons/rectangular.png", Size(50, 50)), Position(225, 910));
+CREATE(ellipse_button_sprite,   Sprite, Texture("icons/ellipse.png", Size(50, 50)), Position(225, 980));
 
 CREATE(pencil_button_outline,   RectWindow,     Size(60, 60),       Position(10, 905),      Color(80, 90, 91));
 CREATE(eraser_button_outline,   RectWindow,     Size(60, 60),       Position(10, 975),      Color(80, 90, 91));
@@ -23,6 +26,7 @@ CREATE(dropper_button_outline,  RectWindow,     Size(60, 60),       Position(80,
 CREATE(spray_button_outline,    RectWindow,     Size(60, 60),       Position(150, 905),      Color(80, 90, 91));
 CREATE(clear_button_outline,    RectWindow,     Size(60, 60),       Position(150, 975),      Color(80, 90, 91));
 CREATE(rect_button_outline,     RectWindow,     Size(60, 60),       Position(220, 905),      Color(80, 90, 91));
+CREATE(ellipse_button_outline,  RectWindow,     Size(60, 60),       Position(220, 975),      Color(80, 90, 91));
 
 CREATE(pencil_button,           RectButton,     Size(50, 50),       Position(15, 910),      Color(236, 236, 236), PENCIL);
 CREATE(eraser_button,           RectButton,     Size(50, 50),       Position(15, 980),      Color(236, 236, 236), ERASER);
@@ -32,6 +36,7 @@ CREATE(dropper_button,          RectButton,     Size(50, 50),       Position(85,
 CREATE(spray_button,            RectButton,     Size(50, 50),       Position(155, 910),      Color(236, 236, 236), SPRAY);
 CREATE(clear_button,            RectButton,     Size(50, 50),       Position(155, 980),      Color(236, 236, 236), CLEAR);
 CREATE(rect_button,             RectButton,     Size(50, 50),       Position(225, 910),      Color(236, 236, 236), RECT_INSTRUMENT);
+CREATE(ellipse_button,          RectButton,     Size(50, 50),       Position(225, 980),      Color(236, 236, 236), ELLIPSE_INSTRUMENT);
 
 CREATE(hue_selector,            HUEselector,    Size(360, 30),      Position(1545, 1015));
 CREATE(sv_selector,             SVselector,     Size(360, 360),     Position(1545, 635));
@@ -59,6 +64,7 @@ SUBSCRIBE(root_window.get(),        dropper_button.get());
 SUBSCRIBE(root_window.get(),        spray_button.get());
 SUBSCRIBE(root_window.get(),        clear_button.get());
 SUBSCRIBE(root_window.get(),        rect_button.get());
+SUBSCRIBE(root_window.get(),        ellipse_button.get());
 
 SUBSCRIBE(hue_selector.get(),       sv_fader.get());
 SUBSCRIBE(hue_selector.get(),       sv_selector.get());
@@ -79,6 +85,7 @@ SUBSCRIBE(dropper_button.get(),     toolbar_listener.get());
 SUBSCRIBE(spray_button.get(),       toolbar_listener.get());
 SUBSCRIBE(clear_button.get(),       toolbar_listener.get());
 SUBSCRIBE(rect_button.get(),        toolbar_listener.get());
+SUBSCRIBE(ellipse_button.get(),     toolbar_listener.get());
 
 /* ADOPTIONS */
 
@@ -90,6 +97,7 @@ ADOPT(dropper_button,           dropper_button_sprite);
 ADOPT(spray_button,             spray_button_sprite);
 ADOPT(clear_button,             clear_button_sprite);
 ADOPT(rect_button,              rect_button_sprite);
+ADOPT(ellipse_button,           ellipse_button_sprite);
 
 ADOPT(sv_selector,              sv_fader);
 
@@ -104,6 +112,7 @@ ADOPT(dropper_button_outline,   dropper_button);
 ADOPT(spray_button_outline,     spray_button);
 ADOPT(clear_button_outline,     clear_button);
 ADOPT(rect_button_outline,      rect_button);
+ADOPT(ellipse_button_outline,   ellipse_button);
 
 ADOPT(thickness_slider_base,    thickness_slider);
 
@@ -121,3 +130,4 @@ ADOPT(root_window,              spray_button_outline);
 ADOPT(root_window,              clear_button_outline);
 ADOPT(root_window,              canvas);
 ADOPT(root_window,              rect_button_outline);
+ADOPT(root_window,              ellipse_button_outline);

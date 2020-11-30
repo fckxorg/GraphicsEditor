@@ -176,6 +176,13 @@ void Rect::apply(Image& canvas, Position point, Position last_point,
   Renderer::add_delayed(rect_data);
 }
 
+void Ellipse::apply(Image& canvas, Position point, Position last_point,
+                    Color color, uint8_t thickness) {
+  ellipse_data.size.width = point.x - ellipse_data.pos.x;
+  ellipse_data.size.height = point.y - ellipse_data.pos.y;
+  Renderer::add_delayed(ellipse_data);
+}
+
 bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(-1, -1);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
@@ -199,6 +206,8 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Clear()));
   instruments[RECT_INSTRUMENT] =
       std::move(std::unique_ptr<AbstractInstrument>(new Rect()));
+  instruments[ELLIPSE_INSTRUMENT] =
+      std::move(std::unique_ptr<AbstractInstrument>(new Ellipse()));
 }
 
 void InstrumentManager::start_applying(Position pos) {
@@ -210,31 +219,76 @@ void InstrumentManager::start_applying(Position pos) {
     auto instrument = dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get());
     instrument->rect_data.pos = pos;
     instrument->rect_data.color = color;
+    instrument->rect_data.type = RECT;
+  }
+
+  if (current_instrument == ELLIPSE_INSTRUMENT) {
+    auto instrument =
+        dynamic_cast<Ellipse*>(instruments[ELLIPSE_INSTRUMENT].get());
+    instrument->ellipse_data.pos = pos;
+    instrument->ellipse_data.color = color;
+    instrument->ellipse_data.type = ELLIPSE;
   }
 }
 
 void InstrumentManager::stop_applying(Image& canvas) {
   application_started = false;
   if (current_instrument == RECT_INSTRUMENT) {
-    DelayedRenderData* rect_data = &(dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get())->rect_data);
-    if(rect_data->size.width < 0) {
-        rect_data->pos.x += rect_data->size.width;
-        rect_data->size.width = -rect_data->size.width;
+    DelayedRenderData* rect_data =
+        &(dynamic_cast<Rect*>(instruments[RECT_INSTRUMENT].get())->rect_data);
+    if (rect_data->size.width < 0) {
+      rect_data->pos.x += rect_data->size.width;
+      rect_data->size.width = -rect_data->size.width;
     }
 
-    if(rect_data->size.height < 0) {
-        rect_data->pos.y += rect_data->size.height;
-        rect_data->size.height = -rect_data->size.height;
+    if (rect_data->size.height < 0) {
+      rect_data->pos.y += rect_data->size.height;
+      rect_data->size.height = -rect_data->size.height;
     }
 
-    for(int x = 0; x < rect_data->size.width; ++x) {
-        for(int y = 0; y < rect_data->size.height; ++y) {
-            canvas.setPixel(x + rect_data->pos.x, y + rect_data->pos.y, color);
-        }
-    } 
+    for (int x = 0; x < rect_data->size.width; ++x) {
+      for (int y = 0; y < rect_data->size.height; ++y) {
+        canvas.setPixel(x + rect_data->pos.x, y + rect_data->pos.y, color);
+      }
+    }
 
     rect_data->pos = Position(-1, -1);
     rect_data->size = Size(0, 0);
+    Renderer::remove_delayed();
+  }
+
+  if (current_instrument == ELLIPSE_INSTRUMENT) {
+    DelayedRenderData* ellipse_data =
+        &(dynamic_cast<Ellipse*>(instruments[ELLIPSE_INSTRUMENT].get())
+              ->ellipse_data);
+    if (ellipse_data->size.width < 0) {
+      ellipse_data->pos.x += ellipse_data->size.width;
+      ellipse_data->size.width = -ellipse_data->size.width;
+    }
+
+    if (ellipse_data->size.height < 0) {
+      ellipse_data->pos.y += ellipse_data->size.height;
+      ellipse_data->size.height = -ellipse_data->size.height;
+    }
+
+    float radius_hor = static_cast<float>(ellipse_data->size.width) / 2;
+    float radius_vert = static_cast<float>(ellipse_data->size.height) / 2;
+
+    for (int x = 0; x < ellipse_data->size.width; ++x) {
+      for (int y = 0; y < ellipse_data->size.height; ++y) {
+        float x_eq_part =
+            (x - radius_hor) * (x - radius_hor) / (radius_hor * radius_hor);
+        float y_eq_part =
+            (y - radius_vert) * (y - radius_vert) / (radius_vert * radius_vert);
+        if (x_eq_part + y_eq_part <= 1) {
+          canvas.setPixel(x + ellipse_data->pos.x, y + ellipse_data->pos.y,
+                          color);
+        }
+      }
+    }
+
+    ellipse_data->pos = Position(-1, -1);
+    ellipse_data->size = Size(0, 0);
     Renderer::remove_delayed();
   }
 }

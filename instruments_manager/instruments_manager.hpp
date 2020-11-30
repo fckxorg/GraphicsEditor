@@ -18,7 +18,7 @@ class ToolbarListener : public Window {
   void render() override;
 };
 
-enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, CLEAR, RECT_INSTRUMENT, COUNT };
+enum INSTRUMENTS { ERASER, PENCIL, BRUSH, DROPPER, SPRAY, CLEAR, RECT_INSTRUMENT, ELLIPSE_INSTRUMENT, COUNT };
 
 class AbstractInstrument {
  public:
@@ -73,6 +73,17 @@ class Rect : public AbstractInstrument {
                      Color color, uint8_t thickness) override;
   friend class InstrumentManager;
 };
+
+class Ellipse : public AbstractInstrument {
+ private:
+  DelayedRenderData ellipse_data;
+
+ public:
+  virtual void apply(Image& canvas, Position point, Position last_point,
+                     Color color, uint8_t thickness) override;
+  friend class InstrumentManager;
+};
+
 
 class InstrumentManager {
  private:

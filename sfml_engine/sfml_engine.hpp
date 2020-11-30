@@ -17,19 +17,18 @@
 #include <cassert>
 #include <stack>
 #include <unordered_map>
+#include <cmath>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 
-enum DELAYED_RENDER_TYPES {
-    RECT
-};
+enum DELAYED_RENDER_TYPES { RECT, ELLIPSE };
 
 struct DelayedRenderData {
-    int type;
-    Size size;
-    Position pos;
-    Color color;
+  int type;
+  Size size;
+  Position pos;
+  Color color;
 };
 
 struct OffscreenRenderData {
@@ -45,7 +44,7 @@ class Renderer {
  private:
   static sf::RenderWindow window;
 
-  static DelayedRenderData delayed_render; 
+  static DelayedRenderData delayed_render;
   static bool has_delayed;
 
   static std::unordered_map<const char*, sf::Font> fonts;
@@ -85,6 +84,7 @@ class Renderer {
   static void draw_text(Text text, Position pos);
   static void draw_scrollable_text(Text text, Size size, Position pos,
                                    Color color, float relative_offset);
+  static void draw_ellipse(Size size, Position pos, Color color);
 
   static void draw_sprite(Texture texture, Position pos);
 
