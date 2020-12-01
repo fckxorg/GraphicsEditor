@@ -7,6 +7,7 @@ const uint8_t CONTROLS_COLOR_DELTA = 30;
 const float SCROLLBAR_BUTTON_RATIO = 0.1;
 const float LINESPACING_COEFF = 0.08;
 const float SCROLLBAR_SIZE_RATIO = 0.07;
+const float INPUTBOX_TEXT_OFFSET = 5;
 
 /*---------------------------------------*/
 /*         Interface Clickable           */
@@ -740,8 +741,8 @@ void Inputbox::handle_event(Event* event) {
 
         switch (key_event->key) {
           case Backspace: {
-            if(!input_value.empty()) {
-            input_value.pop_back();
+            if (!input_value.empty()) {
+              input_value.pop_back();
             }
             break;
           }
@@ -775,5 +776,7 @@ void Inputbox::onMouseRelease(MouseButtonEvent* event) {}
 void Inputbox::render() {
   Renderer::draw_rectangle(size, pos, color);
   input_text.text = input_value.data();
-  Renderer::draw_text(input_text, pos);
+
+  Position text_pos = Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y + INPUTBOX_TEXT_OFFSET);
+  Renderer::draw_text(input_text, text_pos);
 }
