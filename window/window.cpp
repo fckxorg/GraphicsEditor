@@ -65,8 +65,6 @@ void RenderWindow::move_children(float offset_x, float offset_y) {
   pos.x += offset_x;
   pos.y += offset_y;
 
-  printf("New pos is %d %d", pos.x, pos.y);
-
   for (auto& subwindow : subwindows) {
     dynamic_cast<RenderWindow*>(subwindow.get())
         ->move_children(offset_x, offset_y);
@@ -194,7 +192,6 @@ void Slider::move_relative(float offset) {
       std::max(pos.*primary_axis, static_cast<int16_t>(lower_bound));
   pos.*primary_axis =
       std::min(pos.*primary_axis, static_cast<int16_t>(upper_bound));
-  printf("New position %d\n", pos.*primary_axis);
 }
 
 void Slider::move(int delta) {
@@ -397,7 +394,6 @@ void ScrollableWindow::handle_event(Event* event) {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
       offset_y = -offset_y - (inner_container_size.height - size.height) *
                                  scroll_event->position;
-      printf("Offset is %f\n", offset_y);
       fflush(stdout);
     }
   }
@@ -569,6 +565,9 @@ void SVselector::handle_event(Event* event) {
       Color selected_color = canvas->img.getPixel(
           fader_event->pos_x * size.width, fader_event->pos_y * size.height);
 
+      printf("Selected color is %d %d %d\n", selected_color.r, selected_color.g,
+             selected_color.b);
+
       SEND(this, new ColorChangedEvent(selected_color));
       break;
     }
@@ -635,8 +634,8 @@ void Fader::onMousePress(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     pressed = true;
     this->pos = event->pos;
-    float pos_x = static_cast<float>(pos.x) / (upper_bound.x - lower_bound.x);
-    float pos_y = static_cast<float>(pos.y) / (upper_bound.y - lower_bound.y);
+    float pos_x = static_cast<float>(pos.x - lower_bound.x) / (upper_bound.x - lower_bound.x);
+    float pos_y = static_cast<float>(pos.y - lower_bound.y) / (upper_bound.y - lower_bound.y);
 
     SEND(this, new FaderMoveEvent(pos_x, pos_y));
   }
@@ -777,6 +776,7 @@ void Inputbox::render() {
   Renderer::draw_rectangle(size, pos, color);
   input_text.text = input_value.data();
 
-  Position text_pos = Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y + INPUTBOX_TEXT_OFFSET);
+  Position text_pos =
+      Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y + INPUTBOX_TEXT_OFFSET);
   Renderer::draw_text(input_text, text_pos);
 }

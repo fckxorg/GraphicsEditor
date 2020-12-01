@@ -79,9 +79,6 @@ SUBS(hue_selector,       sv_fader);
 SUBS(hue_selector,       sv_selector);
 SUBS(sv_selector,        toolbar_listener);
 
-SUBSCRIBE(nullptr,       hue_slider.get());
-SUBSCRIBE(nullptr,       sv_fader.get());
-
 SUBS(thickness_slider,   toolbar_listener);
 SUBS(hue_slider,         hue_selector);
 SUBS(sv_fader,           sv_selector);
