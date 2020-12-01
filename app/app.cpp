@@ -31,4 +31,5 @@ void App::deinit() { Renderer::deinit(); }
 
 void App::set_root_window(std::unique_ptr<Window>& window) {
   root_window = std::move(window);
+  SubscriptionManager::set_system_event_sender(root_window.get());
 }

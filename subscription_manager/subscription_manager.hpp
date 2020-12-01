@@ -15,6 +15,7 @@
 
 class SubscriptionManager {
  private:
+  static Window* system_event_sender;
   static std::unordered_map<Window*, std::unordered_set<Window*>>
       subscriptions;  // TODO custom hash for pointers
 
@@ -27,6 +28,8 @@ class SubscriptionManager {
   static void unsubscribe_all(Window* sender);
   static void unsubscribe_from_all(Window* recipient);
   static void send_event(Window* sender, Event* event);
+  static Window* get_system_event_sender();
+  static void set_system_event_sender(Window* system_event_sender);
 };
 
 #endif
