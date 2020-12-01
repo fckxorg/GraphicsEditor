@@ -779,3 +779,50 @@ void Inputbox::render() {
       Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y + INPUTBOX_TEXT_OFFSET);
   Renderer::draw_text(input_text, text_pos);
 }
+
+/*---------------------------------------*/
+/*              DialogWindow             */
+/*---------------------------------------*/
+DialogWindow::DialogWindow(Size size, Position pos, Color color,
+                           Color outline_color, int16_t outline_thickness,
+                           Window* creator)
+    : RectWindow(size, pos, color),
+      outline_color(outline_color),
+      outline_thickness(outline_thickness),
+      creator(creator) {
+  SubscriptionManager::init_new_layer();
+}
+
+DialogWindow::~DialogWindow() { SubscriptionManager::deinit_layer(); }
+
+void DialogWindow::render() {
+  Position outline_pos =
+      Position(pos.x - outline_thickness, pos.y - outline_thickness);
+  Size outline_size =
+      Size(size.width + 2 * outline_thickness, size.height + 2 * outline_thickness);
+  Renderer::draw_rectangle(outline_size, outline_pos, outline_color);
+  Renderer::draw_rectangle(size, pos, color);
+}
+
+void DialogWindow::handle_event(Event* event) {
+  if (event->get_type() == DIALOG_END) {
+    SEND(creator, new Event(DIALOG_END));
+  }
+}
+
+/*---------------------------------------*/
+/*              SaveButton               */
+/*---------------------------------------*/
+
+SaveButton::SaveButton(Size size, Position pos, Color color)
+    : RectButton(size, pos, color) {}
+
+void SaveButton::onMouseRelease(MouseButtonEvent* event) {
+  RectButton::onMouseRelease(event);
+
+  if (!is_point_inside(event->pos)) return;
+  auto dialog_window = std::unique_ptr<Window>(
+      new DialogWindow(Size(800, 600), Position(560, 240), Color(255, 255, 255),
+                       Color(80, 90, 91), 5, this));
+  add_child_window(dialog_window);
+}

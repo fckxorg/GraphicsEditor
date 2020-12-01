@@ -1,7 +1,6 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <bits/stdint-uintn.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -326,6 +325,27 @@ class Inputbox : public RectWindow, public InterfaceClickable {
   virtual void handle_event(Event* event) override;
   virtual void render() override;
   virtual void onMousePress(MouseButtonEvent* event) override;
+  virtual void onMouseRelease(MouseButtonEvent* event) override;
+};
+
+class DialogWindow : public RectWindow {
+  Color outline_color;
+  int16_t outline_thickness;
+
+ protected:
+  Window* creator;
+
+ public:
+  DialogWindow(Size size, Position pos, Color color, Color outline_color,
+               int16_t outline_thickness, Window* creator);
+  void render() override;
+  void handle_event(Event* event) override;
+  ~DialogWindow();
+};
+
+class SaveButton : public RectButton {
+ public:
+  SaveButton(Size size, Position pos, Color color);
   virtual void onMouseRelease(MouseButtonEvent* event) override;
 };
 

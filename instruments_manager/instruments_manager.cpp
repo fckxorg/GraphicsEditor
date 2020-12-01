@@ -200,7 +200,6 @@ void Clear::apply(Image& canvas, Position point, Position last_point,
   }
 }
 
-
 void Rect::init(Position pos) {
   render_data.pos = pos;
   render_data.type = RECT;
