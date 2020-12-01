@@ -17,6 +17,7 @@
 #include "../instruments_manager/instruments_manager.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
+#include "../event_queue/event_queue.hpp"
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"
@@ -339,7 +340,6 @@ class DialogWindow : public RectWindow {
   DialogWindow(Size size, Position pos, Color color, Color outline_color,
                int16_t outline_thickness, Window* creator);
   void render() override;
-  void handle_event(Event* event) override;
   virtual ~DialogWindow();
 };
 
@@ -352,6 +352,13 @@ class DialogSaveWindow : public DialogWindow {
 class SaveButton : public RectButton {
  public:
   SaveButton(Size size, Position pos, Color color);
+  virtual void onMouseRelease(MouseButtonEvent* event) override;
+  virtual void handle_event(Event* event) override;
+};
+
+class DialogEndButton : public RectButton {
+ public:
+  DialogEndButton(Size size, Position pos, Color color);
   virtual void onMouseRelease(MouseButtonEvent* event) override;
 };
 

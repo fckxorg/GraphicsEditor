@@ -1,7 +1,5 @@
 #include "window.hpp"
 
-#include <bits/stdint-uintn.h>
-
 const uint8_t PRESS_FADE_DELTA = 50;
 const uint8_t CONTROLS_COLOR_DELTA = 30;
 const float SCROLLBAR_BUTTON_RATIO = 0.1;
@@ -46,7 +44,10 @@ void RootWindow::handle_event(Event* event) { SEND(this, event); };
 /*---------------------------------------*/
 
 RenderWindow::RenderWindow() = default;
-RenderWindow::~RenderWindow() = default;
+RenderWindow::~RenderWindow() {
+  SubscriptionManager::unsubscribe_all(this);
+  SubscriptionManager::unsubscribe_from_all(this);
+}
 RenderWindow::RenderWindow(Size size, Position pos) : size(size), pos(pos) {}
 
 void RenderWindow::set_pos(Position pos) { this->pos = pos; }
@@ -729,7 +730,6 @@ Inputbox::Inputbox(Size size, Position pos, Color color,
 }
 
 void Inputbox::handle_event(Event* event) {
-  printf("Got event!\n");
   switch (event->get_type()) {
     case KEY_PRESSED: {
       if (active) {
@@ -794,9 +794,10 @@ DialogWindow::DialogWindow(Size size, Position pos, Color color,
       outline_thickness(outline_thickness),
       creator(creator) {
   SubscriptionManager::init_new_layer();
+  SUBSCRIBE(this, creator);
 }
 
-DialogWindow::~DialogWindow() { SubscriptionManager::deinit_layer(); }
+DialogWindow::~DialogWindow() { SubscriptionManager::cleanup(); }
 
 void DialogWindow::render() {
   Position outline_pos =
@@ -806,12 +807,6 @@ void DialogWindow::render() {
   Renderer::draw_rectangle(outline_size, outline_pos, outline_color);
   Renderer::draw_rectangle(size, pos, color);
   RenderWindow::render();
-}
-
-void DialogWindow::handle_event(Event* event) {
-  if (event->get_type() == DIALOG_END) {
-    SEND(creator, new Event(DIALOG_END));
-  }
 }
 
 /*---------------------------------------*/
@@ -840,8 +835,18 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
   auto file_inputbox_outline = std::unique_ptr<Window>(new RectWindow(
       inputbox_outline_size, inputbox_outline_pos, Color(80, 90, 91)));
 
+  auto dialog_end_button = std::unique_ptr<Window>(new DialogEndButton(
+      Size(40, 30),
+      Position(pos.x + 550, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
+      Color(0, 255, 0)));
+
+  SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
+            dialog_end_button.get());
+  SUBSCRIBE(SubscriptionManager::get_system_event_sender(), creator);
+
   file_inputbox_outline->add_child_window(file_inputbox);
   add_child_window(file_inputbox_outline);
+  add_child_window(dialog_end_button);
 };
 
 /*---------------------------------------*/
@@ -850,6 +855,13 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
 
 SaveButton::SaveButton(Size size, Position pos, Color color)
     : RectButton(size, pos, color) {}
+
+void SaveButton::handle_event(Event* event) {
+  RectButton::handle_event(event);
+  if (event->get_type() == DIALOG_END) {
+    subwindows.pop_back();
+  }
+}
 
 void SaveButton::onMouseRelease(MouseButtonEvent* event) {
   RectButton::onMouseRelease(event);
@@ -860,3 +872,17 @@ void SaveButton::onMouseRelease(MouseButtonEvent* event) {
                            Color(212, 212, 212), Color(80, 90, 91), 5, this));
   add_child_window(dialog_window);
 }
+
+/*---------------------------------------*/
+/*            DialogEndButton            */
+/*---------------------------------------*/
+DialogEndButton::DialogEndButton(Size size, Position pos, Color color)
+    : RectButton(size, pos, color) {}
+
+void DialogEndButton::onMouseRelease(MouseButtonEvent* event) {
+  RectButton::onMouseRelease(event);
+  if (!is_point_inside(event->pos)) return;
+
+  EventQueue::add_event(new Event(DIALOG_END));
+}
+

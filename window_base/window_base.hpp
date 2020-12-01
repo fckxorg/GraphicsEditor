@@ -15,6 +15,7 @@ class Window {
   virtual ~Window();
 
   void add_child_window(std::unique_ptr<Window>& child);
+  void delete_child_window(std::list<std::unique_ptr<Window>>::iterator child);
   virtual void handle_event(Event* event);
   virtual void render() = 0;
 };

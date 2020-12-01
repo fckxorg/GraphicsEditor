@@ -18,9 +18,8 @@ class SubscriptionManager {
  private:
   static Window* system_event_sender;
   static std::stack<std::unordered_map<Window*, std::unordered_set<Window*>>>
-      subscriptions;  // TODO custom hash for pointers
-
-  // XXX std::function-like functors with arguments union
+      subscriptions; 
+ static bool cleanup_needed; 
 
  public:
   SubscriptionManager() = delete;
@@ -33,6 +32,7 @@ class SubscriptionManager {
   static void set_system_event_sender(Window* system_event_sender);
   static void init_new_layer();
   static void deinit_layer();
+  static void cleanup();
 };
 
 #endif
