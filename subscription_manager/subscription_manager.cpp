@@ -52,7 +52,6 @@ void SubscriptionManager::send_event(Window* sender, Event* event) {
     deinit_layer();
     cleanup_needed = false;
   }
-  printf("Stack size is %ld\n", subscriptions.size());
 }
 
 Window* SubscriptionManager::get_system_event_sender() {
