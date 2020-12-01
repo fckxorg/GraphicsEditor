@@ -8,6 +8,8 @@ const float SCROLLBAR_BUTTON_RATIO = 0.1;
 const float LINESPACING_COEFF = 0.08;
 const float SCROLLBAR_SIZE_RATIO = 0.07;
 const float INPUTBOX_TEXT_OFFSET = 5;
+const int16_t INPUTBOX_SAVE_DIALOG_OFFSET_X = 30;
+const int16_t INPUTBOX_SAVE_DIALOG_OFFSET_Y = 540;
 
 /*---------------------------------------*/
 /*         Interface Clickable           */
@@ -727,6 +729,7 @@ Inputbox::Inputbox(Size size, Position pos, Color color,
 }
 
 void Inputbox::handle_event(Event* event) {
+  printf("Got event!\n");
   switch (event->get_type()) {
     case KEY_PRESSED: {
       if (active) {
@@ -798,10 +801,11 @@ DialogWindow::~DialogWindow() { SubscriptionManager::deinit_layer(); }
 void DialogWindow::render() {
   Position outline_pos =
       Position(pos.x - outline_thickness, pos.y - outline_thickness);
-  Size outline_size =
-      Size(size.width + 2 * outline_thickness, size.height + 2 * outline_thickness);
+  Size outline_size = Size(size.width + 2 * outline_thickness,
+                           size.height + 2 * outline_thickness);
   Renderer::draw_rectangle(outline_size, outline_pos, outline_color);
   Renderer::draw_rectangle(size, pos, color);
+  RenderWindow::render();
 }
 
 void DialogWindow::handle_event(Event* event) {
@@ -809,6 +813,36 @@ void DialogWindow::handle_event(Event* event) {
     SEND(creator, new Event(DIALOG_END));
   }
 }
+
+/*---------------------------------------*/
+/*          DialogSaveWindow             */
+/*---------------------------------------*/
+
+DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
+                                   Color outline_color,
+                                   int16_t outline_thickness, Window* creator)
+    : DialogWindow(size, pos, color, outline_color, outline_thickness,
+                   creator) {
+  Size inputbox_size = Size(540, 30);
+  Position inputbox_pos = Position(pos.x + INPUTBOX_SAVE_DIALOG_OFFSET_X,
+                                   pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y);
+  Size inputbox_outline_size =
+      Size(inputbox_size.width + 10, inputbox_size.height + 10);
+  Position inputbox_outline_pos =
+      Position(inputbox_pos.x - 5, inputbox_pos.y - 5);
+
+  auto file_inputbox = std::unique_ptr<Window>(
+      new Inputbox(inputbox_size, inputbox_pos, Color(255, 255, 255), 16,
+                   "fonts/Roboto-Thin.ttf", Color(0, 0, 0)));
+  SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
+            file_inputbox.get());
+
+  auto file_inputbox_outline = std::unique_ptr<Window>(new RectWindow(
+      inputbox_outline_size, inputbox_outline_pos, Color(80, 90, 91)));
+
+  file_inputbox_outline->add_child_window(file_inputbox);
+  add_child_window(file_inputbox_outline);
+};
 
 /*---------------------------------------*/
 /*              SaveButton               */
@@ -822,7 +856,7 @@ void SaveButton::onMouseRelease(MouseButtonEvent* event) {
 
   if (!is_point_inside(event->pos)) return;
   auto dialog_window = std::unique_ptr<Window>(
-      new DialogWindow(Size(800, 600), Position(560, 240), Color(255, 255, 255),
-                       Color(80, 90, 91), 5, this));
+      new DialogSaveWindow(Size(800, 600), Position(560, 240),
+                           Color(212, 212, 212), Color(80, 90, 91), 5, this));
   add_child_window(dialog_window);
 }

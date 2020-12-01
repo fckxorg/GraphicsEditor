@@ -340,7 +340,13 @@ class DialogWindow : public RectWindow {
                int16_t outline_thickness, Window* creator);
   void render() override;
   void handle_event(Event* event) override;
-  ~DialogWindow();
+  virtual ~DialogWindow();
+};
+
+class DialogSaveWindow : public DialogWindow {
+ public:
+  DialogSaveWindow(Size size, Position pos, Color color, Color outline_color,
+                   int16_t outline_thickness, Window* creator);
 };
 
 class SaveButton : public RectButton {
