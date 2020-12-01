@@ -818,7 +818,7 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
                                    int16_t outline_thickness, Window* creator)
     : DialogWindow(size, pos, color, outline_color, outline_thickness,
                    creator) {
-  Size inputbox_size = Size(540, 30);
+  Size inputbox_size = Size(610, 30);
   Position inputbox_pos = Position(pos.x + INPUTBOX_SAVE_DIALOG_OFFSET_X,
                                    pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y);
   Size inputbox_outline_size =
@@ -828,23 +828,25 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
 
   CREATE(file_inputbox, Inputbox, inputbox_size, inputbox_pos,
          Color(255, 255, 255), 16, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
-  SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
-            file_inputbox.get());
-
   CREATE(file_inputbox_outline, RectWindow, inputbox_outline_size,
          inputbox_outline_pos, Color(80, 90, 91));
-
-  CREATE(dialog_end_button, DialogEndButton, Size(40, 30),
-         Position(pos.x + 550, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
+  CREATE(dialog_end_button, DialogEndButton, Size(100, 30),
+         Position(pos.x + 660, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
          Color(0, 255, 0));
+  CREATE(dialog_end_button_outline, RectWindow, Size(110, 40),
+         Position(pos.x + 655, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y - 5),
+         Color(80, 90, 91));
 
+  SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
+            file_inputbox.get());
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
             dialog_end_button.get());
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(), creator);
 
   ADOPT(file_inputbox_outline, file_inputbox);
+  ADOPT(dialog_end_button_outline, dialog_end_button);
   ADOPT(this, file_inputbox_outline);
-  ADOPT(this, dialog_end_button);
+  ADOPT(this, dialog_end_button_outline);
 };
 
 /*---------------------------------------*/
@@ -865,10 +867,9 @@ void SaveButton::onMouseRelease(MouseButtonEvent* event) {
   RectButton::onMouseRelease(event);
 
   if (!is_point_inside(event->pos)) return;
-  auto dialog_window = std::unique_ptr<Window>(
-      new DialogSaveWindow(Size(800, 600), Position(560, 240),
-                           Color(212, 212, 212), Color(80, 90, 91), 5, this));
-  add_child_window(dialog_window);
+  CREATE(dialog_window, DialogSaveWindow, Size(800, 600), Position(560, 240),
+         Color(212, 212, 212), Color(80, 90, 91), 5, this);
+  ADOPT(this, dialog_window);
 }
 
 /*---------------------------------------*/
