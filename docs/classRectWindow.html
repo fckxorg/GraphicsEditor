@@ -80,17 +80,16 @@ Inheritance diagram for RectWindow:</div>
  <div class="center">
   <img src="classRectWindow.png" usemap="#RectWindow_map" alt=""/>
   <map id="RectWindow_map" name="RectWindow_map">
-<area href="classRenderWindow.html" alt="RenderWindow" shape="rect" coords="369,56,482,80"/>
-<area href="classWindow.html" alt="Window" shape="rect" coords="369,0,482,24"/>
-<area href="classCanvas.html" alt="Canvas" shape="rect" coords="0,168,113,192"/>
-<area href="classFader.html" alt="Fader" shape="rect" coords="123,168,236,192"/>
-<area href="classRectButton.html" alt="RectButton" shape="rect" coords="246,168,359,192"/>
-<area href="classScrollableText.html" alt="ScrollableText" shape="rect" coords="369,168,482,192"/>
-<area href="classScrollableWindow.html" alt="ScrollableWindow" shape="rect" coords="492,168,605,192"/>
-<area href="classScrollbar.html" alt="Scrollbar" shape="rect" coords="615,168,728,192"/>
-<area href="classSlider.html" alt="Slider" shape="rect" coords="738,168,851,192"/>
-<area href="classSVFader.html" alt="SVFader" shape="rect" coords="123,224,236,248"/>
-<area href="classHueSlider.html" alt="HueSlider" shape="rect" coords="738,224,851,248"/>
+<area href="classRenderWindow.html" alt="RenderWindow" shape="rect" coords="0,56,113,80"/>
+<area href="classWindow.html" alt="Window" shape="rect" coords="0,0,113,24"/>
+<area href="classCanvas.html" alt="Canvas" shape="rect" coords="123,168,236,192"/>
+<area href="classDialogWindow.html" alt="DialogWindow" shape="rect" coords="123,224,236,248"/>
+<area href="classFader.html" alt="Fader" shape="rect" coords="123,280,236,304"/>
+<area href="classInputbox.html" alt="Inputbox" shape="rect" coords="123,336,236,360"/>
+<area href="classRectButton.html" alt="RectButton" shape="rect" coords="123,392,236,416"/>
+<area href="classScrollableWindow.html" alt="ScrollableWindow" shape="rect" coords="123,448,236,472"/>
+<area href="classScrollbar.html" alt="Scrollbar" shape="rect" coords="123,504,236,528"/>
+<area href="classSlider.html" alt="Slider" shape="rect" coords="123,560,236,584"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -140,6 +139,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>move_children</b> (fl
 <tr class="memitem:aeed39eb021bb09eff9d921323fb60a4c inherit pub_methods_classWindow"><td class="memItemLeft" align="right" valign="top"><a id="aeed39eb021bb09eff9d921323fb60a4c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add_child_window</b> (std::unique_ptr&lt; <a class="el" href="classWindow.html">Window</a> &gt; &amp;child)</td></tr>
 <tr class="separator:aeed39eb021bb09eff9d921323fb60a4c inherit pub_methods_classWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4597d9ad5f43d7942615a46784fc77cc inherit pub_methods_classWindow"><td class="memItemLeft" align="right" valign="top"><a id="a4597d9ad5f43d7942615a46784fc77cc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>delete_child_window</b> (std::list&lt; std::unique_ptr&lt; <a class="el" href="classWindow.html">Window</a> &gt;&gt;::iterator child)</td></tr>
+<tr class="separator:a4597d9ad5f43d7942615a46784fc77cc inherit pub_methods_classWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab89d2a0aeed37a8f5348babeeb9e70dc inherit pub_methods_classWindow"><td class="memItemLeft" align="right" valign="top"><a id="ab89d2a0aeed37a8f5348babeeb9e70dc"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handle_event</b> (<a class="el" href="classEvent.html">Event</a> *event)</td></tr>
 <tr class="separator:ab89d2a0aeed37a8f5348babeeb9e70dc inherit pub_methods_classWindow"><td class="memSeparator" colspan="2">&#160;</td></tr>

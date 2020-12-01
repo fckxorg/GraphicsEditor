@@ -115,7 +115,7 @@ $(function() {
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">void</span> release();</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">class </span><a class="code" href="classRenderer.html">Renderer</a> {</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classRenderer.html">   43</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRenderer.html">Renderer</a> {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keyword">static</span> sf::RenderWindow window;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
@@ -136,47 +136,48 @@ $(function() {
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keyword">static</span> MouseButtonEvent::MouseButton get_mouse_button(sf::Mouse::Button);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keyword">static</span> <a class="code" href="classEvent.html">Event</a>* translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                    MouseButtonEvent::Action action);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <a class="code" href="classRenderer.html">Renderer</a>();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init(<a class="code" href="structSize.html">Size</a> window_size, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> deinit();</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init_offscreen_target(<a class="code" href="structSize.html">Size</a> target_size, <a class="code" href="structPosition.html">Position</a> target_pos);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> flush_offscreen_target();</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> clear();</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> show();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <span class="keyword">static</span> <a class="code" href="classEvent.html">Event</a>* poll_event();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keyword">static</span> <a class="code" href="classImage.html">Image</a> load_image(<span class="keyword">const</span> <span class="keywordtype">char</span>* filename);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> save_image(<a class="code" href="classImage.html">Image</a>&amp; img, <span class="keyword">const</span> <span class="keywordtype">char</span>* filename);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_image(<a class="code" href="structPosition.html">Position</a> pos, <a class="code" href="classImage.html">Image</a>&amp; img);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_rectangle(<a class="code" href="structSize.html">Size</a> size, <a class="code" href="structPosition.html">Position</a> pos, <a class="code" href="structColor.html">Color</a> color);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_text(<a class="code" href="structText.html">Text</a> text, <a class="code" href="structPosition.html">Position</a> pos);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_scrollable_text(<a class="code" href="structText.html">Text</a> text, <a class="code" href="structSize.html">Size</a> size, <a class="code" href="structPosition.html">Position</a> pos,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                                   <a class="code" href="structColor.html">Color</a> color, <span class="keywordtype">float</span> relative_offset);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_ellipse(<a class="code" href="structSize.html">Size</a> size, <a class="code" href="structPosition.html">Position</a> pos, <a class="code" href="structColor.html">Color</a> color);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_sprite(<a class="code" href="structTexture.html">Texture</a> texture, <a class="code" href="structPosition.html">Position</a> pos);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> add_delayed(<a class="code" href="structDelayedRenderData.html">DelayedRenderData</a> delayed_data);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_delayed();</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> remove_delayed();</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;};</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="keyword">static</span> <a class="code" href="classEvent.html">Event</a>* translateKeyboardEvent(sf::Event::KeyEvent sf_key_data);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <a class="code" href="classRenderer.html">Renderer</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init(<a class="code" href="structSize.html">Size</a> window_size, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> deinit();</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init_offscreen_target(<a class="code" href="structSize.html">Size</a> target_size, <a class="code" href="structPosition.html">Position</a> target_pos);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> flush_offscreen_target();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> clear();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> show();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="keyword">static</span> <a class="code" href="classEvent.html">Event</a>* poll_event();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keyword">static</span> <a class="code" href="classImage.html">Image</a> load_image(<span class="keyword">const</span> <span class="keywordtype">char</span>* filename);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> save_image(<a class="code" href="classImage.html">Image</a>&amp; img, <span class="keyword">const</span> <span class="keywordtype">char</span>* filename);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_image(<a class="code" href="structPosition.html">Position</a> pos, <a class="code" href="classImage.html">Image</a>&amp; img);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_rectangle(<a class="code" href="structSize.html">Size</a> size, <a class="code" href="structPosition.html">Position</a> pos, <a class="code" href="structColor.html">Color</a> color);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_text(<a class="code" href="structText.html">Text</a> text, <a class="code" href="structPosition.html">Position</a> pos);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_scrollable_text(<a class="code" href="structText.html">Text</a> text, <a class="code" href="structSize.html">Size</a> size, <a class="code" href="structPosition.html">Position</a> pos,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                   <a class="code" href="structColor.html">Color</a> color, <span class="keywordtype">float</span> relative_offset);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_ellipse(<a class="code" href="structSize.html">Size</a> size, <a class="code" href="structPosition.html">Position</a> pos, <a class="code" href="structColor.html">Color</a> color);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_sprite(<a class="code" href="structTexture.html">Texture</a> texture, <a class="code" href="structPosition.html">Position</a> pos);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> add_delayed(<a class="code" href="structDelayedRenderData.html">DelayedRenderData</a> delayed_data);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> draw_delayed();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> remove_delayed();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;};</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="astructDelayedRenderData_html"><div class="ttname"><a href="structDelayedRenderData.html">DelayedRenderData</a></div><div class="ttdef"><b>Definition:</b> sfml_engine.hpp:27</div></div>
 <div class="ttc" id="astructOffscreenRenderData_html"><div class="ttname"><a href="structOffscreenRenderData.html">OffscreenRenderData</a></div><div class="ttdef"><b>Definition:</b> sfml_engine.hpp:34</div></div>
 <div class="ttc" id="aclassImage_html"><div class="ttname"><a href="classImage.html">Image</a></div><div class="ttdef"><b>Definition:</b> data_classes.hpp:86</div></div>
-<div class="ttc" id="aclassEvent_html"><div class="ttname"><a href="classEvent.html">Event</a></div><div class="ttdef"><b>Definition:</b> event.hpp:21</div></div>
+<div class="ttc" id="aclassEvent_html"><div class="ttname"><a href="classEvent.html">Event</a></div><div class="ttdef"><b>Definition:</b> event.hpp:58</div></div>
 <div class="ttc" id="astructSize_html"><div class="ttname"><a href="structSize.html">Size</a></div><div class="ttdef"><b>Definition:</b> data_classes.hpp:14</div></div>
 <div class="ttc" id="astructText_html"><div class="ttname"><a href="structText.html">Text</a></div><div class="ttdef"><b>Definition:</b> data_classes.hpp:64</div></div>
 <div class="ttc" id="astructTexture_html"><div class="ttname"><a href="structTexture.html">Texture</a></div><div class="ttdef"><b>Definition:</b> data_classes.hpp:100</div></div>
-<div class="ttc" id="aclassRenderer_html"><div class="ttname"><a href="classRenderer.html">Renderer</a></div><div class="ttdef"><b>Definition:</b> ncurses_engine.hpp:12</div></div>
+<div class="ttc" id="aclassRenderer_html"><div class="ttname"><a href="classRenderer.html">Renderer</a></div><div class="ttdef"><b>Definition:</b> sfml_engine.hpp:43</div></div>
 <div class="ttc" id="astructPosition_html"><div class="ttname"><a href="structPosition.html">Position</a></div><div class="ttdef"><b>Definition:</b> data_classes.hpp:50</div></div>
 <div class="ttc" id="astructColor_html"><div class="ttname"><a href="structColor.html">Color</a></div><div class="ttdef"><b>Definition:</b> data_classes.hpp:30</div></div>
 <!-- start footer part -->
