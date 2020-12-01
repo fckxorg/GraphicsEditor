@@ -1,6 +1,6 @@
 #include "macro.hpp"
 CREATE(file_inputbox, Inputbox, inputbox_size, inputbox_pos,
-       Color(255, 255, 255), 16, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
+       Color(255, 255, 255), 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
 CREATE(file_inputbox_outline, RectWindow, inputbox_outline_size,
        inputbox_outline_pos, Color(80, 90, 91));
 CREATE(dialog_end_button, DialogEndButton, Size(100, 30),
@@ -18,7 +18,11 @@ CREATE(scrollbar, Scrollbar, Size(30, 480), Position(pos.x + 735, pos.y + 35),
 
 CREATE(file_list_outline, RectWindow, Size(690, 490),
        Position(pos.x + 30, pos.y + 30), Color(80, 90, 91));
-CREATE(test_scroll, Sprite, Texture("sketch.jpg", Size(1276, 800)), Position(0, 0));
+CREATE(test_scroll, DirectoryEntry, Size(680, 30), Position(0, 0),
+       Color(212, 212, 212),
+       Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+            Color(255, 255, 255)),
+       "test_directory", "icons/folder.png", 1);
 
 SUBSCRIBE(SubscriptionManager::get_system_event_sender(), file_inputbox.get());
 SUBSCRIBE(SubscriptionManager::get_system_event_sender(),

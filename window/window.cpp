@@ -8,6 +8,7 @@ const float SCROLLBAR_SIZE_RATIO = 0.07;
 const float INPUTBOX_TEXT_OFFSET = 5;
 const int16_t INPUTBOX_SAVE_DIALOG_OFFSET_X = 30;
 const int16_t INPUTBOX_SAVE_DIALOG_OFFSET_Y = 530;
+const int16_t DIRECTORY_ENTRY_TEXT_OFFSET = 5;
 
 /*---------------------------------------*/
 /*         Interface Clickable           */
@@ -881,5 +882,5 @@ void DirectoryEntry::render() {
   Renderer::draw_sprite(Texture(icon_path, Size(size.height, size.height)),
                         pos);
   text.text = name.data();
-  Renderer::draw_text(text, Position(pos.x + size.height, pos.y));
+  Renderer::draw_text(text, Position(pos.x + size.height + DIRECTORY_ENTRY_TEXT_OFFSET, pos.y));
 }
