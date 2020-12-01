@@ -1,72 +1,77 @@
 /* LAYOUT DEFENITION */
 #include "macro.hpp"
 
+const Color OUTLINE_COLOR = Color(80, 90, 91);
+const Color EDITOR_BUTTON_COLOR = Color(236, 236, 236);
+const Size EDITOR_BUTTON_OUTLINE_SIZE = Size(60, 60);
+const Size EDITOR_BUTTON_SIZE = Size(50, 50);
+
 CREATE(root_window, RootWindow);
 CREATE(window, RectWindow, Size(1920, 1080), Position(0, 0),
        Color(212, 212, 212));
 
 CREATE(toolbar_listener, ToolbarListener);
 
-CREATE(pencil_button_sprite, Sprite, Texture("icons/pencil.png", Size(50, 50)),
+CREATE(pencil_button_sprite, Sprite, Texture("icons/pencil.png", EDITOR_BUTTON_SIZE),
        Position(15, 910));
-CREATE(eraser_button_sprite, Sprite, Texture("icons/eraser.png", Size(50, 50)),
+CREATE(eraser_button_sprite, Sprite, Texture("icons/eraser.png", EDITOR_BUTTON_SIZE),
        Position(15, 980));
-CREATE(save_button_sprite, Sprite, Texture("icons/save.png", Size(50, 50)),
+CREATE(save_button_sprite, Sprite, Texture("icons/save.png", EDITOR_BUTTON_SIZE),
        Position(1515, 15));
-CREATE(brush_button_sprite, Sprite, Texture("icons/brush.png", Size(50, 50)),
+CREATE(brush_button_sprite, Sprite, Texture("icons/brush.png", EDITOR_BUTTON_SIZE),
        Position(85, 910));
 CREATE(dropper_button_sprite, Sprite,
-       Texture("icons/dropper.png", Size(50, 50)), Position(85, 980));
+       Texture("icons/dropper.png", EDITOR_BUTTON_SIZE), Position(85, 980));
 CREATE(spray_button_sprite, Sprite, Texture("icons/spray.png", Size(50, 50)),
        Position(155, 910));
-CREATE(clear_button_sprite, Sprite, Texture("icons/clear.png", Size(50, 50)),
+CREATE(clear_button_sprite, Sprite, Texture("icons/clear.png", EDITOR_BUTTON_SIZE),
        Position(155, 980));
 CREATE(rect_button_sprite, Sprite,
-       Texture("icons/rectangular.png", Size(50, 50)), Position(225, 910));
+       Texture("icons/rectangular.png", EDITOR_BUTTON_SIZE), Position(225, 910));
 CREATE(ellipse_button_sprite, Sprite,
-       Texture("icons/ellipse.png", Size(50, 50)), Position(225, 980));
+       Texture("icons/ellipse.png", EDITOR_BUTTON_SIZE), Position(225, 980));
 
-CREATE(pencil_button_outline, RectWindow, Size(60, 60), Position(10, 905),
-       Color(80, 90, 91));
-CREATE(eraser_button_outline, RectWindow, Size(60, 60), Position(10, 975),
-       Color(80, 90, 91));
+CREATE(pencil_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(10, 905),
+       OUTLINE_COLOR);
+CREATE(eraser_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(10, 975),
+       OUTLINE_COLOR);
 CREATE(hue_selector_outline, RectWindow, Size(370, 40), Position(1540, 1010),
-       Color(80, 90, 91));
+       OUTLINE_COLOR);
 CREATE(sv_selector_outline, RectWindow, Size(370, 370), Position(1540, 630),
-       Color(80, 90, 91));
-CREATE(save_button_outline, RectWindow, Size(60, 60), Position(1510, 10),
-       Color(80, 90, 91));
-CREATE(brush_button_outline, RectWindow, Size(60, 60), Position(80, 905),
-       Color(80, 90, 91));
-CREATE(dropper_button_outline, RectWindow, Size(60, 60), Position(80, 975),
-       Color(80, 90, 91));
-CREATE(spray_button_outline, RectWindow, Size(60, 60), Position(150, 905),
-       Color(80, 90, 91));
-CREATE(clear_button_outline, RectWindow, Size(60, 60), Position(150, 975),
-       Color(80, 90, 91));
-CREATE(rect_button_outline, RectWindow, Size(60, 60), Position(220, 905),
-       Color(80, 90, 91));
-CREATE(ellipse_button_outline, RectWindow, Size(60, 60), Position(220, 975),
-       Color(80, 90, 91));
+       OUTLINE_COLOR);
+CREATE(save_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(1510, 10),
+       OUTLINE_COLOR);
+CREATE(brush_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(80, 905),
+       OUTLINE_COLOR);
+CREATE(dropper_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(80, 975),
+       OUTLINE_COLOR);
+CREATE(spray_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(150, 905),
+       OUTLINE_COLOR);
+CREATE(clear_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(150, 975),
+       OUTLINE_COLOR);
+CREATE(rect_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(220, 905),
+       OUTLINE_COLOR);
+CREATE(ellipse_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE, Position(220, 975),
+       OUTLINE_COLOR);
 
-CREATE(pencil_button, RectButton, Size(50, 50), Position(15, 910),
-       Color(236, 236, 236), PENCIL);
-CREATE(eraser_button, RectButton, Size(50, 50), Position(15, 980),
-       Color(236, 236, 236), ERASER);
-CREATE(save_button, SaveButton, Size(50, 50), Position(1515, 15),
-       Color(236, 236, 236));
-CREATE(brush_button, RectButton, Size(50, 50), Position(85, 910),
-       Color(236, 236, 236), BRUSH);
-CREATE(dropper_button, RectButton, Size(50, 50), Position(85, 980),
-       Color(236, 236, 236), DROPPER);
-CREATE(spray_button, RectButton, Size(50, 50), Position(155, 910),
-       Color(236, 236, 236), SPRAY);
-CREATE(clear_button, RectButton, Size(50, 50), Position(155, 980),
-       Color(236, 236, 236), CLEAR);
-CREATE(rect_button, RectButton, Size(50, 50), Position(225, 910),
-       Color(236, 236, 236), RECT_INSTRUMENT);
-CREATE(ellipse_button, RectButton, Size(50, 50), Position(225, 980),
-       Color(236, 236, 236), ELLIPSE_INSTRUMENT);
+CREATE(pencil_button, RectButton, EDITOR_BUTTON_SIZE, Position(15, 910),
+       EDITOR_BUTTON_COLOR, PENCIL);
+CREATE(eraser_button, RectButton, EDITOR_BUTTON_SIZE, Position(15, 980),
+       EDITOR_BUTTON_COLOR, ERASER);
+CREATE(save_button, SaveButton, EDITOR_BUTTON_SIZE, Position(1515, 15),
+       EDITOR_BUTTON_COLOR);
+CREATE(brush_button, RectButton, EDITOR_BUTTON_SIZE, Position(85, 910),
+       EDITOR_BUTTON_COLOR, BRUSH);
+CREATE(dropper_button, RectButton, EDITOR_BUTTON_SIZE, Position(85, 980),
+       EDITOR_BUTTON_COLOR, DROPPER);
+CREATE(spray_button, RectButton, EDITOR_BUTTON_SIZE, Position(155, 910),
+       EDITOR_BUTTON_COLOR, SPRAY);
+CREATE(clear_button, RectButton, EDITOR_BUTTON_SIZE, Position(155, 980),
+       EDITOR_BUTTON_COLOR, CLEAR);
+CREATE(rect_button, RectButton, EDITOR_BUTTON_SIZE, Position(225, 910),
+       EDITOR_BUTTON_COLOR, RECT_INSTRUMENT);
+CREATE(ellipse_button, RectButton, EDITOR_BUTTON_SIZE, Position(225, 980),
+       EDITOR_BUTTON_COLOR, ELLIPSE_INSTRUMENT);
 
 CREATE(hue_selector, HUEselector, Size(360, 30), Position(1545, 1015));
 CREATE(sv_selector, SVselector, Size(360, 360), Position(1545, 635));
