@@ -825,8 +825,8 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
       Size(inputbox_size.width + 10, inputbox_size.height + 10);
   Position inputbox_outline_pos =
       Position(inputbox_pos.x - 5, inputbox_pos.y - 5);
-        #include "../layouts/file_dialog_window.hpp"
-  };
+#include "../layouts/file_dialog_window.hpp"
+};
 
 /*---------------------------------------*/
 /*              SaveButton               */
@@ -868,20 +868,18 @@ void DialogEndButton::onMouseRelease(MouseButtonEvent* event) {
 /*             DirectoryEntry            */
 /*---------------------------------------*/
 
-DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color,
-                               Color text_color, const std::string& name,
-                               const char* icon_path, const char* font_path,
+DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color, Text text,
+                               const std::string& name, const char* icon_path,
                                int idx)
-    : RectButton(size, pos, color, idx), name(name), icon_path(icon_path) {
-  text.line_spacing = 1;
-  text.font_path = font_path;
-  text.character_size = 16;
-  text.color = text_color;
-}
+    : RectButton(size, pos, color, idx),
+      name(name),
+      icon_path(icon_path),
+      text(text) {}
 
 void DirectoryEntry::render() {
-    RectButton::render();
-    Renderer::draw_sprite(Texture(icon_path, Size(size.height, size.height)), pos);
-    text.text = name.data();
-    Renderer::draw_text(text, Position(pos.x + size.height, pos.y));
+  RectButton::render();
+  Renderer::draw_sprite(Texture(icon_path, Size(size.height, size.height)),
+                        pos);
+  text.text = name.data();
+  Renderer::draw_text(text, Position(pos.x + size.height, pos.y));
 }

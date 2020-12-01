@@ -19,13 +19,7 @@
 #include "../window_base/window_base.hpp"
 #include "../event_queue/event_queue.hpp"
 
-#ifdef NCURSES_ENGINE
-#include "../ncurses_engine/ncurses_engine.hpp"
-#endif
-
-#ifdef SFML_ENGINE
 #include "../sfml_engine/sfml_engine.hpp"
-#endif
 
 extern const uint8_t PRESS_FADE_DELTA;
 extern const uint8_t CONTROLS_COLOR_DELTA;
@@ -368,7 +362,7 @@ class DirectoryEntry : public RectButton {
         std::string name;
         const char* icon_path;
     public:
-        DirectoryEntry(Size size, Position pos, Color color, Color text_color, const std::string& name, const char* icon_path, const char* font_path, int idx);
+        DirectoryEntry(Size size, Position pos, Color color, Text text, const std::string& name, const char* icon_path, int idx);
         virtual void render() override;
 };
 
