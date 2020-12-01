@@ -832,18 +832,17 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
          inputbox_outline_pos, Color(80, 90, 91));
   CREATE(dialog_end_button, DialogEndButton, Size(100, 30),
          Position(pos.x + 665, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y + 5),
-         Color(236, 236, 236));
+         Color(0, 255, 0));
   CREATE(dialog_end_button_outline, RectWindow, Size(110, 40),
          Position(pos.x + 660, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
          Color(80, 90, 91));
-  CREATE(file_list, ScrollableWindow, Size(680, 480), Size(710, 520),
+  CREATE(file_list, ScrollableWindow, Size(660, 480), Size(710, 520),
          Position(pos.x + 35, pos.y + 35), Color(255, 255, 255));
-  CREATE(scrollbar_outline, RectWindow, Size(40, 490),
-         Position(pos.x + 730, pos.y + 30), Color(80, 90, 91));
-  CREATE(scrollbar, Scrollbar, Size(30, 480), Position(pos.x + 735, pos.y + 35),
+  CREATE(scrollbar_outline, RectWindow, Size(40, 490), Position(pos.x + 715, pos.y + 30))
+  CREATE(scrollbar, Scrollbar, Size(30, 480), Position(pos.x + 720, pos.y + 35),
          Color(200, 200, 200), 480, 520, 1);
 
-  CREATE(file_list_outline, RectWindow, Size(690, 490),
+  CREATE(file_list_outline, RectWindow, Size(670, 490),
          Position(pos.x + 30, pos.y + 30), Color(80, 90, 91));
 
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
@@ -858,11 +857,10 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
   ADOPT(file_inputbox_outline, file_inputbox);
   ADOPT(dialog_end_button_outline, dialog_end_button);
   ADOPT(file_list_outline, file_list);
-  ADOPT(scrollbar_outline, scrollbar);
   ADOPT(this, file_inputbox_outline);
   ADOPT(this, dialog_end_button_outline);
+  ADOPT(this, scrollbar);
   ADOPT(this, file_list_outline);
-  ADOPT(this, scrollbar_outline);
 };
 
 /*---------------------------------------*/
