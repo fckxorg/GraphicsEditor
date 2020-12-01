@@ -18,6 +18,7 @@
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
 #include "../event_queue/event_queue.hpp"
+#include "../macro.hpp"
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"

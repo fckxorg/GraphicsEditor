@@ -826,27 +826,25 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
   Position inputbox_outline_pos =
       Position(inputbox_pos.x - 5, inputbox_pos.y - 5);
 
-  auto file_inputbox = std::unique_ptr<Window>(
-      new Inputbox(inputbox_size, inputbox_pos, Color(255, 255, 255), 16,
-                   "fonts/Roboto-Thin.ttf", Color(0, 0, 0)));
+  CREATE(file_inputbox, Inputbox, inputbox_size, inputbox_pos,
+         Color(255, 255, 255), 16, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
             file_inputbox.get());
 
-  auto file_inputbox_outline = std::unique_ptr<Window>(new RectWindow(
-      inputbox_outline_size, inputbox_outline_pos, Color(80, 90, 91)));
+  CREATE(file_inputbox_outline, RectWindow, inputbox_outline_size,
+         inputbox_outline_pos, Color(80, 90, 91));
 
-  auto dialog_end_button = std::unique_ptr<Window>(new DialogEndButton(
-      Size(40, 30),
-      Position(pos.x + 550, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
-      Color(0, 255, 0)));
+  CREATE(dialog_end_button, DialogEndButton, Size(40, 30),
+         Position(pos.x + 550, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
+         Color(0, 255, 0));
 
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
             dialog_end_button.get());
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(), creator);
 
-  file_inputbox_outline->add_child_window(file_inputbox);
-  add_child_window(file_inputbox_outline);
-  add_child_window(dialog_end_button);
+  ADOPT(file_inputbox_outline, file_inputbox);
+  ADOPT(this, file_inputbox_outline);
+  ADOPT(this, dialog_end_button);
 };
 
 /*---------------------------------------*/

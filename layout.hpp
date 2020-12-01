@@ -1,9 +1,5 @@
 /* LAYOUT DEFENITION */
-#define CREATE(WINDOW_NAME, WINDOW_TYPE, ...) \
-  std::unique_ptr<Window> WINDOW_NAME(new WINDOW_TYPE(__VA_ARGS__))
-
-#define ADOPT(PARENT, CHILD) (PARENT)->add_child_window((CHILD))
-#define SUBS(SENDER, RECIPIENT) SUBSCRIBE((SENDER).get(), (RECIPIENT).get())
+#include "macro.hpp"
 
 CREATE(root_window, RootWindow);
 CREATE(window, RectWindow, Size(1920, 1080), Position(0, 0),
@@ -57,7 +53,7 @@ CREATE(pencil_button, RectButton, Size(50, 50), Position(15, 910),
        Color(236, 236, 236), PENCIL);
 CREATE(eraser_button, RectButton, Size(50, 50), Position(15, 980),
        Color(236, 236, 236), ERASER);
-CREATE(save_button,   SaveButton, Size(50, 50), Position(1515, 15),
+CREATE(save_button, SaveButton, Size(50, 50), Position(1515, 15),
        Color(236, 236, 236));
 CREATE(brush_button, RectButton, Size(50, 50), Position(85, 910),
        Color(236, 236, 236), BRUSH);
