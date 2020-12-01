@@ -19,6 +19,7 @@
 class App {
  private:
   static std::unique_ptr<Window> root_window;
+  static bool open;
 
  public:
   App() = delete;

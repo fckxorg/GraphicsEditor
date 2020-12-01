@@ -1,14 +1,19 @@
 #include "app.hpp"
 
 std::unique_ptr<Window> App::root_window;
+bool App::open = true;
 
 void App::run() {
   Event* event = nullptr;
 
   // TODO timer event generation
-  while (true) {
+  while (open) {
     event = Renderer::poll_event();
     while (event) {
+      if (event->get_type() == WINDOW_CLOSED) {
+        open = false;
+      }
+
       EventQueue::add_event(event);
       event = Renderer::poll_event();
     }
@@ -25,7 +30,10 @@ void App::run() {
   }
 }
 
-void App::init(Size size, const char* name) { Renderer::init(size, name); }
+void App::init(Size size, const char* name) {
+  Renderer::init(size, name);
+  open = true;
+}
 
 void App::deinit() { Renderer::deinit(); }
 
