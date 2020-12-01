@@ -363,4 +363,14 @@ class DialogEndButton : public RectButton {
   virtual void onMouseRelease(MouseButtonEvent* event) override;
 };
 
+class DirectoryEntry : public RectButton {
+    private:
+        Text text;
+        std::string name;
+        const char* icon_path;
+    public:
+        DirectoryEntry(Size size, Position pos, Color color, Color text_color, const std::string& name, const char* icon_path, const char* font_path, int idx);
+        virtual void render() override;
+};
+
 #endif

@@ -845,6 +845,8 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
 
   CREATE(file_list_outline, RectWindow, Size(690, 490),
          Position(pos.x + 30, pos.y + 30), Color(80, 90, 91));
+  std::string test("directory");
+  CREATE(directory, DirectoryEntry, Size(680, 30), Position(0, 0), Color(255, 255, 255), Color(0, 0, 0), test, "icons/save.png", "fonts/Roboto-Thin.ttf", 0);
 
   SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
             file_inputbox.get());
@@ -857,6 +859,7 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
 
   ADOPT(file_inputbox_outline, file_inputbox);
   ADOPT(dialog_end_button_outline, dialog_end_button);
+  ADOPT(file_list,  directory);
   ADOPT(file_list_outline, file_list);
   ADOPT(scrollbar_outline, scrollbar);
   ADOPT(this, file_inputbox_outline);
@@ -901,3 +904,24 @@ void DialogEndButton::onMouseRelease(MouseButtonEvent* event) {
   EventQueue::add_event(new Event(DIALOG_END));
 }
 
+/*---------------------------------------*/
+/*             DirectoryEntry            */
+/*---------------------------------------*/
+
+DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color,
+                               Color text_color, const std::string& name,
+                               const char* icon_path, const char* font_path,
+                               int idx)
+    : RectButton(size, pos, color, idx), name(name), icon_path(icon_path) {
+  text.line_spacing = 1;
+  text.font_path = font_path;
+  text.character_size = 16;
+  text.color = text_color;
+}
+
+void DirectoryEntry::render() {
+    RectButton::render();
+    Renderer::draw_sprite(Texture(icon_path, Size(size.height, size.height)), pos);
+    text.text = name.data();
+    Renderer::draw_text(text, Position(pos.x + size.height, pos.y));
+}
