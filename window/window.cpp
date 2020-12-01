@@ -395,15 +395,13 @@ void ScrollableWindow::handle_event(Event* event) {
   switch (event->get_type()) {
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset_y = -offset_y - (inner_container_size.height - size.height) *
-                                 scroll_event->position;
-      fflush(stdout);
+      offset_y =
+          -(inner_container_size.height - size.height) * scroll_event->position;
+      for (auto& subwindow : subwindows) {
+        auto window = dynamic_cast<RenderWindow*>(subwindow.get());
+        window->set_pos(Position(offset_x, offset_y));
+      }
     }
-  }
-
-  for (auto& subwindow : subwindows) {
-    auto window = dynamic_cast<RenderWindow*>(subwindow.get());
-    window->move_children(offset_x, offset_y);
   }
 }
 
@@ -471,7 +469,9 @@ void Canvas::handle_event(Event* event) {
 /*                 Sprite                */
 /*---------------------------------------*/
 
-Sprite::Sprite(Texture text, Position pos) : texture(text), pos(pos) {}
+Sprite::Sprite(Texture text, Position pos) : texture(text) {
+   RenderWindow::pos = pos;
+}
 void Sprite::render() { Renderer::draw_sprite(texture, pos); }
 
 void Sprite::handle_event(Event* event) {}

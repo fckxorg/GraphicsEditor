@@ -205,21 +205,6 @@ class ScrollableWindow : public RectWindow {
   virtual void handle_event(Event* event) override;
 };
 
-class ScrollableText : public RectWindow {
- private:
-  Text text;
-  uint16_t whole_block_height;
-  float offset;
-
-  uint16_t get_nlines();
-
- public:
-  ScrollableText(Size viewport_size, Position pos, Color bg_color, Text text);
-  virtual void render() override;
-
-  void handle_event(Event* event) override;
-};
-
 class Canvas : public RectWindow, public InterfaceClickable {
  private:
   Image img;
@@ -245,7 +230,6 @@ class Canvas : public RectWindow, public InterfaceClickable {
 class Sprite : public RenderWindow {
  private:
   Texture texture;
-  Position pos;
 
  public:
   Sprite(Texture text, Position pos);
