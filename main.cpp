@@ -13,7 +13,7 @@
 int main() {
   SubscriptionManager::init_new_layer();
 
-#include "layout.hpp"
+#include "layouts/main_layout.hpp"
 
   InstrumentManager::init();
   App::init(Size(1920, 1080), "Test application");
