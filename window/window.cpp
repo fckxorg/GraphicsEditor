@@ -1,5 +1,7 @@
 #include "window.hpp"
 
+#include <bits/stdint-uintn.h>
+
 const uint8_t PRESS_FADE_DELTA = 50;
 const uint8_t CONTROLS_COLOR_DELTA = 30;
 const float SCROLLBAR_BUTTON_RATIO = 0.1;
@@ -714,13 +716,64 @@ void SVFader::handle_event(Event* event) {
 /*---------------------------------------*/
 /*              Inputbox                 */
 /*---------------------------------------*/
-Inputbox::Inputbox() = default;
-
-void Inputbox::handle_event(Event *event) {
-   if(event->get_type() == KEY_PRESSED) {
-    auto key_event = dynamic_cast<KeyPressedEvent*>(event);
-    printf("Prssed key %c\n", key_event->key);
-   } 
+Inputbox::Inputbox(Size size, Position pos, Color color,
+                   uint16_t character_size, const char* font_path,
+                   Color text_color)
+    : RectWindow(size, pos, color), active(false) {
+  input_text.bg_color = color;
+  input_text.character_size = character_size;
+  input_text.font_path = font_path;
+  input_text.line_spacing = 1;
+  input_text.color = text_color;
 }
 
-void Inputbox::render() {}
+void Inputbox::handle_event(Event* event) {
+  switch (event->get_type()) {
+    case KEY_PRESSED: {
+      if (active) {
+        auto key_event = dynamic_cast<KeyPressedEvent*>(event);
+
+        if (key_event->key < 26) {
+          char symbol = key_event->shift ? 'A' : 'a';
+          input_value.push_back(key_event->key + symbol);
+        }
+
+        switch (key_event->key) {
+          case Backspace: {
+            if(!input_value.empty()) {
+            input_value.pop_back();
+            }
+            break;
+          }
+          case Space: {
+            input_value.push_back(' ');
+            break;
+          }
+          case Return: {
+            active = false;
+            break;
+          }
+        }
+      }
+      break;
+    }
+    case MOUSE_BUTTON: {
+      handle_mouse_button_event(event);
+      break;
+    }
+  }
+}
+
+void Inputbox::onMousePress(MouseButtonEvent* event) {
+  if (event->button == MouseButtonEvent::MouseButton::LEFT) {
+    active = true;
+  }
+}
+
+void Inputbox::onMouseRelease(MouseButtonEvent* event) {}
+
+void Inputbox::render() {
+  Renderer::draw_rectangle(size, pos, color);
+  input_text.text = input_value.data();
+  Renderer::draw_text(input_text, pos);
+}

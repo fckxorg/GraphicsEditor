@@ -54,7 +54,9 @@ CREATE(sv_fader,                SVFader,          Size(8, 8),         Position(1
 
 CREATE(canvas,                  Canvas,         Size(1500, 890),    Position(0, 0),         Color(255, 255, 255));
 
-CREATE(input,                   Inputbox);
+CREATE(input,                   Inputbox,       Size(360, 30),      Position(1545, 555),    Color(255, 255, 255), 16, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
+
+CREATE(input_outline,           RectWindow,     Size(370, 40),      Position(1540, 550),    Color(80, 90, 91));
 
 /* SUBSCRIPTIONS */
 
@@ -120,6 +122,7 @@ ADOPT(spray_button_outline,     spray_button);
 ADOPT(clear_button_outline,     clear_button);
 ADOPT(rect_button_outline,      rect_button);
 ADOPT(ellipse_button_outline,   ellipse_button);
+ADOPT(input_outline,            input);
 
 ADOPT(thickness_slider_base,    thickness_slider);
 
@@ -138,4 +141,4 @@ ADOPT(root_window,              clear_button_outline);
 ADOPT(root_window,              canvas);
 ADOPT(root_window,              rect_button_outline);
 ADOPT(root_window,              ellipse_button_outline);
-ADOPT(root_window,              input);
+ADOPT(root_window,              input_outline);

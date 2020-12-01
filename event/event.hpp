@@ -19,6 +19,41 @@ enum SYSTEM_EVENT {
   KEY_PRESSED,
 };
 
+enum KEY {
+  UNDEFINED = -1,
+  A = 0,
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  H,
+  I,
+  J,
+  K,
+  L,
+  M,
+  N,
+  O,
+  P,
+  Q,
+  R,
+  S,
+  T,
+  U,
+  V,
+  W,
+  X,
+  Y,
+  Z,
+  Backspace,
+  Left,
+  Right,
+  Space,
+  Return
+};
+
 class Event {
  private:
   uint32_t type;
@@ -99,8 +134,10 @@ class DropperEvent : public Event {
 
 class KeyPressedEvent : public Event {
  public:
-  char key;
-  KeyPressedEvent(char key);
+  KEY key;
+  bool shift;
+  bool ctrl;
+  KeyPressedEvent(KEY key, bool shift, bool ctrl);
 };
 
 #endif

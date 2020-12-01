@@ -1,5 +1,7 @@
 #include "sfml_engine.hpp"
 
+#include <SFML/Window/Keyboard.hpp>
+
 OffscreenRenderData::OffscreenRenderData() {
   sprite = new sf::Sprite();
   texture = new sf::RenderTexture();
@@ -106,8 +108,7 @@ void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
 }
 
 MouseButtonEvent::MouseButton Renderer::get_mouse_button(
-    sf::Mouse::Button
-        button) {  // XXX normal way to create private static const map?
+    sf::Mouse::Button button) {
   switch (button) {
     case sf::Mouse::Left:
       return MouseButtonEvent::MouseButton::LEFT;
@@ -132,12 +133,34 @@ Event* Renderer::translateMouseEvent(sf::Event::MouseButtonEvent sf_mouse_data,
 }
 
 Event* Renderer::translateKeyboardEvent(sf::Event::KeyEvent sf_key_data) {
-  if (sf_key_data.code == sf::Keyboard::Key::Enter) {
-    return new KeyPressedEvent('\n');
-  } else if (sf_key_data.code < 26) {
-    char symbol = sf_key_data.shift ? 'A' : 'a' + sf_key_data.code;
-    return new KeyPressedEvent(symbol);
+  KEY key = UNDEFINED;
+  if (sf_key_data.code < 26) {
+    key = static_cast<KEY>(sf_key_data.code);
   }
+  switch (sf_key_data.code) {
+    case sf::Keyboard::Enter: {
+      key = KEY::Return;
+      break;
+    }
+    case sf::Keyboard::Backspace: {
+      key = KEY::Backspace;
+      break;
+    }
+    case sf::Keyboard::Left: {
+      key = KEY::Left;
+      break;
+    }
+
+    case sf::Keyboard::Right: {
+      key = KEY::Right;
+      break;
+    }
+    case sf::Keyboard::Space: {
+      key = KEY::Space;
+      break;
+    }
+  }
+  return new KeyPressedEvent(key, sf_key_data.shift, sf_key_data.control);
 }
 
 Event* Renderer::poll_event() {
@@ -165,7 +188,7 @@ Event* Renderer::poll_event() {
     }
 
     case sf::Event::KeyPressed: {
-        return translateKeyboardEvent(sf_event.key);
+      return translateKeyboardEvent(sf_event.key);
     }
   }
 
