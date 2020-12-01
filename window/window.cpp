@@ -565,9 +565,6 @@ void SVselector::handle_event(Event* event) {
       Color selected_color = canvas->img.getPixel(
           fader_event->pos_x * size.width, fader_event->pos_y * size.height);
 
-      printf("Selected color is %d %d %d\n", selected_color.r, selected_color.g,
-             selected_color.b);
-
       SEND(this, new ColorChangedEvent(selected_color));
       break;
     }
@@ -634,8 +631,10 @@ void Fader::onMousePress(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     pressed = true;
     this->pos = event->pos;
-    float pos_x = static_cast<float>(pos.x - lower_bound.x) / (upper_bound.x - lower_bound.x);
-    float pos_y = static_cast<float>(pos.y - lower_bound.y) / (upper_bound.y - lower_bound.y);
+    float pos_x = static_cast<float>(pos.x - lower_bound.x) /
+                  (upper_bound.x - lower_bound.x);
+    float pos_y = static_cast<float>(pos.y - lower_bound.y) /
+                  (upper_bound.y - lower_bound.y);
 
     SEND(this, new FaderMoveEvent(pos_x, pos_y));
   }
@@ -697,7 +696,7 @@ void SVFader::handle_event(Event* event) {
       pos.x = lower_bound.x + pos_x;
       pos.y = lower_bound.y + pos_y;
 
-      SEND(this, new FaderMoveEvent(pos_x, pos_y));
+      SEND(this, new FaderMoveEvent(s, 1.f - v));
       break;
     }
     case HUE_CHANGED: {

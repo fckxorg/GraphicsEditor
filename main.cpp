@@ -11,8 +11,9 @@
 #include "window/window.hpp"
 
 int main() {
- 
-  #include "layout.hpp"
+  SubscriptionManager::init_new_layer();
+
+#include "layout.hpp"
 
   InstrumentManager::init();
   App::init(Size(1920, 1080), "Test application");

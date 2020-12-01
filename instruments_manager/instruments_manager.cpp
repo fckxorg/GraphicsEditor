@@ -144,7 +144,6 @@ void Dropper::apply(Image& canvas, Position point, Position last_point,
                     Color color, uint8_t thickness) {
   Color pixel = canvas.getPixel(point.x, point.y);
   SEND(SubscriptionManager::get_system_event_sender(), new DropperEvent(pixel));
-  InstrumentManager::set_color(pixel);
 }
 
 void Spray::apply(Image& canvas, Position point, Position last_point,

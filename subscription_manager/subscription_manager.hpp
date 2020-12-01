@@ -5,6 +5,7 @@
 #include <cstdarg>
 #include <unordered_map>
 #include <unordered_set>
+#include <stack>
 
 #include "../window_base/window_base.hpp"
 
@@ -16,7 +17,7 @@
 class SubscriptionManager {
  private:
   static Window* system_event_sender;
-  static std::unordered_map<Window*, std::unordered_set<Window*>>
+  static std::stack<std::unordered_map<Window*, std::unordered_set<Window*>>>
       subscriptions;  // TODO custom hash for pointers
 
   // XXX std::function-like functors with arguments union
@@ -30,6 +31,8 @@ class SubscriptionManager {
   static void send_event(Window* sender, Event* event);
   static Window* get_system_event_sender();
   static void set_system_event_sender(Window* system_event_sender);
+  static void init_new_layer();
+  static void deinit_layer();
 };
 
 #endif
