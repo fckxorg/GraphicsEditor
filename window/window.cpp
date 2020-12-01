@@ -841,7 +841,7 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
   CREATE(scrollbar_outline, RectWindow, Size(40, 490),
          Position(pos.x + 730, pos.y + 30), Color(80, 90, 91));
   CREATE(scrollbar, Scrollbar, Size(30, 480), Position(pos.x + 735, pos.y + 35),
-         Color(200, 200, 200), 480, 520, 1);
+         Color(200, 200, 200), 480, 520, 10);
 
   CREATE(file_list_outline, RectWindow, Size(690, 490),
          Position(pos.x + 30, pos.y + 30), Color(80, 90, 91));
