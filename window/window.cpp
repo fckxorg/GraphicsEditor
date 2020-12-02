@@ -326,6 +326,9 @@ void Scrollbar::setup_controls(uint16_t viewport_size,
   slider_size.*primary_size = static_cast<float>(viewport_size) /
                               scroll_block_size * size.*primary_size *
                               (1 - 2 * SCROLLBAR_BUTTON_RATIO);
+  slider_size.*primary_size =
+      std::min(static_cast<int16_t>(size.*primary_size - 2 * button_size.*primary_size),
+               slider_size.*primary_size);
   slider_size.*secondary_size = size.*secondary_size;
 
   Color controls_colors = color - CONTROLS_COLOR_DELTA;
