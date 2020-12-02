@@ -2,7 +2,9 @@
 #define EVENT_HPP
 
 #include <bits/stdint-uintn.h>
+
 #include <cstdint>
+#include <string>
 
 #include "../data_classes/data_classes.hpp"
 
@@ -144,9 +146,10 @@ class KeyPressedEvent : public Event {
 };
 
 class FileListRebuildEvent : public Event {
-    public:
-        uint32_t value;
-    FileListRebuildEvent(uint32_t value);
+ public:
+  std::string name;
+
+  FileListRebuildEvent(std::string name);
 };
 
 #endif

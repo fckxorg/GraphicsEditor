@@ -1,4 +1,5 @@
 #include "event.hpp"
+
 #include <bits/stdint-uintn.h>
 
 uint32_t Event::get_type() { return type; }
@@ -37,4 +38,5 @@ DropperEvent::DropperEvent(Color color)
 KeyPressedEvent::KeyPressedEvent(KEY key, bool shift, bool ctrl)
     : Event(KEY_PRESSED), key(key), shift(shift), ctrl(ctrl) {}
 
-FileListRebuildEvent::FileListRebuildEvent(uint32_t value) : Event(FILE_LIST_REBUILD), value(value) {}
+FileListRebuildEvent::FileListRebuildEvent(std::string name)
+    : Event(FILE_LIST_REBUILD), name(name) {}
