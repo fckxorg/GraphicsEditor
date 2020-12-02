@@ -804,13 +804,37 @@ void FileList::build_entries_list() {
 
   int16_t cur_offset = 0;
 
+  CREATE(dot_entry_window, DirectoryEntry, Size(size.width, 30),
+         Position(0, cur_offset), Color(255, 255, 255),
+         Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+              Color(255, 255, 255)),
+         ".", "icons/folder.png");
+
+  SUBSCRIBE(this, dot_entry_window.get());
+
+  ADOPT(this, dot_entry_window);
+
+  cur_offset += 30;
+
+  CREATE(double_dot_entry_window, DirectoryEntry, Size(size.width, 30),
+         Position(0, cur_offset), Color(255, 255, 255),
+         Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+              Color(255, 255, 255)),
+         "..", "icons/folder.png");
+
+  SUBSCRIBE(this, double_dot_entry_window.get());
+
+  ADOPT(this, double_dot_entry_window);
+
+  cur_offset += 30;
+
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (entry.is_directory()) {
       CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
              Position(0, cur_offset), Color(255, 255, 255),
              Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
                   Color(255, 255, 255)),
-             entry.path().filename(), "icons/folder.png", cur_offset / 30 + 1);
+             entry.path().filename(), "icons/folder.png");
 
       SUBSCRIBE(this, entry_window.get());
 
@@ -825,7 +849,7 @@ void FileList::build_entries_list() {
              Position(0, cur_offset), Color(255, 255, 255),
              Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
                   Color(255, 255, 255)),
-             entry.path().filename(), "icons/file.png", cur_offset / 30 + 1);
+             entry.path().filename(), "icons/file.png");
 
       SUBSCRIBE(this, entry_window.get());
 
@@ -933,9 +957,8 @@ void DialogEndButton::on_mouse_release(MouseButtonEvent* event) {
 /*---------------------------------------*/
 
 DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color, Text text,
-                               const std::string& name, const char* icon_path,
-                               int idx)
-    : RectButton(size, pos, color, idx),
+                               const std::string& name, const char* icon_path)
+    : RectButton(size, pos, color),
       name(name),
       icon_path(icon_path),
       text(text) {}

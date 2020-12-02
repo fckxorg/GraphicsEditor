@@ -351,7 +351,7 @@ class DirectoryEntry : public RectButton {
 
  public:
   DirectoryEntry(Size size, Position pos, Color color, Text text,
-                 const std::string& name, const char* icon_path, int idx);
+                 const std::string& name, const char* icon_path);
   virtual void on_mouse_release(MouseButtonEvent* event) override;
   virtual void render() override;
 
