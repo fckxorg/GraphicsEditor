@@ -1,6 +1,8 @@
 #include "macro.hpp"
+
+
 CREATE(file_inputbox, Inputbox, inputbox_size, inputbox_pos,
-       Color(255, 255, 255), 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
+       Color(255, 255, 255), 20, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
 CREATE(file_inputbox_outline, RectWindow, inputbox_outline_size,
        inputbox_outline_pos, Color(80, 90, 91));
 CREATE(dialog_end_button, DialogEndButton, Size(100, 30),
@@ -28,6 +30,7 @@ SUBSCRIBE(SubscriptionManager::get_system_event_sender(), file_list.get());
 SUBSCRIBE(SubscriptionManager::get_system_event_sender(), scrollbar.get());
 SUBSCRIBE(scrollbar.get(), file_list.get());
 SUBSCRIBE(file_list.get(), scrollbar.get());
+SUBSCRIBE(file_list.get(), file_inputbox.get());
 
 ADOPT(file_inputbox_outline, file_inputbox);
 ADOPT(dialog_end_button_outline, dialog_end_button);

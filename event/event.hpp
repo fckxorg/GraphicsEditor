@@ -22,7 +22,8 @@ enum SYSTEM_EVENT {
   KEY_PRESSED,
   DIALOG_END,
   FILE_LIST_REBUILD,
-  CONTAINER_SIZE_CHANGED
+  CONTAINER_SIZE_CHANGED,
+  CHANGE_INPUTBOX_VALUE
 };
 
 enum KEY {
@@ -157,6 +158,12 @@ class ContainerSizeChangedEvent : public Event {
     public:
         int16_t block_size;
         ContainerSizeChangedEvent(int16_t block_size);
+};
+
+class ChangeInputboxValueEvent : public Event {
+    public:
+        std::string value;
+        ChangeInputboxValueEvent(std::string value);
 };
 
 #endif

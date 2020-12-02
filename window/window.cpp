@@ -781,6 +781,11 @@ void Inputbox::handle_event(Event* event) {
       handle_mouse_button_event(event);
       break;
     }
+
+    case CHANGE_INPUTBOX_VALUE: {
+      auto change_event = dynamic_cast<ChangeInputboxValueEvent*>(event);
+      this->input_value = change_event->value;
+    }
   }
 }
 
@@ -798,7 +803,7 @@ void Inputbox::render() {
   input_text.text = input_value.data();
 
   Position text_pos =
-      Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y + INPUTBOX_TEXT_OFFSET);
+      Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y);
   Renderer::draw_text(input_text, text_pos);
 }
 
@@ -846,8 +851,9 @@ void FileList::build_entries_list() {
       cur_offset += 30;
     }
   }
+
   inner_container_size = Size(inner_container_size.width, cur_offset);
-  SEND(this, new ContainerSizeChangedEvent(inner_container_size.height));
+
   offset_y = 0;
 }
 
@@ -856,7 +862,11 @@ void FileList::handle_event(Event* event) {
   if (event->get_type() == FILE_LIST_REBUILD) {
     auto rebuild_event = dynamic_cast<FileListRebuildEvent*>(event);
     cur_path /= rebuild_event->name;
+    cur_path = std::filesystem::canonical(cur_path);
     build_entries_list();
+
+    SEND(this, new ContainerSizeChangedEvent(inner_container_size.height));
+    SEND(this, new ChangeInputboxValueEvent(cur_path.string()));
   }
 }
 
@@ -902,7 +912,11 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
       Size(inputbox_size.width + 10, inputbox_size.height + 10);
   Position inputbox_outline_pos =
       Position(inputbox_pos.x - 5, inputbox_pos.y - 5);
+
 #include "../layouts/file_dialog_window.hpp"
+
+  auto directory_path = std::filesystem::current_path();
+  EventQueue::add_event(new ChangeInputboxValueEvent(directory_path.string()));
 };
 
 /*---------------------------------------*/
