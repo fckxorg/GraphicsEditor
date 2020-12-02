@@ -10,16 +10,17 @@
 #include <list>
 #include <memory>
 #include <vector>
+#include <filesystem>
+#include "../layouts/macro.hpp"
 
 #include "../color_utilities/hsvrgb.hpp"
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
+#include "../event_queue/event_queue.hpp"
 #include "../instruments_manager/instruments_manager.hpp"
+#include "../sfml_engine/sfml_engine.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
-#include "../event_queue/event_queue.hpp"
-
-#include "../sfml_engine/sfml_engine.hpp"
 
 extern const uint8_t PRESS_FADE_DELTA;
 extern const uint8_t CONTROLS_COLOR_DELTA;
@@ -193,7 +194,7 @@ class Scrollbar : public RectWindow {
 };
 
 class ScrollableWindow : public RectWindow {
- private:
+ protected:
   float offset_x;
   float offset_y;
   Size inner_container_size;
@@ -307,6 +308,13 @@ class Inputbox : public RectWindow, public InterfaceClickable {
   virtual void onMouseRelease(MouseButtonEvent* event) override;
 };
 
+class FileList : public ScrollableWindow {
+ public:
+  FileList(Size viewport_size, Size inner_container_size, Position pos,
+                   Color bg_color);
+  void build_entries_list();
+};
+
 class DialogWindow : public RectWindow {
   Color outline_color;
   int16_t outline_thickness;
@@ -341,13 +349,15 @@ class DialogEndButton : public RectButton {
 };
 
 class DirectoryEntry : public RectButton {
-    private:
-        Text text;
-        std::string name;
-        const char* icon_path;
-    public:
-        DirectoryEntry(Size size, Position pos, Color color, Text text, const std::string& name, const char* icon_path, int idx);
-        virtual void render() override;
+ private:
+  Text text;
+  std::string name;
+  const char* icon_path;
+
+ public:
+  DirectoryEntry(Size size, Position pos, Color color, Text text,
+                 const std::string& name, const char* icon_path, int idx);
+  virtual void render() override;
 };
 
 #endif

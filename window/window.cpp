@@ -471,7 +471,7 @@ void Canvas::handle_event(Event* event) {
 /*---------------------------------------*/
 
 Sprite::Sprite(Texture text, Position pos) : texture(text) {
-   RenderWindow::pos = pos;
+  RenderWindow::pos = pos;
 }
 void Sprite::render() { Renderer::draw_sprite(texture, pos); }
 
@@ -785,6 +785,40 @@ void Inputbox::render() {
 }
 
 /*---------------------------------------*/
+/*              FileList                 */
+/*---------------------------------------*/
+FileList::FileList(Size viewport_size, Size inner_container_size, Position pos,
+                   Color bg_color)
+    : ScrollableWindow(viewport_size, inner_container_size, pos, bg_color) {
+  build_entries_list();
+}
+
+void FileList::build_entries_list() {
+  auto cur_path = std::filesystem::current_path();
+  int16_t cur_offset = 0;
+
+  for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
+    if (!entry.is_directory()) {
+      CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
+             Position(0, cur_offset), Color(255, 255, 255),
+             Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+                  Color(255, 255, 255)),
+             entry.path().filename(), "icons/file.png", cur_offset / 30);
+      ADOPT(this, entry_window);
+    } else {
+      CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
+             Position(0, cur_offset), Color(255, 255, 255),
+             Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+                  Color(255, 255, 255)),
+             entry.path().filename(), "icons/folder.png", cur_offset / 30);
+      ADOPT(this, entry_window);
+    }
+    cur_offset += 30;
+  }
+  inner_container_size = Size(inner_container_size.width, cur_offset);
+}
+
+/*---------------------------------------*/
 /*              DialogWindow             */
 /*---------------------------------------*/
 DialogWindow::DialogWindow(Size size, Position pos, Color color,
@@ -882,5 +916,6 @@ void DirectoryEntry::render() {
   Renderer::draw_sprite(Texture(icon_path, Size(size.height, size.height)),
                         pos);
   text.text = name.data();
-  Renderer::draw_text(text, Position(pos.x + size.height + DIRECTORY_ENTRY_TEXT_OFFSET, pos.y));
+  Renderer::draw_text(
+      text, Position(pos.x + size.height + DIRECTORY_ENTRY_TEXT_OFFSET, pos.y));
 }
