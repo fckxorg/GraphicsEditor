@@ -128,7 +128,7 @@ class TextWindow : public RenderWindow {
 };
 
 class RectButton : public RectWindow, public InterfaceClickable {
- private:
+ protected:
   Color default_color;
   uint32_t value;
 
@@ -300,10 +300,14 @@ class Inputbox : public RectWindow, public InterfaceClickable {
 };
 
 class FileList : public ScrollableWindow {
+ private:
+  std::filesystem::path cur_path;
+
  public:
   FileList(Size viewport_size, Size inner_container_size, Position pos,
            Color bg_color);
   void build_entries_list();
+  virtual void handle_event(Event* event) override;
 };
 
 class DialogWindow : public RectWindow {
@@ -348,7 +352,10 @@ class DirectoryEntry : public RectButton {
  public:
   DirectoryEntry(Size size, Position pos, Color color, Text text,
                  const std::string& name, const char* icon_path, int idx);
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
   virtual void render() override;
+
+  friend class FileList;
 };
 
 #endif

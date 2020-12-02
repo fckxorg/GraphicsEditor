@@ -1,6 +1,7 @@
 #ifndef EVENT_HPP
 #define EVENT_HPP
 
+#include <bits/stdint-uintn.h>
 #include <cstdint>
 
 #include "../data_classes/data_classes.hpp"
@@ -17,7 +18,8 @@ enum SYSTEM_EVENT {
   FADER_MOVE,
   DROPPER_APPLIED,
   KEY_PRESSED,
-  DIALOG_END
+  DIALOG_END,
+  FILE_LIST_REBUILD
 };
 
 enum KEY {
@@ -139,6 +141,12 @@ class KeyPressedEvent : public Event {
   bool shift;
   bool ctrl;
   KeyPressedEvent(KEY key, bool shift, bool ctrl);
+};
+
+class FileListRebuildEvent : public Event {
+    public:
+        uint32_t value;
+    FileListRebuildEvent(uint32_t value);
 };
 
 #endif

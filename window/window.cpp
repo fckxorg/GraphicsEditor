@@ -395,7 +395,15 @@ void ScrollableWindow::handle_event(Event* event) {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
       offset_y =
           -scroll_event->position * (inner_container_size.height - size.height);
-    }
+    }/*
+    default: {
+      if (event->get_type() == MOUSE_BUTTON) {
+        auto mouse_event = dynamic_cast<MouseButtonEvent*>(event);
+        mouse_event->pos.x += offset_x;
+        mouse_event->pos.y += offset_y;
+        SEND(this, event);
+      }
+    }*/
   }
 }
 
@@ -761,6 +769,7 @@ void Inputbox::handle_event(Event* event) {
 }
 
 void Inputbox::on_mouse_press(MouseButtonEvent* event) {
+  if(!is_point_inside(event->pos)) return;
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     active = true;
   }
@@ -783,10 +792,13 @@ void Inputbox::render() {
 FileList::FileList(Size viewport_size, Size inner_container_size, Position pos,
                    Color bg_color)
     : ScrollableWindow(viewport_size, inner_container_size, pos, bg_color) {
+  cur_path = std::filesystem::current_path();
   build_entries_list();
 }
 
 void FileList::build_entries_list() {
+  subwindows.clear();
+
   auto cur_path = std::filesystem::current_path();
   int16_t cur_offset = 0;
 
@@ -796,9 +808,10 @@ void FileList::build_entries_list() {
              Position(0, cur_offset), Color(255, 255, 255),
              Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
                   Color(255, 255, 255)),
-             entry.path().filename(), "icons/folder.png", cur_offset / 30);
+             entry.path().filename(), "icons/folder.png", cur_offset / 30 + 1);
+      SUBSCRIBE(this, entry_window.get());
       ADOPT(this, entry_window);
-        cur_offset += 30;
+      cur_offset += 30;
     }
   }
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
@@ -807,12 +820,28 @@ void FileList::build_entries_list() {
              Position(0, cur_offset), Color(255, 255, 255),
              Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
                   Color(255, 255, 255)),
-             entry.path().filename(), "icons/file.png", cur_offset / 30);
+             entry.path().filename(), "icons/file.png", cur_offset / 30 + 1);
+      SUBSCRIBE(this, entry_window.get());
       ADOPT(this, entry_window);
       cur_offset += 30;
     }
   }
   inner_container_size = Size(inner_container_size.width, cur_offset);
+}
+
+void FileList::handle_event(Event *event) {
+    ScrollableWindow::handle_event(event);
+
+    if(event->get_type() == FILE_LIST_REBUILD) {
+        auto rebuild_event = dynamic_cast<FileListRebuildEvent*>(event);
+        for(auto& subwindow : subwindows) {
+            auto entry = dynamic_cast<DirectoryEntry*>(subwindow.get());
+            if(entry->value == rebuild_event->value) {
+                cur_path /= entry->name;
+                break;
+            }
+        }
+    }
 }
 
 /*---------------------------------------*/
@@ -907,6 +936,14 @@ DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color, Text text,
       name(name),
       icon_path(icon_path),
       text(text) {}
+
+void DirectoryEntry::on_mouse_release(MouseButtonEvent *event) {
+  assert(event != nullptr);  
+
+  this->color = default_color;
+
+  EventQueue::add_event(new FileListRebuildEvent(value));
+}
 
 void DirectoryEntry::render() {
   RectButton::render();
