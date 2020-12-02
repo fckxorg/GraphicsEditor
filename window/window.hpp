@@ -35,7 +35,8 @@ struct SliderParameters {
   bool horizontal;
 
   SliderParameters();
-  SliderParameters(uint16_t lower_bound, uint16_t upper_bound, uint16_t step, bool horizontal);
+  SliderParameters(uint16_t lower_bound, uint16_t upper_bound, uint16_t step,
+                   bool horizontal);
 };
 
 enum DIRECTION { UP, DOWN };
@@ -175,12 +176,13 @@ class Slider : public RectWindow, public InterfaceDraggable {
 
 class Scrollbar : public RectWindow {
  public:
-  Scrollbar();
-  ~Scrollbar();
-
-  void handle_event(Event* event) override;
   Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size,
             uint16_t scroll_block_size, uint16_t step, bool horizontal = false);
+  virtual ~Scrollbar();
+
+  void handle_event(Event* event) override;
+  void setup_controls(uint16_t viewport_size, uint16_t scroll_block_size,
+                      uint16_t step, bool horizontal);
 };
 
 class ScrollableWindow : public RectWindow {

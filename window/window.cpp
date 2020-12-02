@@ -279,27 +279,11 @@ void Slider::on_mouse_release(MouseButtonEvent* event) {
 /*             Scrollbar                 */
 /*---------------------------------------*/
 
-Scrollbar::Scrollbar() = default;
 Scrollbar::~Scrollbar() = default;
 
-void Scrollbar::handle_event(Event* event) {
-  assert(event != nullptr);
-
-  if (event->get_type() == SLIDER_MOVE) {
-    SliderMoveEvent* slider_event = dynamic_cast<SliderMoveEvent*>(event);
-    SEND(this, new ScrollEvent(slider_event->position));
-    return;
-  }
-
-  for (auto& subwindow : subwindows) {
-    subwindow->handle_event(event);
-  }
-}
-
-Scrollbar::Scrollbar(Size size, Position pos, Color color,
-                     uint16_t viewport_size, uint16_t scroll_block_size,
-                     uint16_t step, bool horizontal)
-    : RectWindow(size, pos, color) {
+void Scrollbar::setup_controls(uint16_t viewport_size, uint16_t scroll_block_size,
+                          uint16_t step, bool horizontal) {
+  subwindows.clear();
   Size button_size = {};
 
   Position bottom_button_pos = {};
@@ -359,6 +343,27 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   ADOPT(this, top_button);
   ADOPT(this, bottom_button);
   ADOPT(this, slider);
+}
+
+void Scrollbar::handle_event(Event* event) {
+  assert(event != nullptr);
+
+  if (event->get_type() == SLIDER_MOVE) {
+    SliderMoveEvent* slider_event = dynamic_cast<SliderMoveEvent*>(event);
+    SEND(this, new ScrollEvent(slider_event->position));
+    return;
+  }
+
+  for (auto& subwindow : subwindows) {
+    subwindow->handle_event(event);
+  }
+}
+
+Scrollbar::Scrollbar(Size size, Position pos, Color color,
+                     uint16_t viewport_size, uint16_t scroll_block_size,
+                     uint16_t step, bool horizontal)
+    : RectWindow(size, pos, color) {
+  setup_controls(viewport_size, scroll_block_size, step, horizontal);
 }
 
 /*---------------------------------------*/
