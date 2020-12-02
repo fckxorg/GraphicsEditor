@@ -393,7 +393,8 @@ void ScrollableWindow::handle_event(Event* event) {
   switch (event->get_type()) {
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset_y = -scroll_event->position * (inner_container_size.height - size.height);
+      offset_y =
+          -scroll_event->position * (inner_container_size.height - size.height);
     }
   }
 }
@@ -790,6 +791,17 @@ void FileList::build_entries_list() {
   int16_t cur_offset = 0;
 
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
+    if (entry.is_directory()) {
+      CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
+             Position(0, cur_offset), Color(255, 255, 255),
+             Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+                  Color(255, 255, 255)),
+             entry.path().filename(), "icons/folder.png", cur_offset / 30);
+      ADOPT(this, entry_window);
+        cur_offset += 30;
+    }
+  }
+  for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (!entry.is_directory()) {
       CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
              Position(0, cur_offset), Color(255, 255, 255),
@@ -797,15 +809,8 @@ void FileList::build_entries_list() {
                   Color(255, 255, 255)),
              entry.path().filename(), "icons/file.png", cur_offset / 30);
       ADOPT(this, entry_window);
-    } else {
-      CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
-             Position(0, cur_offset), Color(255, 255, 255),
-             Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
-                  Color(255, 255, 255)),
-             entry.path().filename(), "icons/folder.png", cur_offset / 30);
-      ADOPT(this, entry_window);
+      cur_offset += 30;
     }
-    cur_offset += 30;
   }
   inner_container_size = Size(inner_container_size.width, cur_offset);
 }
