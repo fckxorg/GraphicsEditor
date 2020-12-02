@@ -96,15 +96,12 @@ class RectWindow : public RenderWindow {
 
  public:
   RectWindow();
-  ~RectWindow();
+  virtual ~RectWindow();
   RectWindow(Size size, Position pos, Color color);
 
   void set_color(Color color);
 
-  Size get_size();
-  void set_size(Size size);
-
-  Color get_color();
+  Color get_color() const;
 
   virtual void render() override;
 };

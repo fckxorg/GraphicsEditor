@@ -72,7 +72,9 @@ void RenderWindow::render() {
 /*---------------------------------------*/
 
 RectWindow::RectWindow() = default;
+
 RectWindow::~RectWindow() = default;
+
 RectWindow::RectWindow(Size size, Position pos, Color color)
     : RenderWindow(size, pos), color(color) {}
 
@@ -83,11 +85,7 @@ void RectWindow::render() {
 
 void RectWindow::set_color(Color color) { this->color = color; }
 
-Size RectWindow::get_size() { return this->size; }
-
-void RectWindow::set_size(Size size) { this->size = size; }
-
-Color RectWindow::get_color() { return color; }
+Color RectWindow::get_color() const { return color; }
 
 bool RectWindow::is_point_inside(Position point) {
   if (point.x < pos.x || point.x > pos.x + size.width) return false;
