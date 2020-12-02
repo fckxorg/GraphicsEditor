@@ -99,6 +99,7 @@ bool RectWindow::is_point_inside(Position point) {
 /*---------------------------------------*/
 
 RectButton::RectButton() = default;
+
 RectButton::~RectButton() = default;
 
 RectButton::RectButton(Size size, Position pos, Color color, uint32_t value)
@@ -115,16 +116,28 @@ void RectButton::on_mouse_press(MouseButtonEvent* event) {
 
 void RectButton::on_mouse_release(MouseButtonEvent* event) {
   assert(event != nullptr);
+
   if (is_point_inside(event->pos)) {
     SEND(this, new ButtonPressEvent(value));
   }
+
   this->color = default_color;
 }
 
 void RectButton::handle_event(Event* event) {
+  assert(event != nullptr);
+
   if (event->get_type() == SYSTEM_EVENT::MOUSE_BUTTON) {
     handle_mouse_button_event(event);
   }
+}
+
+Color RectButton::get_default_color() const {
+    return default_color;
+}
+
+void RectButton::set_default_color(Color color) {
+    default_color = color;
 }
 
 /*---------------------------------------*/

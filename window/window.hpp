@@ -7,17 +7,17 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <filesystem>
 #include <list>
 #include <memory>
 #include <vector>
-#include <filesystem>
-#include "../layouts/macro.hpp"
 
 #include "../color_utilities/hsvrgb.hpp"
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
 #include "../event_queue/event_queue.hpp"
 #include "../instruments_manager/instruments_manager.hpp"
+#include "../layouts/macro.hpp"
 #include "../sfml_engine/sfml_engine.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
@@ -127,17 +127,22 @@ class RectButton : public RectWindow, public InterfaceClickable {
 
  public:
   RectButton();
-  ~RectButton();
+
+  virtual ~RectButton();
 
   virtual void render() override;
+
   RectButton(Size size, Position pos, Color color, uint32_t value = 0);
 
   virtual void handle_event(Event* event) override;
 
-  bool check_boundaries(Position click_pos);
-
   virtual void on_mouse_press(MouseButtonEvent* event) override;
+
   virtual void on_mouse_release(MouseButtonEvent* event) override;
+
+  void set_default_color(Color color);
+
+  Color get_default_color() const;
 };
 
 class Slider : public RectWindow, public InterfaceDraggable {
@@ -304,7 +309,7 @@ class Inputbox : public RectWindow, public InterfaceClickable {
 class FileList : public ScrollableWindow {
  public:
   FileList(Size viewport_size, Size inner_container_size, Position pos,
-                   Color bg_color);
+           Color bg_color);
   void build_entries_list();
 };
 
