@@ -326,9 +326,9 @@ void Scrollbar::setup_controls(uint16_t viewport_size,
   slider_size.*primary_size = static_cast<float>(viewport_size) /
                               scroll_block_size * size.*primary_size *
                               (1 - 2 * SCROLLBAR_BUTTON_RATIO);
-  slider_size.*primary_size =
-      std::min(static_cast<int16_t>(size.*primary_size - 2 * button_size.*primary_size),
-               slider_size.*primary_size);
+  slider_size.*primary_size = std::min(
+      static_cast<int16_t>(size.*primary_size - 2 * button_size.*primary_size),
+      slider_size.*primary_size);
   slider_size.*secondary_size = size.*secondary_size;
 
   Color controls_colors = color - CONTROLS_COLOR_DELTA;
@@ -848,6 +848,7 @@ void FileList::build_entries_list() {
   }
   inner_container_size = Size(inner_container_size.width, cur_offset);
   SEND(this, new ContainerSizeChangedEvent(inner_container_size.height));
+  offset_y = 0;
 }
 
 void FileList::handle_event(Event* event) {
@@ -855,7 +856,6 @@ void FileList::handle_event(Event* event) {
   if (event->get_type() == FILE_LIST_REBUILD) {
     auto rebuild_event = dynamic_cast<FileListRebuildEvent*>(event);
     cur_path /= rebuild_event->name;
-    printf("Folder name %s\n", rebuild_event->name.data());
     build_entries_list();
   }
 }
