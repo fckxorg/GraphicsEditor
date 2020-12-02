@@ -11,6 +11,17 @@ const int16_t INPUTBOX_SAVE_DIALOG_OFFSET_Y = 530;
 const int16_t DIRECTORY_ENTRY_TEXT_OFFSET = 5;
 
 /*---------------------------------------*/
+/*            SliderParameters           */
+/*---------------------------------------*/
+SliderParameters::SliderParameters() = default;
+SliderParameters::SliderParameters(uint16_t lower_bound, uint16_t upper_bound,
+                                   uint16_t step, bool horizontal)
+    : lower_bound(lower_bound),
+      upper_bound(upper_bound),
+      step(step),
+      horizontal(horizontal) {}
+
+/*---------------------------------------*/
 /*         Interface Clickable           */
 /*---------------------------------------*/
 
@@ -132,13 +143,9 @@ void RectButton::handle_event(Event* event) {
   }
 }
 
-Color RectButton::get_default_color() const {
-    return default_color;
-}
+Color RectButton::get_default_color() const { return default_color; }
 
-void RectButton::set_default_color(Color color) {
-    default_color = color;
-}
+void RectButton::set_default_color(Color color) { default_color = color; }
 
 /*---------------------------------------*/
 /*              TextWindow               */
@@ -160,8 +167,6 @@ void TextWindow::render() {
 /*---------------------------------------*/
 /*                Slider                 */
 /*---------------------------------------*/
-
-Slider::Slider() = default;
 Slider::~Slider() = default;
 
 /*!
@@ -176,43 +181,41 @@ Slider::~Slider() = default;
  * @param horizontal flag, defining direction of slider movement
  */
 
-Slider::Slider(Size size, Position pos, Color color, uint16_t lower_bound,
-               uint16_t upper_bound, uint16_t step, bool horizontal)
+Slider::Slider(Size size, Position pos, Color color, SliderParameters params)
     : RectWindow(size, pos, color),
       default_color(color),
       pressed(false),
-      lower_bound(lower_bound),
-      horizontal(horizontal),
       last_mouse_pos(pos),
-      step(step) {
-  if (horizontal) {
+      params(params) {
+  if (params.horizontal) {
     primary_axis = &Position::x;
-    this->upper_bound = std::max(upper_bound - size.width, 0);
+    this->params.upper_bound = std::max(params.upper_bound - size.width, 0);
   } else {
     primary_axis = &Position::y;
-    this->upper_bound = std::max(upper_bound - size.height, 0);
+    this->params.upper_bound = std::max(params.upper_bound - size.height, 0);
   }
 }
 
 void Slider::move_relative(float offset) {
-  pos.*primary_axis = lower_bound + (upper_bound - lower_bound) * offset;
   pos.*primary_axis =
-      std::max(pos.*primary_axis, static_cast<int16_t>(lower_bound));
+      params.lower_bound + (params.upper_bound - params.lower_bound) * offset;
   pos.*primary_axis =
-      std::min(pos.*primary_axis, static_cast<int16_t>(upper_bound));
+      std::max(pos.*primary_axis, static_cast<int16_t>(params.lower_bound));
+  pos.*primary_axis =
+      std::min(pos.*primary_axis, static_cast<int16_t>(params.upper_bound));
 }
 
 void Slider::move(int delta) {
-  uint16_t new_pos =
-      std::max(static_cast<uint16_t>(pos.*primary_axis + delta), lower_bound);
-  new_pos = std::min(static_cast<uint16_t>(new_pos), upper_bound);
+  uint16_t new_pos = std::max(static_cast<uint16_t>(pos.*primary_axis + delta),
+                              params.lower_bound);
+  new_pos = std::min(static_cast<uint16_t>(new_pos), params.upper_bound);
 
   pos.*primary_axis = new_pos;
 }
 
 float Slider::get_relative_pos() {
-  return static_cast<float>(pos.*primary_axis - lower_bound) /
-         static_cast<float>(upper_bound - lower_bound);
+  return static_cast<float>(pos.*primary_axis - params.lower_bound) /
+         static_cast<float>(params.upper_bound - params.lower_bound);
 }
 
 void Slider::handle_event(Event* event) {
@@ -231,25 +234,14 @@ void Slider::handle_event(Event* event) {
 
     case BUTTON_PRESSED: {
       auto button_press_event = dynamic_cast<ButtonPressEvent*>(event);
-
-      if (button_press_event->value == UP) {
-        onButtonUp();
-      } else if (button_press_event->value == DOWN) {
-        onButtonDown();
-      }
+      on_button(button_press_event->value);
       break;
     }
   }
 }
 
-void Slider::onButtonUp() {
-  move(-step);
-  last_mouse_pos = pos;
-  SEND(this, new SliderMoveEvent(get_relative_pos()));
-}
-
-void Slider::onButtonDown() {
-  move(step);
+void Slider::on_button(uint32_t value) {
+  move(UP == value ? -params.step : params.step);
   last_mouse_pos = pos;
   SEND(this, new SliderMoveEvent(get_relative_pos()));
 }
@@ -268,14 +260,12 @@ void Slider::on_mouse_move(MouseMoveEvent* event) {
   if (!pressed) return;
 
   Position mouse_position = event->pos;
-  Position old_pos = pos;
 
   int mouse_delta = mouse_position.*primary_axis - last_mouse_pos.*primary_axis;
   move(mouse_delta);
+  last_mouse_pos = mouse_position;
 
   SEND(this, new SliderMoveEvent(get_relative_pos()));
-
-  last_mouse_pos = mouse_position;
 }
 
 void Slider::on_mouse_release(MouseButtonEvent* event) {
@@ -316,10 +306,6 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   Position slider_default_position = {};
   Size slider_size = {};
 
-  uint16_t slider_lower_boundary = 0;
-  uint16_t slider_upper_boundary = 0;
-  uint16_t slider_step = 0;
-
   /* Setting up pointers to members to unify further calculations */
 
   int16_t Position::*primary_axis = &Position::y;
@@ -334,6 +320,8 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   }
 
   /* calculating sizes and positions of scrollbar controls */
+  SliderParameters slider_params;
+  slider_params.horizontal = horizontal;
 
   button_size.*primary_size = size.*primary_size * SCROLLBAR_BUTTON_RATIO;
   button_size.*secondary_size = size.*secondary_size;
@@ -346,15 +334,14 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
       pos.*primary_axis + size.*primary_size * (1 - SCROLLBAR_BUTTON_RATIO);
   bottom_button_pos.*secondary_axis = pos.*secondary_axis;
 
-  slider_lower_boundary = slider_default_position.*primary_axis;
-  slider_upper_boundary = bottom_button_pos.*primary_axis;
+  slider_params.lower_bound = slider_default_position.*primary_axis;
+  slider_params.upper_bound = bottom_button_pos.*primary_axis;
+  slider_params.step = step;
 
   slider_size.*primary_size = static_cast<float>(viewport_size) /
                               scroll_block_size * size.*primary_size *
                               (1 - 2 * SCROLLBAR_BUTTON_RATIO);
   slider_size.*secondary_size = size.*secondary_size;
-  slider_step =
-      static_cast<float>(slider_size.*primary_size) / viewport_size * step;
 
   Color controls_colors = color - CONTROLS_COLOR_DELTA;
 
@@ -363,7 +350,7 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   CREATE(bottom_button, RectButton, button_size, bottom_button_pos,
          controls_colors, DOWN);
   CREATE(slider, Slider, slider_size, slider_default_position, controls_colors,
-         slider_lower_boundary, slider_upper_boundary, slider_step, horizontal);
+         slider_params);
 
   SUBSCRIBE(top_button.get(), slider.get());
   SUBSCRIBE(bottom_button.get(), slider.get());
@@ -604,9 +591,9 @@ void HueSlider::handle_event(Event* event) {
   }
 }
 
-HueSlider::HueSlider(Size size, Position pos, Color color, uint16_t lower_bound,
-                     uint16_t upper_bound, uint16_t step, bool horizontal)
-    : Slider(size, pos, color, lower_bound, upper_bound, step, horizontal){};
+HueSlider::HueSlider(Size size, Position pos, Color color,
+                     SliderParameters params)
+    : Slider(size, pos, color, params){};
 
 /*---------------------------------------*/
 /*                 Fader                 */

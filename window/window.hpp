@@ -28,6 +28,16 @@ extern const float SCROLLBAR_BUTTON_RATIO;
 extern const float LINESPACING_COEFF;
 extern const float SCROLLBAR_SIZE_RATIO;
 
+struct SliderParameters {
+  uint16_t lower_bound;
+  uint16_t upper_bound;
+  uint16_t step;
+  bool horizontal;
+
+  SliderParameters();
+  SliderParameters(uint16_t lower_bound, uint16_t upper_bound, uint16_t step, bool horizontal);
+};
+
 enum DIRECTION { UP, DOWN };
 
 /*!
@@ -72,17 +82,13 @@ class RenderWindow : public Window {
 
  public:
   RenderWindow();
-
-  virtual ~RenderWindow();
-
   RenderWindow(const RenderWindow& other) = delete;
-
   RenderWindow(Size size, Position pos);
+  virtual ~RenderWindow();
 
   virtual void render();
 
   void set_pos(Position pos);
-
   virtual Position get_position() const;
 
   virtual void set_size(Size new_size);
@@ -92,15 +98,15 @@ class RenderWindow : public Window {
 class RectWindow : public RenderWindow {
  protected:
   Color color;
+
   virtual bool is_point_inside(Position point);
 
  public:
   RectWindow();
-  virtual ~RectWindow();
   RectWindow(Size size, Position pos, Color color);
+  virtual ~RectWindow();
 
   void set_color(Color color);
-
   Color get_color() const;
 
   virtual void render() override;
@@ -127,21 +133,16 @@ class RectButton : public RectWindow, public InterfaceClickable {
 
  public:
   RectButton();
-
+  RectButton(Size size, Position pos, Color color, uint32_t value = 0);
   virtual ~RectButton();
 
   virtual void render() override;
 
-  RectButton(Size size, Position pos, Color color, uint32_t value = 0);
-
   virtual void handle_event(Event* event) override;
-
   virtual void on_mouse_press(MouseButtonEvent* event) override;
-
   virtual void on_mouse_release(MouseButtonEvent* event) override;
 
   void set_default_color(Color color);
-
   Color get_default_color() const;
 };
 
@@ -150,34 +151,25 @@ class Slider : public RectWindow, public InterfaceDraggable {
   Color default_color;
   Position last_mouse_pos;
   bool pressed;
-  uint16_t step;
-
-  bool horizontal;
 
   int16_t Position::*primary_axis;
 
   void move(int delta);
+  void on_button(uint32_t value);
 
  protected:
   void move_relative(float offset);
   float get_relative_pos();
 
-  uint16_t lower_bound;
-  uint16_t upper_bound;
+  SliderParameters params;
 
  public:
-  Slider();
-  ~Slider();
-  Slider(Size size, Position pos, Color color, uint16_t lower_bound,
-         uint16_t upper_bound, uint16_t step, bool horizontal = false);
+  virtual ~Slider();
+  Slider(Size size, Position pos, Color color, SliderParameters params);
 
   virtual void on_mouse_press(MouseButtonEvent* event);
   virtual void on_mouse_release(MouseButtonEvent* event);
   virtual void on_mouse_move(MouseMoveEvent* event);
-
-  void onButtonUp();
-  void onButtonDown();
-
   virtual void handle_event(Event* event);
 };
 
@@ -284,8 +276,7 @@ class SVFader : public Fader {
 
 class HueSlider : public Slider {
  public:
-  HueSlider(Size size, Position pos, Color color, uint16_t lower_bound,
-            uint16_t upper_bound, uint16_t step, bool horizontal = false);
+  HueSlider(Size size, Position pos, Color color, SliderParameters params);
 
   void handle_event(Event* event) override;
 };
