@@ -799,62 +799,37 @@ FileList::FileList(Size viewport_size, Size inner_container_size, Position pos,
   build_entries_list();
 }
 
+void FileList::create_entry(Size size, Position pos, std::string name,
+                            const char* icon) {
+  CREATE(entry_window, DirectoryEntry, size, pos, Color(255, 255, 255),
+         Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
+              Color(255, 255, 255)),
+         name, icon);
+
+  SUBSCRIBE(this, entry_window.get());
+
+  ADOPT(this, entry_window);
+}
+
 void FileList::build_entries_list() {
   subwindows.clear();
 
   int16_t cur_offset = 0;
-
-  CREATE(dot_entry_window, DirectoryEntry, Size(size.width, 30),
-         Position(0, cur_offset), Color(255, 255, 255),
-         Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
-              Color(255, 255, 255)),
-         ".", "icons/folder.png");
-
-  SUBSCRIBE(this, dot_entry_window.get());
-
-  ADOPT(this, dot_entry_window);
-
-  cur_offset += 30;
-
-  CREATE(double_dot_entry_window, DirectoryEntry, Size(size.width, 30),
-         Position(0, cur_offset), Color(255, 255, 255),
-         Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
-              Color(255, 255, 255)),
-         "..", "icons/folder.png");
-
-  SUBSCRIBE(this, double_dot_entry_window.get());
-
-  ADOPT(this, double_dot_entry_window);
-
+  create_entry(Size(size.width, 30), Position(0, cur_offset), "..",
+               "icons/folder.png");
   cur_offset += 30;
 
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (entry.is_directory()) {
-      CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
-             Position(0, cur_offset), Color(255, 255, 255),
-             Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
-                  Color(255, 255, 255)),
-             entry.path().filename(), "icons/folder.png");
-
-      SUBSCRIBE(this, entry_window.get());
-
-      ADOPT(this, entry_window);
-
+      create_entry(Size(size.width, 30), Position(0, cur_offset), entry.path().filename(),
+                   "icons/folder.png");
       cur_offset += 30;
     }
   }
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (!entry.is_directory()) {
-      CREATE(entry_window, DirectoryEntry, Size(size.width, 30),
-             Position(0, cur_offset), Color(255, 255, 255),
-             Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
-                  Color(255, 255, 255)),
-             entry.path().filename(), "icons/file.png");
-
-      SUBSCRIBE(this, entry_window.get());
-
-      ADOPT(this, entry_window);
-
+      create_entry(Size(size.width, 30), Position(0, cur_offset), entry.path().filename(),
+                   "icons/file.png");
       cur_offset += 30;
     }
   }

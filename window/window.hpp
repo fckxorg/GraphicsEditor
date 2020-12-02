@@ -303,6 +303,8 @@ class FileList : public ScrollableWindow {
  private:
   std::filesystem::path cur_path;
 
+  void create_entry(Size size, Position pos, std::string name, const char* icon);
+
  public:
   FileList(Size viewport_size, Size inner_container_size, Position pos,
            Color bg_color);
