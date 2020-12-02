@@ -51,6 +51,7 @@ class Renderer {
   static std::unordered_map<const char*, sf::Texture> textures;
   static std::vector<OffscreenRenderData> offscreen_resources;
   static std::stack<OffscreenRenderData> offscreen_render_stack;
+  static std::stack<Position> global_offsets;
 
   static sf::RenderTarget* get_target();
 
@@ -83,8 +84,6 @@ class Renderer {
   static void draw_image(Position pos, Image& img);
   static void draw_rectangle(Size size, Position pos, Color color);
   static void draw_text(Text text, Position pos);
-  static void draw_scrollable_text(Text text, Size size, Position pos,
-                                   Color color, float relative_offset);
   static void draw_ellipse(Size size, Position pos, Color color);
 
   static void draw_sprite(Texture texture, Position pos);
@@ -92,5 +91,9 @@ class Renderer {
   static void add_delayed(DelayedRenderData delayed_data);
   static void draw_delayed();
   static void remove_delayed();
+
+  static void add_offset(Position offset);
+  static Position get_offset(); 
+  static void remove_offset();
 };
 #endif

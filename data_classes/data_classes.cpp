@@ -52,6 +52,12 @@ Position::Position(const sf::Vector2f& sfpos)
 Position::operator sf::Vector2f() const { return sf::Vector2f(x, y); }
 #endif
 
+Position& Position::operator+=(const Position &other) {
+    this->x += other.x;
+    this->y += other.y;
+    return *this;
+}
+
 /*--------------- TEXT -------------------------------------*/
 
 Text::Text() = default;

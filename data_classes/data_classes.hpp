@@ -54,6 +54,8 @@ struct Position {
   Position();
   Position(int16_t x, int16_t y);
 
+  Position& operator+=(const Position& other);
+
 #ifdef SFML_ENGINE
   explicit Position(const sf::Vector2f& sfpos);
 

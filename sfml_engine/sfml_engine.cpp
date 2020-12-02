@@ -15,6 +15,7 @@ void OffscreenRenderData::release() {
 std::stack<OffscreenRenderData> Renderer::offscreen_render_stack;
 std::vector<OffscreenRenderData> Renderer::offscreen_resources;
 std::unordered_map<const char*, sf::Texture> Renderer::textures;
+std::stack<Position> Renderer::global_offsets;
 bool Renderer::has_delayed = false;
 
 DelayedRenderData Renderer::delayed_render = {};
@@ -34,7 +35,7 @@ void Renderer::deinit() { window.close(); }
 
 void Renderer::init_offscreen_target(Size target_size, Position target_pos) {
   OffscreenRenderData target = {};
-  target.sprite->setPosition(target_pos);
+  target.sprite->setPosition((target_pos += get_offset()));
   target.texture->create(target_size.width, target_size.height);
   target.sprite->setTexture(target.texture->getTexture());
 
@@ -61,6 +62,12 @@ void Renderer::clear() {
   }
   offscreen_resources.clear();
   window.clear();
+
+  while (!global_offsets.empty()) {
+    global_offsets.pop();
+  }
+
+  global_offsets.push(Position(0, 0));
 }
 
 sf::RenderTarget* Renderer::get_target() {
@@ -71,11 +78,14 @@ sf::RenderTarget* Renderer::get_target() {
   return offscreen_render_stack.top().texture;
 }
 
+Position Renderer::get_offset() { return global_offsets.top(); }
+void Renderer::add_offset(Position offset) { global_offsets.push(offset); }
+
 void Renderer::show() { window.display(); }
 
 void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   sf::RectangleShape rect = sf::RectangleShape(size);
-  rect.setPosition(pos);
+  rect.setPosition((pos += get_offset()));
   rect.setFillColor(color);
 
   auto target = get_target();
@@ -84,27 +94,10 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
 
 void Renderer::draw_text(Text text, Position pos) {
   sf::Text sfml_text = Renderer::get_sfml_text(text);
-  sfml_text.setPosition(pos);
+  sfml_text.setPosition((pos += get_offset()));
 
   auto target = get_target();
   target->draw(sfml_text);
-}
-
-void Renderer::draw_scrollable_text(Text text, Size size, Position pos,
-                                    Color color, float relative_offset) {
-  sf::Text sfml_text = Renderer::get_sfml_text(text);
-  sfml_text.setPosition(0, relative_offset);
-
-  sf::RenderTexture viewport_texture;
-  viewport_texture.create(size.width, size.height);
-  viewport_texture.clear(sf::Color::White);
-
-  viewport_texture.draw(sfml_text);
-  viewport_texture.display();
-
-  sf::Sprite viewport_sprite;
-  viewport_sprite.setTexture(viewport_texture.getTexture());
-  viewport_sprite.setPosition(pos);
 }
 
 MouseButtonEvent::MouseButton Renderer::get_mouse_button(
@@ -248,7 +241,7 @@ void Renderer::draw_image(Position pos, Image& img) {
 
   sf::Sprite img_sprite(img_texture);
 
-  img_sprite.setPosition(pos);
+  img_sprite.setPosition((pos += get_offset()));
 
   auto target = get_target();
   target->draw(img_sprite);
@@ -262,7 +255,7 @@ void Renderer::draw_sprite(Texture texture, Position pos) {
   }
 
   sf::Sprite sfml_sprite(textures[texture.path]);
-  sfml_sprite.setPosition(pos);
+  sfml_sprite.setPosition((pos += get_offset()));
   auto target = get_target();
   target->draw(sfml_sprite);
 }
@@ -271,13 +264,13 @@ void Renderer::draw_delayed() {
   if (has_delayed) {
     switch (delayed_render.type) {
       case RECT: {
-        Renderer::draw_rectangle(delayed_render.size, delayed_render.pos,
+        Renderer::draw_rectangle(delayed_render.size, delayed_render.pos += get_offset(),
                                  delayed_render.color);
         break;
       }
 
       case ELLIPSE: {
-        Renderer::draw_ellipse(delayed_render.size, delayed_render.pos,
+        Renderer::draw_ellipse(delayed_render.size, delayed_render.pos += get_offset(),
                                delayed_render.color);
         break;
       }
@@ -304,7 +297,7 @@ void Renderer::draw_ellipse(Size size, Position pos, Color color) {
   }
 
   ellipse.setFillColor(color);
-  ellipse.setPosition(pos);
+  ellipse.setPosition((pos += get_offset()));
 
   float scale = 0;
 
@@ -318,4 +311,8 @@ void Renderer::draw_ellipse(Size size, Position pos, Color color) {
 
   auto target = get_target();
   target->draw(ellipse);
+}
+
+void Renderer::remove_offset() {
+    global_offsets.pop();
 }

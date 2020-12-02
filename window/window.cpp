@@ -281,8 +281,9 @@ void Slider::on_mouse_release(MouseButtonEvent* event) {
 
 Scrollbar::~Scrollbar() = default;
 
-void Scrollbar::setup_controls(uint16_t viewport_size, uint16_t scroll_block_size,
-                          uint16_t step, bool horizontal) {
+void Scrollbar::setup_controls(uint16_t viewport_size,
+                               uint16_t scroll_block_size, uint16_t step,
+                               bool horizontal) {
   subwindows.clear();
   Size button_size = {};
 
@@ -380,7 +381,9 @@ ScrollableWindow::ScrollableWindow(Size viewport_size,
 void ScrollableWindow::render() {
   Renderer::draw_rectangle(size, pos, color);
   Renderer::init_offscreen_target(size, pos);
+  Renderer::add_offset(Position(offset_x, offset_y));
   RenderWindow::render();
+  Renderer::remove_offset();
   Renderer::flush_offscreen_target();
 }
 
@@ -390,16 +393,7 @@ void ScrollableWindow::handle_event(Event* event) {
   switch (event->get_type()) {
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset_y = -offset_y - (inner_container_size.height - size.height) *
-                                 scroll_event->position;
-
-      for (auto& subwindow : subwindows) {
-        auto window = dynamic_cast<RenderWindow*>(subwindow.get());
-
-        Position window_pos = window->get_position();
-        window->set_pos(
-            Position(window_pos.x + offset_x, window_pos.y + offset_y));
-      }
+      offset_y = -scroll_event->position * (inner_container_size.height - size.height);
     }
   }
 }
