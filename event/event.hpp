@@ -21,7 +21,8 @@ enum SYSTEM_EVENT {
   DROPPER_APPLIED,
   KEY_PRESSED,
   DIALOG_END,
-  FILE_LIST_REBUILD
+  FILE_LIST_REBUILD,
+  CONTAINER_SIZE_CHANGED
 };
 
 enum KEY {
@@ -150,6 +151,12 @@ class FileListRebuildEvent : public Event {
   std::string name;
 
   FileListRebuildEvent(std::string name);
+};
+
+class ContainerSizeChangedEvent : public Event {
+    public:
+        int16_t block_size;
+        ContainerSizeChangedEvent(int16_t block_size);
 };
 
 #endif

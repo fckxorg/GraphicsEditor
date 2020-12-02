@@ -175,6 +175,10 @@ class Slider : public RectWindow, public InterfaceDraggable {
 };
 
 class Scrollbar : public RectWindow {
+ private:
+     uint16_t viewport_size;
+     uint16_t step;
+     bool horizontal;
  public:
   Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size,
             uint16_t scroll_block_size, uint16_t step, bool horizontal = false);

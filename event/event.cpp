@@ -1,5 +1,6 @@
 #include "event.hpp"
 
+#include <bits/stdint-intn.h>
 #include <bits/stdint-uintn.h>
 
 uint32_t Event::get_type() { return type; }
@@ -40,3 +41,5 @@ KeyPressedEvent::KeyPressedEvent(KEY key, bool shift, bool ctrl)
 
 FileListRebuildEvent::FileListRebuildEvent(std::string name)
     : Event(FILE_LIST_REBUILD), name(name) {}
+
+ContainerSizeChangedEvent::ContainerSizeChangedEvent(int16_t block_size) : Event(CONTAINER_SIZE_CHANGED), block_size(block_size) {}

@@ -355,6 +355,13 @@ void Scrollbar::handle_event(Event* event) {
     return;
   }
 
+  if (event->get_type() == CONTAINER_SIZE_CHANGED) {
+    auto container_event = dynamic_cast<ContainerSizeChangedEvent*>(event);
+    setup_controls(viewport_size, container_event->block_size, step,
+                   horizontal);
+    return;
+  }
+
   for (auto& subwindow : subwindows) {
     subwindow->handle_event(event);
   }
@@ -363,7 +370,10 @@ void Scrollbar::handle_event(Event* event) {
 Scrollbar::Scrollbar(Size size, Position pos, Color color,
                      uint16_t viewport_size, uint16_t scroll_block_size,
                      uint16_t step, bool horizontal)
-    : RectWindow(size, pos, color) {
+    : RectWindow(size, pos, color),
+      viewport_size(viewport_size),
+      step(step),
+      horizontal(horizontal) {
   setup_controls(viewport_size, scroll_block_size, step, horizontal);
 }
 
@@ -821,15 +831,15 @@ void FileList::build_entries_list() {
 
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (entry.is_directory()) {
-      create_entry(Size(size.width, 30), Position(0, cur_offset), entry.path().filename(),
-                   "icons/folder.png");
+      create_entry(Size(size.width, 30), Position(0, cur_offset),
+                   entry.path().filename(), "icons/folder.png");
       cur_offset += 30;
     }
   }
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (!entry.is_directory()) {
-      create_entry(Size(size.width, 30), Position(0, cur_offset), entry.path().filename(),
-                   "icons/file.png");
+      create_entry(Size(size.width, 30), Position(0, cur_offset),
+                   entry.path().filename(), "icons/file.png");
       cur_offset += 30;
     }
   }
