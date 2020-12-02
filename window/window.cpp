@@ -20,11 +20,11 @@ void InterfaceClickable::handle_mouse_button_event(Event* event) {
   auto mouse_button_event = dynamic_cast<MouseButtonEvent*>(event);
 
   if (mouse_button_event->action == MouseButtonEvent::Action::PRESSED) {
-    onMousePress(mouse_button_event);
+    on_mouse_press(mouse_button_event);
   }
 
   if (mouse_button_event->action == MouseButtonEvent::Action::RELEASED) {
-    onMouseRelease(mouse_button_event);
+    on_mouse_release(mouse_button_event);
   }
 }
 
@@ -106,14 +106,14 @@ RectButton::RectButton(Size size, Position pos, Color color, uint32_t value)
 
 void RectButton::render() { RectWindow::render(); }
 
-void RectButton::onMousePress(MouseButtonEvent* event) {
+void RectButton::on_mouse_press(MouseButtonEvent* event) {
   assert(event != nullptr);
   if (!is_point_inside(event->pos)) return;
 
   this->color = RectWindow::get_color() - PRESS_FADE_DELTA;
 }
 
-void RectButton::onMouseRelease(MouseButtonEvent* event) {
+void RectButton::on_mouse_release(MouseButtonEvent* event) {
   assert(event != nullptr);
   if (is_point_inside(event->pos)) {
     SEND(this, new ButtonPressEvent(value));
@@ -132,6 +132,7 @@ void RectButton::handle_event(Event* event) {
 /*---------------------------------------*/
 
 TextWindow::TextWindow() = default;
+
 TextWindow::TextWindow(Text text, Position pos) : text(text) { set_pos(pos); }
 
 Text TextWindow::get_text() const { return text; }
@@ -211,7 +212,7 @@ void Slider::handle_event(Event* event) {
 
     case MOUSE_MOVE: {
       auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
-      onMouseMove(mouse_move_event);
+      on_mouse_move(mouse_move_event);
       break;
     }
 
@@ -240,7 +241,7 @@ void Slider::onButtonDown() {
   SEND(this, new SliderMoveEvent(get_relative_pos()));
 }
 
-void Slider::onMousePress(MouseButtonEvent* event) {
+void Slider::on_mouse_press(MouseButtonEvent* event) {
   assert(event != nullptr);
   if (!is_point_inside(event->pos)) return;
 
@@ -249,7 +250,7 @@ void Slider::onMousePress(MouseButtonEvent* event) {
   last_mouse_pos = event->pos;
 }
 
-void Slider::onMouseMove(MouseMoveEvent* event) {
+void Slider::on_mouse_move(MouseMoveEvent* event) {
   assert(event != nullptr);
   if (!pressed) return;
 
@@ -264,7 +265,7 @@ void Slider::onMouseMove(MouseMoveEvent* event) {
   last_mouse_pos = mouse_position;
 }
 
-void Slider::onMouseRelease(MouseButtonEvent* event) {
+void Slider::on_mouse_release(MouseButtonEvent* event) {
   assert(event != nullptr);
 
   this->color = default_color;
@@ -404,7 +405,7 @@ void ScrollableWindow::handle_event(Event* event) {
 Canvas::Canvas(Size size, Position pos, Color color)
     : RectWindow(size, pos, color), img(size, color) {}
 
-void Canvas::onMousePress(MouseButtonEvent* event) {
+void Canvas::on_mouse_press(MouseButtonEvent* event) {
   if (!is_point_inside(event->pos)) return;
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     InstrumentManager::start_applying(event->pos);
@@ -412,13 +413,13 @@ void Canvas::onMousePress(MouseButtonEvent* event) {
   }
 }
 
-void Canvas::onMouseRelease(MouseButtonEvent* event) {
+void Canvas::on_mouse_release(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     InstrumentManager::stop_applying(img);
   }
 }
 
-void Canvas::onMouseMove(MouseMoveEvent* event) {
+void Canvas::on_mouse_move(MouseMoveEvent* event) {
   if (InstrumentManager::is_applying() && is_point_inside(event->pos)) {
     InstrumentManager::apply(img, event->pos);
   }
@@ -445,7 +446,7 @@ void Canvas::handle_event(Event* event) {
 
     case MOUSE_MOVE: {
       auto move_event = dynamic_cast<MouseMoveEvent*>(event);
-      onMouseMove(move_event);
+      on_mouse_move(move_event);
       break;
     }
 
@@ -614,13 +615,13 @@ void Fader::handle_event(Event* event) {
 
     case MOUSE_MOVE: {
       auto mouse_move_event = dynamic_cast<MouseMoveEvent*>(event);
-      onMouseMove(mouse_move_event);
+      on_mouse_move(mouse_move_event);
       break;
     }
   }
 }
 
-void Fader::onMousePress(MouseButtonEvent* event) {
+void Fader::on_mouse_press(MouseButtonEvent* event) {
   if (event->pos.x < lower_bound.x || event->pos.y < lower_bound.y) return;
   if (event->pos.x > upper_bound.x || event->pos.y > upper_bound.y) return;
 
@@ -636,13 +637,13 @@ void Fader::onMousePress(MouseButtonEvent* event) {
   }
 }
 
-void Fader::onMouseRelease(MouseButtonEvent* event) {
+void Fader::on_mouse_release(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     pressed = false;
   }
 }
 
-void Fader::onMouseMove(MouseMoveEvent* event) {
+void Fader::on_mouse_move(MouseMoveEvent* event) {
   if (event->pos.x < lower_bound.x || event->pos.y < lower_bound.y) return;
   if (event->pos.x > upper_bound.x || event->pos.y > upper_bound.y) return;
   if (!pressed) return;
@@ -759,13 +760,13 @@ void Inputbox::handle_event(Event* event) {
   }
 }
 
-void Inputbox::onMousePress(MouseButtonEvent* event) {
+void Inputbox::on_mouse_press(MouseButtonEvent* event) {
   if (event->button == MouseButtonEvent::MouseButton::LEFT) {
     active = true;
   }
 }
 
-void Inputbox::onMouseRelease(MouseButtonEvent* event) {}
+void Inputbox::on_mouse_release(MouseButtonEvent* event) {}
 
 void Inputbox::render() {
   Renderer::draw_rectangle(size, pos, color);
@@ -869,8 +870,8 @@ void SaveButton::handle_event(Event* event) {
   }
 }
 
-void SaveButton::onMouseRelease(MouseButtonEvent* event) {
-  RectButton::onMouseRelease(event);
+void SaveButton::on_mouse_release(MouseButtonEvent* event) {
+  RectButton::on_mouse_release(event);
 
   if (!is_point_inside(event->pos)) return;
   CREATE(dialog_window, DialogSaveWindow, Size(800, 600), Position(560, 240),
@@ -884,8 +885,8 @@ void SaveButton::onMouseRelease(MouseButtonEvent* event) {
 DialogEndButton::DialogEndButton(Size size, Position pos, Color color)
     : RectButton(size, pos, color) {}
 
-void DialogEndButton::onMouseRelease(MouseButtonEvent* event) {
-  RectButton::onMouseRelease(event);
+void DialogEndButton::on_mouse_release(MouseButtonEvent* event) {
+  RectButton::on_mouse_release(event);
   if (!is_point_inside(event->pos)) return;
 
   EventQueue::add_event(new Event(DIALOG_END));

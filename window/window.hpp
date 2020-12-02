@@ -41,8 +41,8 @@ class InterfaceClickable {
    * @param event event data structure
    * */
   void handle_mouse_button_event(Event* event);
-  virtual void onMousePress(MouseButtonEvent* event) = 0;
-  virtual void onMouseRelease(MouseButtonEvent* event) = 0;
+  virtual void on_mouse_press(MouseButtonEvent* event) = 0;
+  virtual void on_mouse_release(MouseButtonEvent* event) = 0;
   virtual ~InterfaceClickable();
 };
 
@@ -52,7 +52,7 @@ class InterfaceClickable {
 
 class InterfaceDraggable : public InterfaceClickable {
  public:
-  virtual void onMouseMove(MouseMoveEvent* event) = 0;
+  virtual void on_mouse_move(MouseMoveEvent* event) = 0;
 };
 
 /*!
@@ -136,8 +136,8 @@ class RectButton : public RectWindow, public InterfaceClickable {
 
   bool check_boundaries(Position click_pos);
 
-  virtual void onMousePress(MouseButtonEvent* event) override;
-  virtual void onMouseRelease(MouseButtonEvent* event) override;
+  virtual void on_mouse_press(MouseButtonEvent* event) override;
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
 };
 
 class Slider : public RectWindow, public InterfaceDraggable {
@@ -166,9 +166,9 @@ class Slider : public RectWindow, public InterfaceDraggable {
   Slider(Size size, Position pos, Color color, uint16_t lower_bound,
          uint16_t upper_bound, uint16_t step, bool horizontal = false);
 
-  virtual void onMousePress(MouseButtonEvent* event);
-  virtual void onMouseRelease(MouseButtonEvent* event);
-  virtual void onMouseMove(MouseMoveEvent* event);
+  virtual void on_mouse_press(MouseButtonEvent* event);
+  virtual void on_mouse_release(MouseButtonEvent* event);
+  virtual void on_mouse_move(MouseMoveEvent* event);
 
   void onButtonUp();
   void onButtonDown();
@@ -213,9 +213,9 @@ class Canvas : public RectWindow, public InterfaceClickable {
   void save_to_file(const char* filename);
   virtual void render() override;
 
-  void onMousePress(MouseButtonEvent* event) override;
-  void onMouseRelease(MouseButtonEvent* event) override;
-  void onMouseMove(MouseMoveEvent* event);
+  void on_mouse_press(MouseButtonEvent* event) override;
+  void on_mouse_release(MouseButtonEvent* event) override;
+  void on_mouse_move(MouseMoveEvent* event);
 
   friend class HUEselector;
   friend class SVselector;
@@ -264,9 +264,9 @@ class Fader : public RectWindow, public InterfaceDraggable {
   Fader(Size size, Position pos, Color color, Position lower_bound,
         Position upper_bound);
   virtual void handle_event(Event* event) override;
-  virtual void onMousePress(MouseButtonEvent* event) override;
-  virtual void onMouseRelease(MouseButtonEvent* event) override;
-  virtual void onMouseMove(MouseMoveEvent* event) override;
+  virtual void on_mouse_press(MouseButtonEvent* event) override;
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
+  virtual void on_mouse_move(MouseMoveEvent* event) override;
   virtual void render() override;
 };
 
@@ -297,8 +297,8 @@ class Inputbox : public RectWindow, public InterfaceClickable {
            const char* font_path, Color text_color);
   virtual void handle_event(Event* event) override;
   virtual void render() override;
-  virtual void onMousePress(MouseButtonEvent* event) override;
-  virtual void onMouseRelease(MouseButtonEvent* event) override;
+  virtual void on_mouse_press(MouseButtonEvent* event) override;
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
 };
 
 class FileList : public ScrollableWindow {
@@ -331,14 +331,14 @@ class DialogSaveWindow : public DialogWindow {
 class SaveButton : public RectButton {
  public:
   SaveButton(Size size, Position pos, Color color);
-  virtual void onMouseRelease(MouseButtonEvent* event) override;
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
   virtual void handle_event(Event* event) override;
 };
 
 class DialogEndButton : public RectButton {
  public:
   DialogEndButton(Size size, Position pos, Color color);
-  virtual void onMouseRelease(MouseButtonEvent* event) override;
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
 };
 
 class DirectoryEntry : public RectButton {
