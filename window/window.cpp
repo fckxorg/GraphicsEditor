@@ -355,21 +355,19 @@ Scrollbar::Scrollbar(Size size, Position pos, Color color,
   Color controls_colors = color - CONTROLS_COLOR_DELTA;
 
   /* creating scrollbar controls */
-  std::unique_ptr<Window> top_button(
-      new RectButton(button_size, pos, controls_colors, UP));
-  std::unique_ptr<Window> bottom_button(
-      new RectButton(button_size, bottom_button_pos, controls_colors, DOWN));
-  std::unique_ptr<Window> slider(new Slider(
-      slider_size, slider_default_position, controls_colors,
-      slider_lower_boundary, slider_upper_boundary, slider_step, horizontal));
+  CREATE(top_button, RectButton, button_size, pos, controls_colors, UP);
+  CREATE(bottom_button, RectButton, button_size, bottom_button_pos,
+         controls_colors, DOWN);
+  CREATE(slider, Slider, slider_size, slider_default_position, controls_colors,
+         slider_lower_boundary, slider_upper_boundary, slider_step, horizontal);
 
   SUBSCRIBE(top_button.get(), slider.get());
   SUBSCRIBE(bottom_button.get(), slider.get());
   SUBSCRIBE(slider.get(), this);
 
-  add_child_window(top_button);
-  add_child_window(bottom_button);
-  add_child_window(slider);
+  ADOPT(this, top_button);
+  ADOPT(this, bottom_button);
+  ADOPT(this, slider);
 }
 
 /*---------------------------------------*/
@@ -396,14 +394,15 @@ void ScrollableWindow::handle_event(Event* event) {
   switch (event->get_type()) {
     case SCROLL: {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
-      offset_y = -offset_y
-          -(inner_container_size.height - size.height) * scroll_event->position;
+      offset_y = -offset_y - (inner_container_size.height - size.height) *
+                                 scroll_event->position;
 
       for (auto& subwindow : subwindows) {
         auto window = dynamic_cast<RenderWindow*>(subwindow.get());
 
         Position window_pos = window->get_position();
-        window->set_pos(Position(window_pos.x + offset_x, window_pos.y + offset_y));
+        window->set_pos(
+            Position(window_pos.x + offset_x, window_pos.y + offset_y));
       }
     }
   }
