@@ -45,33 +45,25 @@ void RootWindow::handle_event(Event* event) { SEND(this, event); };
 /*---------------------------------------*/
 
 RenderWindow::RenderWindow() = default;
+
 RenderWindow::~RenderWindow() {
   SubscriptionManager::unsubscribe_all(this);
   SubscriptionManager::unsubscribe_from_all(this);
 }
+
 RenderWindow::RenderWindow(Size size, Position pos) : size(size), pos(pos) {}
 
 void RenderWindow::set_pos(Position pos) { this->pos = pos; }
+
 Position RenderWindow::get_position() const { return pos; }
 
-void RenderWindow::set_rotation(const float rotation) {
-  this->rotation = rotation;
-}
-float RenderWindow::get_rotation() const { return rotation; }
+void RenderWindow::set_size(Size new_size) { this->size = new_size; }
+
+Size RenderWindow::get_size() const { return size; }
 
 void RenderWindow::render() {
   for (auto& subwindow : subwindows) {
     subwindow->render();
-  }
-}
-
-void RenderWindow::move_children(float offset_x, float offset_y) {
-  pos.x += offset_x;
-  pos.y += offset_y;
-
-  for (auto& subwindow : subwindows) {
-    dynamic_cast<RenderWindow*>(subwindow.get())
-        ->move_children(offset_x, offset_y);
   }
 }
 

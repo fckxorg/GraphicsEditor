@@ -69,7 +69,6 @@ class RenderWindow : public Window {
  protected:
   Position pos;
   Size size;
-  float rotation;
 
  public:
   RenderWindow();
@@ -86,11 +85,8 @@ class RenderWindow : public Window {
 
   virtual Position get_position() const;
 
-  void set_rotation(const float rotation);
-
-  float get_rotation() const;
-
-  void move_children(float offset_x, float offset_y);
+  virtual void set_size(Size new_size);
+  Size get_size() const;
 };
 
 class RectWindow : public RenderWindow {
