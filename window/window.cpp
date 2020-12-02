@@ -395,6 +395,17 @@ void ScrollableWindow::handle_event(Event* event) {
       auto scroll_event = dynamic_cast<ScrollEvent*>(event);
       offset_y =
           -scroll_event->position * (inner_container_size.height - size.height);
+      break;
+    }
+    case MOUSE_BUTTON: {
+      auto mouse_event = dynamic_cast<MouseButtonEvent*>(event);
+      if (!is_point_inside(mouse_event->pos)) return;
+      auto translated_event =
+          new MouseButtonEvent(Position(mouse_event->pos.x - offset_x - pos.x,
+                                        mouse_event->pos.y - offset_y - pos.y),
+                               mouse_event->button, mouse_event->action);
+      SEND(this, translated_event);
+      break;
     }
   }
 }
@@ -801,8 +812,7 @@ void FileList::build_entries_list() {
                   Color(255, 255, 255)),
              entry.path().filename(), "icons/folder.png", cur_offset / 30 + 1);
 
-      SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
-                entry_window.get());
+      SUBSCRIBE(this, entry_window.get());
 
       ADOPT(this, entry_window);
 
@@ -817,8 +827,7 @@ void FileList::build_entries_list() {
                   Color(255, 255, 255)),
              entry.path().filename(), "icons/file.png", cur_offset / 30 + 1);
 
-      SUBSCRIBE(SubscriptionManager::get_system_event_sender(),
-                entry_window.get());
+      SUBSCRIBE(this, entry_window.get());
 
       ADOPT(this, entry_window);
 
