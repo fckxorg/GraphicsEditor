@@ -27,6 +27,7 @@ SUBSCRIBE(SubscriptionManager::get_system_event_sender(), creator);
 SUBSCRIBE(SubscriptionManager::get_system_event_sender(), file_list.get());
 SUBSCRIBE(SubscriptionManager::get_system_event_sender(), scrollbar.get());
 SUBSCRIBE(scrollbar.get(), file_list.get());
+SUBSCRIBE(file_list.get(), scrollbar.get());
 
 ADOPT(file_inputbox_outline, file_inputbox);
 ADOPT(dialog_end_button_outline, dialog_end_button);

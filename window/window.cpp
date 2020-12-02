@@ -844,6 +844,7 @@ void FileList::build_entries_list() {
     }
   }
   inner_container_size = Size(inner_container_size.width, cur_offset);
+  SEND(this, new ContainerSizeChangedEvent(inner_container_size.height));
 }
 
 void FileList::handle_event(Event* event) {
