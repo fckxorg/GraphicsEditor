@@ -1,13 +1,12 @@
 #include "macro.hpp"
 
-
 CREATE(file_inputbox, Inputbox, inputbox_size, inputbox_pos,
        Color(255, 255, 255), 20, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
 CREATE(file_inputbox_outline, RectWindow, inputbox_outline_size,
        inputbox_outline_pos, Color(80, 90, 91));
-CREATE(dialog_end_button, DialogEndButton, Size(100, 30),
+CREATE(dialog_end_button, DialogEndSaveButton, Size(100, 30),
        Position(pos.x + 665, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y + 5),
-       Color(236, 236, 236));
+       Color(236, 236, 236), dynamic_cast<Inputbox*>(file_inputbox.get()));
 CREATE(dialog_end_button_outline, RectWindow, Size(110, 40),
        Position(pos.x + 660, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
        Color(80, 90, 91));

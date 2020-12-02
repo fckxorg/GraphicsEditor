@@ -152,6 +152,14 @@ Event* Renderer::translateKeyboardEvent(sf::Event::KeyEvent sf_key_data) {
       key = KEY::Space;
       break;
     }
+    case sf::Keyboard::Period: {
+      key = KEY::Period;
+      break;
+    }
+    case sf::Keyboard::Slash: {
+      key = KEY::Slash;
+      break;
+    }
   }
   return new KeyPressedEvent(key, sf_key_data.shift, sf_key_data.control);
 }
@@ -264,13 +272,15 @@ void Renderer::draw_delayed() {
   if (has_delayed) {
     switch (delayed_render.type) {
       case RECT: {
-        Renderer::draw_rectangle(delayed_render.size, delayed_render.pos += get_offset(),
+        Renderer::draw_rectangle(delayed_render.size,
+                                 delayed_render.pos += get_offset(),
                                  delayed_render.color);
         break;
       }
 
       case ELLIPSE: {
-        Renderer::draw_ellipse(delayed_render.size, delayed_render.pos += get_offset(),
+        Renderer::draw_ellipse(delayed_render.size,
+                               delayed_render.pos += get_offset(),
                                delayed_render.color);
         break;
       }
@@ -313,6 +323,4 @@ void Renderer::draw_ellipse(Size size, Position pos, Color color) {
   target->draw(ellipse);
 }
 
-void Renderer::remove_offset() {
-    global_offsets.pop();
-}
+void Renderer::remove_offset() { global_offsets.pop(); }

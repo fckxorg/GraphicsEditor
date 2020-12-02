@@ -176,9 +176,10 @@ class Slider : public RectWindow, public InterfaceDraggable {
 
 class Scrollbar : public RectWindow {
  private:
-     uint16_t viewport_size;
-     uint16_t step;
-     bool horizontal;
+  uint16_t viewport_size;
+  uint16_t step;
+  bool horizontal;
+
  public:
   Scrollbar(Size size, Position pos, Color color, uint16_t viewport_size,
             uint16_t scroll_block_size, uint16_t step, bool horizontal = false);
@@ -291,10 +292,11 @@ class Inputbox : public RectWindow, public InterfaceClickable {
  private:
   Text input_text;
   int cursor_pos;
-  std::string input_value;
   bool active;
 
  public:
+  std::string input_value;
+
   Inputbox(Size size, Position pos, Color color, uint16_t character_size,
            const char* font_path, Color text_color);
   virtual void handle_event(Event* event) override;
@@ -307,7 +309,8 @@ class FileList : public ScrollableWindow {
  private:
   std::filesystem::path cur_path;
 
-  void create_entry(Size size, Position pos, std::string name, const char* icon);
+  void create_entry(Size size, Position pos, std::string name,
+                    const char* icon);
 
  public:
   FileList(Size viewport_size, Size inner_container_size, Position pos,
@@ -362,6 +365,15 @@ class DirectoryEntry : public RectButton {
   virtual void render() override;
 
   friend class FileList;
+};
+
+class DialogEndSaveButton : public DialogEndButton {
+ private:
+  Inputbox* inputbox;
+
+ public:
+  DialogEndSaveButton(Size size, Position pos, Color color, Inputbox* inputbox);
+  virtual void on_mouse_release(MouseButtonEvent* event) override;
 };
 
 #endif

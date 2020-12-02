@@ -42,6 +42,11 @@ KeyPressedEvent::KeyPressedEvent(KEY key, bool shift, bool ctrl)
 FileListRebuildEvent::FileListRebuildEvent(std::string name)
     : Event(FILE_LIST_REBUILD), name(name) {}
 
-ContainerSizeChangedEvent::ContainerSizeChangedEvent(int16_t block_size) : Event(CONTAINER_SIZE_CHANGED), block_size(block_size) {}
+ContainerSizeChangedEvent::ContainerSizeChangedEvent(int16_t block_size)
+    : Event(CONTAINER_SIZE_CHANGED), block_size(block_size) {}
 
-ChangeInputboxValueEvent::ChangeInputboxValueEvent(std::string value) : Event(CHANGE_INPUTBOX_VALUE), value(value) {}
+ChangeInputboxValueEvent::ChangeInputboxValueEvent(std::string value)
+    : Event(CHANGE_INPUTBOX_VALUE), value(value) {}
+
+CanvasSaveEvent::CanvasSaveEvent(std::string filename)
+    : Event(CANVAS_SAVE), filename(filename) {}

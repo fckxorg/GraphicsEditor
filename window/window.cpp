@@ -474,11 +474,9 @@ void Canvas::handle_event(Event* event) {
       break;
     }
 
-    case BUTTON_PRESSED: {
-      auto button_event = dynamic_cast<ButtonPressEvent*>(event);
-      if (button_event->value == SAVE) {
-        save_to_file("sketch.png");  // TODO dialog window
-      }
+    case CANVAS_SAVE: {
+      auto save_event = dynamic_cast<CanvasSaveEvent*>(event);
+      save_to_file(save_event->filename.data());  // TODO dialog window
     }
   }
 }
@@ -773,6 +771,15 @@ void Inputbox::handle_event(Event* event) {
             active = false;
             break;
           }
+
+          case Slash: {
+            input_value.push_back('/');
+            break;
+          }
+          case Period: {
+            input_value.push_back('.');
+            break;
+          }
         }
       }
       break;
@@ -802,8 +809,7 @@ void Inputbox::render() {
   Renderer::draw_rectangle(size, pos, color);
   input_text.text = input_value.data();
 
-  Position text_pos =
-      Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y);
+  Position text_pos = Position(pos.x + INPUTBOX_TEXT_OFFSET, pos.y);
   Renderer::draw_text(input_text, text_pos);
 }
 
@@ -958,7 +964,6 @@ void DialogEndButton::on_mouse_release(MouseButtonEvent* event) {
 /*---------------------------------------*/
 /*             DirectoryEntry            */
 /*---------------------------------------*/
-
 DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color, Text text,
                                const std::string& name, const char* icon_path)
     : RectButton(size, pos, color),
@@ -982,4 +987,19 @@ void DirectoryEntry::render() {
   text.text = name.data();
   Renderer::draw_text(
       text, Position(pos.x + size.height + DIRECTORY_ENTRY_TEXT_OFFSET, pos.y));
+}
+
+/*---------------------------------------*/
+/*        DialogEndSaveButton            */
+/*---------------------------------------*/
+DialogEndSaveButton::DialogEndSaveButton(Size size, Position pos, Color color,
+                                         Inputbox* inputbox)
+    : DialogEndButton(size, pos, color), inputbox(inputbox) {}
+
+void DialogEndSaveButton::on_mouse_release(MouseButtonEvent* event) {
+  DialogEndButton::on_mouse_release(event);
+  if (!is_point_inside(event->pos)) return;
+  EventQueue::add_event(new CanvasSaveEvent(inputbox->input_value));
+  printf("Value in inputbox %s\n", inputbox->input_value.data());
+  fflush(stdout);
 }

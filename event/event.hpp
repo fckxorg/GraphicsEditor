@@ -23,7 +23,8 @@ enum SYSTEM_EVENT {
   DIALOG_END,
   FILE_LIST_REBUILD,
   CONTAINER_SIZE_CHANGED,
-  CHANGE_INPUTBOX_VALUE
+  CHANGE_INPUTBOX_VALUE,
+  CANVAS_SAVE
 };
 
 enum KEY {
@@ -54,6 +55,8 @@ enum KEY {
   X,
   Y,
   Z,
+  Period,
+  Slash,
   Backspace,
   Left,
   Right,
@@ -164,6 +167,12 @@ class ChangeInputboxValueEvent : public Event {
     public:
         std::string value;
         ChangeInputboxValueEvent(std::string value);
+};
+
+class CanvasSaveEvent : public Event {
+    public:
+        std::string filename;
+        CanvasSaveEvent(std::string filename);
 };
 
 #endif
