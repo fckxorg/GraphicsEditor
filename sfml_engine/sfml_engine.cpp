@@ -89,6 +89,7 @@ void Renderer::draw_rectangle(Size size, Position pos, Color color) {
   rect.setFillColor(color);
 
   auto target = get_target();
+  assert(target != nullptr);
   target->draw(rect);
 }
 

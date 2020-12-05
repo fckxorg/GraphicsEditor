@@ -31,6 +31,8 @@ CREATE(rect_button_sprite, Sprite,
        Position(225, 910));
 CREATE(ellipse_button_sprite, Sprite,
        Texture("icons/ellipse.png", EDITOR_BUTTON_SIZE), Position(225, 980));
+CREATE(open_button_sprite, Sprite,
+       Texture("icons/open_file.png", EDITOR_BUTTON_SIZE), Position(1585, 15));
 
 CREATE(pencil_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE,
        Position(10, 905), OUTLINE_COLOR);
@@ -54,6 +56,8 @@ CREATE(rect_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE,
        Position(220, 905), OUTLINE_COLOR);
 CREATE(ellipse_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE,
        Position(220, 975), OUTLINE_COLOR);
+CREATE(open_button_outline, RectWindow, EDITOR_BUTTON_OUTLINE_SIZE,
+       Position(1580, 10), OUTLINE_COLOR);
 
 CREATE(pencil_button, RectButton, EDITOR_BUTTON_SIZE, Position(15, 910),
        EDITOR_BUTTON_COLOR, PENCIL);
@@ -73,6 +77,8 @@ CREATE(rect_button, RectButton, EDITOR_BUTTON_SIZE, Position(225, 910),
        EDITOR_BUTTON_COLOR, RECT_INSTRUMENT);
 CREATE(ellipse_button, RectButton, EDITOR_BUTTON_SIZE, Position(225, 980),
        EDITOR_BUTTON_COLOR, ELLIPSE_INSTRUMENT);
+CREATE(open_button, FileDialogButton, EDITOR_BUTTON_SIZE, Position(1585, 15),
+       EDITOR_BUTTON_COLOR, CanvasFileEvent::CanvasAction::OPEN);
 
 CREATE(hue_selector, HUEselector, Size(360, 30), Position(1545, 1015));
 CREATE(sv_selector, SVselector, Size(360, 360), Position(1545, 635));
@@ -134,6 +140,7 @@ ADOPT(spray_button, spray_button_sprite);
 ADOPT(clear_button, clear_button_sprite);
 ADOPT(rect_button, rect_button_sprite);
 ADOPT(ellipse_button, ellipse_button_sprite);
+ADOPT(open_button, open_button_sprite);
 
 ADOPT(sv_selector, sv_fader);
 
@@ -149,6 +156,7 @@ ADOPT(spray_button_outline, spray_button);
 ADOPT(clear_button_outline, clear_button);
 ADOPT(rect_button_outline, rect_button);
 ADOPT(ellipse_button_outline, ellipse_button);
+ADOPT(open_button_outline, open_button);
 
 ADOPT(thickness_slider_base, thickness_slider);
 
@@ -165,4 +173,5 @@ ADOPT(window, canvas);
 ADOPT(window, rect_button_outline);
 ADOPT(window, ellipse_button_outline);
 ADOPT(window, save_button_outline);
+ADOPT(window, open_button_outline);
 ADOPT(root_window, window);
