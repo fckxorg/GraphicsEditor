@@ -828,11 +828,11 @@ FileList::FileList(Size viewport_size, Size inner_container_size, Position pos,
 }
 
 void FileList::create_entry(Size size, Position pos, std::string name,
-                            const char* icon) {
+                            const char* icon, int type) {
   CREATE(entry_window, DirectoryEntry, size, pos, Color(255, 255, 255),
          Text("smth", 25, "fonts/Roboto-Thin.ttf", Color(0, 0, 0),
               Color(255, 255, 255)),
-         name, icon);
+         name, icon, type);
 
   SUBSCRIBE(this, entry_window.get());
 
@@ -844,20 +844,20 @@ void FileList::build_entries_list() {
 
   int16_t cur_offset = 0;
   create_entry(Size(size.width, 30), Position(0, cur_offset), "..",
-               "icons/folder.png");
+               "icons/folder.png", DirectoryEntry::FOLDER);
   cur_offset += 30;
 
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (entry.is_directory()) {
       create_entry(Size(size.width, 30), Position(0, cur_offset),
-                   entry.path().filename(), "icons/folder.png");
+                   entry.path().filename(), "icons/folder.png", DirectoryEntry::FOLDER);
       cur_offset += 30;
     }
   }
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (!entry.is_directory()) {
       create_entry(Size(size.width, 30), Position(0, cur_offset),
-                   entry.path().filename(), "icons/file.png");
+                   entry.path().filename(), "icons/file.png", DirectoryEntry::REGFILE);
       cur_offset += 30;
     }
   }
@@ -985,11 +985,13 @@ void DialogEndButton::on_mouse_release(MouseButtonEvent* event) {
 /*             DirectoryEntry            */
 /*---------------------------------------*/
 DirectoryEntry::DirectoryEntry(Size size, Position pos, Color color, Text text,
-                               const std::string& name, const char* icon_path)
+                               const std::string& name, const char* icon_path,
+                               int type)
     : RectButton(size, pos, color),
       name(name),
       icon_path(icon_path),
-      text(text) {}
+      text(text),
+      type(type) {}
 
 void DirectoryEntry::on_mouse_release(MouseButtonEvent* event) {
   assert(event != nullptr);

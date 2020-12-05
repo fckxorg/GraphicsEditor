@@ -310,7 +310,7 @@ class FileList : public ScrollableWindow {
   std::filesystem::path cur_path;
 
   void create_entry(Size size, Position pos, std::string name,
-                    const char* icon);
+                    const char* icon, int type);
 
  public:
   FileList(Size viewport_size, Size inner_container_size, Position pos,
@@ -345,7 +345,8 @@ class FileDialogButton : public RectButton {
   CanvasFileEvent::CanvasAction action;
 
  public:
-  FileDialogButton(Size size, Position pos, Color color, CanvasFileEvent::CanvasAction action);
+  FileDialogButton(Size size, Position pos, Color color,
+                   CanvasFileEvent::CanvasAction action);
   virtual void on_mouse_release(MouseButtonEvent* event) override;
   virtual void handle_event(Event* event) override;
 };
@@ -363,8 +364,11 @@ class DirectoryEntry : public RectButton {
   const char* icon_path;
 
  public:
+  enum Type { REGFILE, FOLDER };
+  const int type;
+
   DirectoryEntry(Size size, Position pos, Color color, Text text,
-                 const std::string& name, const char* icon_path);
+                 const std::string& name, const char* icon_path, int type);
   virtual void on_mouse_release(MouseButtonEvent* event) override;
   virtual void render() override;
 
