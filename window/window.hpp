@@ -336,12 +336,16 @@ class DialogWindow : public RectWindow {
 class FileDialogWindow : public DialogWindow {
  public:
   FileDialogWindow(Size size, Position pos, Color color, Color outline_color,
-                   int16_t outline_thickness, Window* creator, CanvasFileEvent::CanvasAction action);
+                   int16_t outline_thickness, Window* creator,
+                   CanvasFileEvent::CanvasAction action);
 };
 
-class SaveButton : public RectButton {
+class FileDialogButton : public RectButton {
+ private:
+  CanvasFileEvent::CanvasAction action;
+
  public:
-  SaveButton(Size size, Position pos, Color color);
+  FileDialogButton(Size size, Position pos, Color color, CanvasFileEvent::CanvasAction action);
   virtual void on_mouse_release(MouseButtonEvent* event) override;
   virtual void handle_event(Event* event) override;
 };

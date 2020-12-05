@@ -945,25 +945,26 @@ FileDialogWindow::FileDialogWindow(Size size, Position pos, Color color,
 };
 
 /*---------------------------------------*/
-/*              SaveButton               */
+/*              FileDialogButton         */
 /*---------------------------------------*/
 
-SaveButton::SaveButton(Size size, Position pos, Color color)
-    : RectButton(size, pos, color) {}
+FileDialogButton::FileDialogButton(Size size, Position pos, Color color,
+                                   CanvasFileEvent::CanvasAction action)
+    : RectButton(size, pos, color), action(action) {}
 
-void SaveButton::handle_event(Event* event) {
+void FileDialogButton::handle_event(Event* event) {
   RectButton::handle_event(event);
   if (event->get_type() == DIALOG_END) {
     subwindows.pop_back();
   }
 }
 
-void SaveButton::on_mouse_release(MouseButtonEvent* event) {
+void FileDialogButton::on_mouse_release(MouseButtonEvent* event) {
   RectButton::on_mouse_release(event);
 
   if (!is_point_inside(event->pos)) return;
   CREATE(dialog_window, FileDialogWindow, Size(800, 600), Position(560, 240),
-         Color(212, 212, 212), Color(80, 90, 91), 5, this, CanvasFileEvent::CanvasAction::SAVE);
+         Color(212, 212, 212), Color(80, 90, 91), 5, this, action);
   ADOPT(this, dialog_window);
 }
 

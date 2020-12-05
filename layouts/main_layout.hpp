@@ -59,8 +59,8 @@ CREATE(pencil_button, RectButton, EDITOR_BUTTON_SIZE, Position(15, 910),
        EDITOR_BUTTON_COLOR, PENCIL);
 CREATE(eraser_button, RectButton, EDITOR_BUTTON_SIZE, Position(15, 980),
        EDITOR_BUTTON_COLOR, ERASER);
-CREATE(save_button, SaveButton, EDITOR_BUTTON_SIZE, Position(1515, 15),
-       EDITOR_BUTTON_COLOR);
+CREATE(save_button, FileDialogButton, EDITOR_BUTTON_SIZE, Position(1515, 15),
+       EDITOR_BUTTON_COLOR, CanvasFileEvent::CanvasAction::SAVE);
 CREATE(brush_button, RectButton, EDITOR_BUTTON_SIZE, Position(85, 910),
        EDITOR_BUTTON_COLOR, BRUSH);
 CREATE(dropper_button, RectButton, EDITOR_BUTTON_SIZE, Position(85, 980),
