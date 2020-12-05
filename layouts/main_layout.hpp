@@ -110,6 +110,7 @@ SUBS(root_window, spray_button);
 SUBS(root_window, clear_button);
 SUBS(root_window, rect_button);
 SUBS(root_window, ellipse_button);
+SUBS(root_window, open_button);
 
 SUBS(hue_selector, sv_fader);
 SUBS(hue_selector, sv_selector);
@@ -122,6 +123,7 @@ SUBS(sv_fader, sv_selector);
 SUBS(pencil_button, toolbar_listener);
 SUBS(eraser_button, toolbar_listener);
 SUBS(save_button, canvas);
+SUBS(open_button, canvas);
 SUBS(brush_button, toolbar_listener);
 SUBS(dropper_button, toolbar_listener);
 SUBS(spray_button, toolbar_listener);
