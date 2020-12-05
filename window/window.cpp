@@ -824,6 +824,7 @@ FileList::FileList(Size viewport_size, Size inner_container_size, Position pos,
                    Color bg_color)
     : ScrollableWindow(viewport_size, inner_container_size, pos, bg_color) {
   cur_path = std::filesystem::current_path();
+  cur_path /= "";
   build_entries_list();
 }
 
@@ -850,14 +851,16 @@ void FileList::build_entries_list() {
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (entry.is_directory()) {
       create_entry(Size(size.width, 30), Position(0, cur_offset),
-                   entry.path().filename(), "icons/folder.png", DirectoryEntry::FOLDER);
+                   entry.path().filename(), "icons/folder.png",
+                   DirectoryEntry::FOLDER);
       cur_offset += 30;
     }
   }
   for (const auto& entry : std::filesystem::directory_iterator(cur_path)) {
     if (!entry.is_directory()) {
       create_entry(Size(size.width, 30), Position(0, cur_offset),
-                   entry.path().filename(), "icons/file.png", DirectoryEntry::REGFILE);
+                   entry.path().filename(), "icons/file.png",
+                   DirectoryEntry::REGFILE);
       cur_offset += 30;
     }
   }
@@ -876,6 +879,13 @@ void FileList::handle_event(Event* event) {
     build_entries_list();
 
     SEND(this, new ContainerSizeChangedEvent(inner_container_size.height));
+    SEND(this, new ChangeInputboxValueEvent(cur_path.string()));
+  }
+
+  if (event->get_type() == FILE_CHOOSEN) {
+    auto file_choice_event = dynamic_cast<FileChoiceEvent*>(event);
+    cur_path.remove_filename();
+    cur_path /= file_choice_event->filename;
     SEND(this, new ChangeInputboxValueEvent(cur_path.string()));
   }
 }
@@ -999,7 +1009,11 @@ void DirectoryEntry::on_mouse_release(MouseButtonEvent* event) {
   this->color = default_color;
   if (!is_point_inside(event->pos)) return;
 
-  EventQueue::add_event(new FileListRebuildEvent(name));
+  if (type == FOLDER) {
+    EventQueue::add_event(new FileListRebuildEvent(name));
+  } else {
+    EventQueue::add_event(new FileChoiceEvent(name));
+  }
 }
 
 void DirectoryEntry::render() {

@@ -24,7 +24,8 @@ enum SYSTEM_EVENT {
   FILE_LIST_REBUILD,
   CONTAINER_SIZE_CHANGED,
   CHANGE_INPUTBOX_VALUE,
-  CANVAS_ACTION
+  CANVAS_ACTION,
+  FILE_CHOOSEN
 };
 
 enum KEY {
@@ -177,6 +178,13 @@ class CanvasFileEvent : public Event {
   std::string filename;
 
   CanvasFileEvent(std::string filename, CanvasAction type);
+};
+
+class FileChoiceEvent : public Event {
+ public:
+  std::string filename;
+
+  FileChoiceEvent(std::string filename);
 };
 
 #endif

@@ -50,3 +50,6 @@ ChangeInputboxValueEvent::ChangeInputboxValueEvent(std::string value)
 
 CanvasFileEvent::CanvasFileEvent(std::string filename, CanvasAction type)
     : Event(CANVAS_ACTION), filename(filename), type(type) {}
+
+FileChoiceEvent::FileChoiceEvent(std::string filename)
+    : filename(filename), Event(FILE_CHOOSEN) {}
