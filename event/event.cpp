@@ -48,5 +48,5 @@ ContainerSizeChangedEvent::ContainerSizeChangedEvent(int16_t block_size)
 ChangeInputboxValueEvent::ChangeInputboxValueEvent(std::string value)
     : Event(CHANGE_INPUTBOX_VALUE), value(value) {}
 
-CanvasSaveEvent::CanvasSaveEvent(std::string filename)
-    : Event(CANVAS_SAVE), filename(filename) {}
+CanvasFileEvent::CanvasFileEvent(std::string filename, CanvasAction type)
+    : Event(CANVAS_ACTION), filename(filename), type(type) {}

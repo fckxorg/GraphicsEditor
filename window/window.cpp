@@ -474,9 +474,14 @@ void Canvas::handle_event(Event* event) {
       break;
     }
 
-    case CANVAS_SAVE: {
-      auto save_event = dynamic_cast<CanvasSaveEvent*>(event);
-      save_to_file(save_event->filename.data());  // TODO dialog window
+    case CANVAS_ACTION: {
+      auto action_event = dynamic_cast<CanvasFileEvent*>(event);
+      if (action_event->type == CanvasFileEvent::CanvasAction::SAVE) {
+        save_to_file(action_event->filename.data());  // TODO dialog window
+      }
+      else {
+        load_from_file(action_event->filename.data());
+      }
     }
   }
 }
@@ -999,7 +1004,8 @@ DialogEndSaveButton::DialogEndSaveButton(Size size, Position pos, Color color,
 void DialogEndSaveButton::on_mouse_release(MouseButtonEvent* event) {
   DialogEndButton::on_mouse_release(event);
   if (!is_point_inside(event->pos)) return;
-  EventQueue::add_event(new CanvasSaveEvent(inputbox->input_value));
+  EventQueue::add_event(new CanvasFileEvent(
+      inputbox->input_value, CanvasFileEvent::CanvasAction::SAVE));
   printf("Value in inputbox %s\n", inputbox->input_value.data());
   fflush(stdout);
 }

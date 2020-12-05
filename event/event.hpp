@@ -24,7 +24,7 @@ enum SYSTEM_EVENT {
   FILE_LIST_REBUILD,
   CONTAINER_SIZE_CHANGED,
   CHANGE_INPUTBOX_VALUE,
-  CANVAS_SAVE
+  CANVAS_ACTION
 };
 
 enum KEY {
@@ -158,21 +158,25 @@ class FileListRebuildEvent : public Event {
 };
 
 class ContainerSizeChangedEvent : public Event {
-    public:
-        int16_t block_size;
-        ContainerSizeChangedEvent(int16_t block_size);
+ public:
+  int16_t block_size;
+  ContainerSizeChangedEvent(int16_t block_size);
 };
 
 class ChangeInputboxValueEvent : public Event {
-    public:
-        std::string value;
-        ChangeInputboxValueEvent(std::string value);
+ public:
+  std::string value;
+  ChangeInputboxValueEvent(std::string value);
 };
 
-class CanvasSaveEvent : public Event {
-    public:
-        std::string filename;
-        CanvasSaveEvent(std::string filename);
+class CanvasFileEvent : public Event {
+ public:
+  enum CanvasAction { SAVE, OPEN };
+
+  CanvasAction type;
+  std::string filename;
+
+  CanvasFileEvent(std::string filename, CanvasAction type);
 };
 
 #endif
