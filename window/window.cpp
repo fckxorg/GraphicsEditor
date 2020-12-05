@@ -478,8 +478,7 @@ void Canvas::handle_event(Event* event) {
       auto action_event = dynamic_cast<CanvasFileEvent*>(event);
       if (action_event->type == CanvasFileEvent::CanvasAction::SAVE) {
         save_to_file(action_event->filename.data());  // TODO dialog window
-      }
-      else {
+      } else {
         load_from_file(action_event->filename.data());
       }
     }
@@ -911,9 +910,10 @@ void DialogWindow::render() {
 /*          DialogSaveWindow             */
 /*---------------------------------------*/
 
-DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
+FileDialogWindow::FileDialogWindow(Size size, Position pos, Color color,
                                    Color outline_color,
-                                   int16_t outline_thickness, Window* creator)
+                                   int16_t outline_thickness, Window* creator,
+                                   CanvasFileEvent::CanvasAction action)
     : DialogWindow(size, pos, color, outline_color, outline_thickness,
                    creator) {
   Size inputbox_size = Size(610, 30);
@@ -924,7 +924,21 @@ DialogSaveWindow::DialogSaveWindow(Size size, Position pos, Color color,
   Position inputbox_outline_pos =
       Position(inputbox_pos.x - 5, inputbox_pos.y - 5);
 
-#include "../layouts/file_dialog_window.hpp"
+#include "../layouts/file_dialog.hpp"
+
+  if (action == CanvasFileEvent::CanvasAction::OPEN) {
+    dynamic_cast<FileDialogEndButton*>(dialog_end_button.get())->action =
+        action;
+  }
+
+  ADOPT(file_inputbox_outline, file_inputbox);
+  ADOPT(dialog_end_button_outline, dialog_end_button);
+  ADOPT(file_list_outline, file_list);
+  ADOPT(scrollbar_outline, scrollbar);
+  ADOPT(this, file_inputbox_outline);
+  ADOPT(this, dialog_end_button_outline);
+  ADOPT(this, file_list_outline);
+  ADOPT(this, scrollbar_outline);
 
   auto directory_path = std::filesystem::current_path();
   EventQueue::add_event(new ChangeInputboxValueEvent(directory_path.string()));
@@ -948,8 +962,8 @@ void SaveButton::on_mouse_release(MouseButtonEvent* event) {
   RectButton::on_mouse_release(event);
 
   if (!is_point_inside(event->pos)) return;
-  CREATE(dialog_window, DialogSaveWindow, Size(800, 600), Position(560, 240),
-         Color(212, 212, 212), Color(80, 90, 91), 5, this);
+  CREATE(dialog_window, FileDialogWindow, Size(800, 600), Position(560, 240),
+         Color(212, 212, 212), Color(80, 90, 91), 5, this, CanvasFileEvent::CanvasAction::SAVE);
   ADOPT(this, dialog_window);
 }
 
@@ -995,17 +1009,17 @@ void DirectoryEntry::render() {
 }
 
 /*---------------------------------------*/
-/*        DialogEndSaveButton            */
+/*        FileDialogEndButton            */
 /*---------------------------------------*/
-DialogEndSaveButton::DialogEndSaveButton(Size size, Position pos, Color color,
-                                         Inputbox* inputbox)
-    : DialogEndButton(size, pos, color), inputbox(inputbox) {}
+FileDialogEndButton::FileDialogEndButton(Size size, Position pos, Color color,
+                                         Inputbox* inputbox,
+                                         CanvasFileEvent::CanvasAction action)
+    : DialogEndButton(size, pos, color), inputbox(inputbox), action(action) {}
 
-void DialogEndSaveButton::on_mouse_release(MouseButtonEvent* event) {
+void FileDialogEndButton::on_mouse_release(MouseButtonEvent* event) {
   DialogEndButton::on_mouse_release(event);
   if (!is_point_inside(event->pos)) return;
-  EventQueue::add_event(new CanvasFileEvent(
-      inputbox->input_value, CanvasFileEvent::CanvasAction::SAVE));
+  EventQueue::add_event(new CanvasFileEvent(inputbox->input_value, action));
   printf("Value in inputbox %s\n", inputbox->input_value.data());
   fflush(stdout);
 }

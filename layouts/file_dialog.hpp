@@ -4,9 +4,9 @@ CREATE(file_inputbox, Inputbox, inputbox_size, inputbox_pos,
        Color(255, 255, 255), 20, "fonts/Roboto-Thin.ttf", Color(0, 0, 0));
 CREATE(file_inputbox_outline, RectWindow, inputbox_outline_size,
        inputbox_outline_pos, Color(80, 90, 91));
-CREATE(dialog_end_button, DialogEndSaveButton, Size(100, 30),
+CREATE(dialog_end_button, FileDialogEndButton, Size(100, 30),
        Position(pos.x + 665, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y + 5),
-       Color(236, 236, 236), dynamic_cast<Inputbox*>(file_inputbox.get()));
+       Color(236, 236, 236), dynamic_cast<Inputbox*>(file_inputbox.get()), CanvasFileEvent::CanvasAction::SAVE);
 CREATE(dialog_end_button_outline, RectWindow, Size(110, 40),
        Position(pos.x + 660, pos.y + INPUTBOX_SAVE_DIALOG_OFFSET_Y),
        Color(80, 90, 91));
@@ -31,12 +31,4 @@ SUBSCRIBE(scrollbar.get(), file_list.get());
 SUBSCRIBE(file_list.get(), scrollbar.get());
 SUBSCRIBE(file_list.get(), file_inputbox.get());
 
-ADOPT(file_inputbox_outline, file_inputbox);
-ADOPT(dialog_end_button_outline, dialog_end_button);
-ADOPT(file_list_outline, file_list);
-ADOPT(scrollbar_outline, scrollbar);
-ADOPT(this, file_inputbox_outline);
-ADOPT(this, dialog_end_button_outline);
-ADOPT(this, file_list_outline);
-ADOPT(this, scrollbar_outline);
 

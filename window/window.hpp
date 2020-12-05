@@ -333,10 +333,10 @@ class DialogWindow : public RectWindow {
   virtual ~DialogWindow();
 };
 
-class DialogSaveWindow : public DialogWindow {
+class FileDialogWindow : public DialogWindow {
  public:
-  DialogSaveWindow(Size size, Position pos, Color color, Color outline_color,
-                   int16_t outline_thickness, Window* creator);
+  FileDialogWindow(Size size, Position pos, Color color, Color outline_color,
+                   int16_t outline_thickness, Window* creator, CanvasFileEvent::CanvasAction action);
 };
 
 class SaveButton : public RectButton {
@@ -367,12 +367,15 @@ class DirectoryEntry : public RectButton {
   friend class FileList;
 };
 
-class DialogEndSaveButton : public DialogEndButton {
+class FileDialogEndButton : public DialogEndButton {
  private:
   Inputbox* inputbox;
 
  public:
-  DialogEndSaveButton(Size size, Position pos, Color color, Inputbox* inputbox);
+  CanvasFileEvent::CanvasAction action;
+
+  FileDialogEndButton(Size size, Position pos, Color color, Inputbox* inputbox,
+                      CanvasFileEvent::CanvasAction action);
   virtual void on_mouse_release(MouseButtonEvent* event) override;
 };
 
