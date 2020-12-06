@@ -387,4 +387,15 @@ class FileDialogEndButton : public DialogEndButton {
   virtual void on_mouse_release(MouseButtonEvent* event) override;
 };
 
+class PluginToolbar : public Window {
+    private:
+        Position pos;
+        void create_plugin_buttons();
+    public:
+        PluginToolbar(Position pos);
+
+        virtual void render() override;
+        virtual void handle_event(Event* event) override;
+};
+
 #endif

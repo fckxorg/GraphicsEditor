@@ -12,6 +12,7 @@
 #include "../sfml_engine/sfml_engine.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
+#include "../event_queue/event_queue.hpp"
 
 class ToolbarListener : public Window {
  public:
@@ -107,7 +108,6 @@ class InstrumentManager {
   static bool application_started;
   static Position last_point;
   static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
-  static std::vector<PluginInfo> plugins_info;
   static int current_instrument;
 
   static uint8_t thickness;
@@ -116,6 +116,8 @@ class InstrumentManager {
   static void get_plugins();
 
  public:
+  static std::vector<PluginInfo> plugins_info;
+
   static void init();
 
   static void start_applying(Position pos);

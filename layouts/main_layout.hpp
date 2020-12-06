@@ -94,6 +94,7 @@ CREATE(sv_fader, SVFader, Size(8, 8), Position(1896, 986), Color(0, 0, 0),
        Position(1545, 635), Position(1896, 986));
 
 CREATE(canvas, Canvas, Size(1500, 890), Position(0, 0), Color(255, 255, 255));
+CREATE(plugin_toolbar, PluginToolbar, Position(290, 905));
 
 /* SUBSCRIPTIONS */
 
@@ -111,6 +112,7 @@ SUBS(root_window, clear_button);
 SUBS(root_window, rect_button);
 SUBS(root_window, ellipse_button);
 SUBS(root_window, open_button);
+SUBS(root_window, plugin_toolbar);
 
 SUBS(hue_selector, sv_fader);
 SUBS(hue_selector, sv_selector);
@@ -176,4 +178,5 @@ ADOPT(window, rect_button_outline);
 ADOPT(window, ellipse_button_outline);
 ADOPT(window, save_button_outline);
 ADOPT(window, open_button_outline);
+ADOPT(window, plugin_toolbar);
 ADOPT(root_window, window);

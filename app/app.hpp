@@ -18,6 +18,7 @@
 #include "../event_queue/event_queue.hpp"
 #include "../window_base/window_base.hpp"
 #include "../subscription_manager/subscription_manager.hpp"
+#include "../instruments_manager/instruments_manager.hpp"
 
 class App {
  private:

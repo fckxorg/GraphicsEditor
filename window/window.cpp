@@ -1040,3 +1040,44 @@ void FileDialogEndButton::on_mouse_release(MouseButtonEvent* event) {
   printf("Value in inputbox %s\n", inputbox->input_value.data());
   fflush(stdout);
 }
+
+
+/*---------------------------------------*/
+/*              PluginToolbar            */
+/*---------------------------------------*/
+
+PluginToolbar::PluginToolbar(Position pos) : pos(pos) {}
+
+void PluginToolbar::render() {
+    for(auto& subwindow : subwindows) {
+        subwindow->render();
+    }
+}
+
+void PluginToolbar::create_plugin_buttons() {
+    Position cur_pos = pos;
+
+    for(auto& plugin : InstrumentManager::plugins_info) {
+       Position button_pos = Position(cur_pos.x + 5, cur_pos.y + 5);
+        
+
+       CREATE(outline, RectWindow, Size(60, 60), cur_pos, Color(80, 90, 91));
+       CREATE(button, RectButton, Size(50, 50), button_pos, Color(236, 236, 236));
+       CREATE(button_sprite, Sprite, Texture(plugin.icon_path.data(), Size(50, 50)), button_pos); 
+       
+       SUBSCRIBE(SubscriptionManager::get_system_event_sender(), button.get());
+
+       ADOPT(button, button_sprite);
+       ADOPT(outline, button);
+       ADOPT(this, outline);
+
+       cur_pos.x += 70;
+    } 
+}
+
+void PluginToolbar::handle_event(Event *event) {
+    if(event->get_type() == LOAD_PLUGINS) {
+        create_plugin_buttons();
+    }
+}
+

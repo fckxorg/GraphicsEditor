@@ -267,6 +267,7 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Ellipse()));
 
   get_plugins();
+  EventQueue::add_event(new Event(LOAD_PLUGINS));
 }
 
 void InstrumentManager::start_applying(Position pos) {
