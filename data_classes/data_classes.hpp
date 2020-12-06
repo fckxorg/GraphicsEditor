@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <vector>
+#include <string>
 
 #ifdef SFML_ENGINE
 #include <SFML/Graphics.hpp>
@@ -105,6 +106,11 @@ struct Texture {
 
   Texture();
   Texture(const char* path, Size size);
+};
+
+struct PluginInfo {
+  std::string icon_path;
+  std::string lib_path;
 };
 
 #endif

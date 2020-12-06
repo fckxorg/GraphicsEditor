@@ -5,6 +5,7 @@
 #include <memory>
 #include <random>
 #include <vector>
+#include <filesystem>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
@@ -106,10 +107,13 @@ class InstrumentManager {
   static bool application_started;
   static Position last_point;
   static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
+  static std::vector<PluginInfo> plugins_info;
   static int current_instrument;
 
   static uint8_t thickness;
   static Color color;
+
+  static void get_plugins();
 
  public:
   static void init();

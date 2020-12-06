@@ -1,6 +1,9 @@
 #ifndef APP_HPP
 #define APP_HPP
 #include <memory>
+#include <vector>
+#include <utility>
+#include <string>
 
 #ifdef NCURSES_ENGINE
 #include "../ncurses_engine/ncurses_engine.hpp"

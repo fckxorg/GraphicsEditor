@@ -1,9 +1,5 @@
 #include "instruments_manager.hpp"
 
-#include <bits/stdint-intn.h>
-
-#include <random>
-
 const int MAX_THICKNESS = 40;
 const int SPRAY_DENSITY = 20;
 
@@ -247,6 +243,7 @@ bool InstrumentManager::application_started = false;
 Position InstrumentManager::last_point = Position(-1, -1);
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
     COUNT);
+std::vector<PluginInfo> InstrumentManager::plugins_info;
 int InstrumentManager::current_instrument = PENCIL;
 uint8_t InstrumentManager::thickness = 1;
 Color InstrumentManager::color = Color(0, 0, 0);
@@ -268,6 +265,8 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Rect()));
   instruments[ELLIPSE_INSTRUMENT] =
       std::move(std::unique_ptr<AbstractInstrument>(new Ellipse()));
+
+  get_plugins();
 }
 
 void InstrumentManager::start_applying(Position pos) {
@@ -321,5 +320,34 @@ Color InstrumentManager::get_color() { return InstrumentManager::color; }
 
 void InstrumentManager::set_thickness(uint8_t thickness) {
   InstrumentManager::thickness = thickness;
+}
+
+void InstrumentManager::get_plugins() {
+  auto plugins_path = std::filesystem::current_path();
+  plugins_path /= "plugins";
+
+  for (auto& plugin_entry : std::filesystem::directory_iterator(plugins_path)) {
+    if (plugin_entry.is_directory()) {
+      PluginInfo current_plugin_info;
+
+      for (auto& plugin_asset :
+           std::filesystem::directory_iterator(plugin_entry)) {
+        auto filename = plugin_asset.path().filename();
+
+        if (filename.string().starts_with("icon")) {
+          current_plugin_info.icon_path = plugin_asset.path().string();
+        } else if (filename.string().ends_with(".so")) {
+          current_plugin_info.lib_path = plugin_asset.path().string();
+        }
+      }
+
+      plugins_info.push_back(current_plugin_info);
+    }
+  }
+
+  for (auto& info_entry : plugins_info) {
+    printf("Found plugin %s %s\n", info_entry.icon_path.data(),
+           info_entry.lib_path.data());
+  }
 }
 
