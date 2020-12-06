@@ -265,6 +265,26 @@ void Renderer::draw_sprite(Texture texture, Position pos) {
 
   sf::Sprite sfml_sprite(textures[texture.path]);
   sfml_sprite.setPosition((pos += get_offset()));
+
+  float x_scale_factor = 0;
+  float y_scale_factor = 0;
+
+  auto real_size = textures[texture.path].getSize();
+
+  if (real_size.x > texture.size.width) {
+    x_scale_factor = static_cast<float>(texture.size.width) / real_size.x;
+  } else {
+    x_scale_factor = static_cast<float>(real_size.x) / texture.size.width;
+  }
+
+  if (real_size.y > texture.size.height) {
+    y_scale_factor = static_cast<float>(texture.size.height) / real_size.y;
+  } else {
+    y_scale_factor = static_cast<float>(real_size.y) / texture.size.height;
+  }
+
+  sfml_sprite.setScale(x_scale_factor, y_scale_factor);
+
   auto target = get_target();
   target->draw(sfml_sprite);
 }
