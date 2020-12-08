@@ -41,6 +41,8 @@ struct Color {
   Color operator+(int delta);
   Color operator-(int delta);
 
+  operator int32_t();
+
 #ifdef SFML_ENGINE
   explicit Color(const sf::Color& sfcolor);
 
@@ -95,7 +97,7 @@ class Image {
   Image(Size size, Color color);
   void setPixel(int x, int y, Color color);
   Color getPixel(int x, int y);
-  const uint8_t* get_pixel_array();
+  uint8_t* get_pixel_array();
 
   Size get_size();
 };

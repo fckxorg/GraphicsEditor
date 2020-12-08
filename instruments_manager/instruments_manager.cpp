@@ -1,4 +1,5 @@
 #include "instruments_manager.hpp"
+
 #include <dlfcn.h>
 
 const int MAX_THICKNESS = 40;
@@ -7,6 +8,7 @@ const int SPRAY_DENSITY = 20;
 void ToolbarListener::handle_event(Event* event) {
   if (event->get_type() == BUTTON_PRESSED) {
     auto button_event = dynamic_cast<ButtonPressEvent*>(event);
+    InstrumentManager::disable_plugin();
     InstrumentManager::set_instrument(button_event->value);
   }
 
@@ -244,13 +246,16 @@ std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
     COUNT);
 std::vector<void*> InstrumentManager::handles;
 std::vector<PluginAPI::Plugin*> InstrumentManager::plugins;
+std::vector<PluginInfo> InstrumentManager::plugins_info;
 
 bool InstrumentManager::application_started = false;
-Position InstrumentManager::last_point = Position(-1, -1);
-std::vector<PluginInfo> InstrumentManager::plugins_info;
+bool InstrumentManager::plugin_active = false;
+
 int InstrumentManager::current_instrument = PENCIL;
 uint8_t InstrumentManager::thickness = 1;
+
 Color InstrumentManager::color = Color(0, 0, 0);
+Position InstrumentManager::last_point = Position(-1, -1);
 
 void InstrumentManager::init() {
   instruments[ERASER] =
@@ -276,24 +281,48 @@ void InstrumentManager::init() {
 }
 
 void InstrumentManager::deinit() {
-    for(auto& plugin : plugins) {
-        plugin->deinit();
-    }
+  for (auto& plugin : plugins) {
+    plugin->deinit();
+  }
 
-    for(auto& handle : handles) {
-        dlclose(handle);
-    }
+  for (auto& handle : handles) {
+    dlclose(handle);
+  }
 }
 
-void InstrumentManager::start_applying(Position pos) {
+void InstrumentManager::start_applying(Image& canvas, Position pos) {
   application_started = true;
   last_point.x = pos.x + 1;
   last_point.y = pos.y;
 
-  instruments[current_instrument]->init(pos);
+  if (!plugin_active) {
+    instruments[current_instrument]->init(pos);
+    return;
+  }
+
+  PluginAPI::Canvas plugin_adapter_canvas = {};
+  PluginAPI::Position plugin_adapter_pos = {};
+
+  plugin_adapter_canvas.pixels = canvas.get_pixel_array();
+  plugin_adapter_canvas.width = canvas.get_size().width;
+  plugin_adapter_canvas.height = canvas.get_size().height;
+
+  plugin_adapter_pos.x = pos.x;
+  plugin_adapter_pos.y = pos.y;
+
+  for (auto& property : plugins[current_instrument]->properties) {
+    switch (property.first) {
+      case PluginAPI::Property::TYPE::PRIMARY_COLOR: {
+        property.second.int_value = color;
+      }
+    }
+  }
+
+  plugins[current_instrument]->start_apply(plugin_adapter_canvas,
+                                           plugin_adapter_pos);
 }
 
-void InstrumentManager::stop_applying(Image& canvas) {
+void InstrumentManager::stop_applying(Image& canvas, Position pos) {
   application_started = false;
   instruments[current_instrument]->deinit(canvas, color);
 }
@@ -382,5 +411,7 @@ void InstrumentManager::load_plugins() {
   }
 }
 
+void InstrumentManager::enable_plugin() { plugin_active = true; }
 
+void InstrumentManager::disable_plugin() { plugin_active = false; }
 

@@ -36,6 +36,18 @@ Color Color::operator-(int delta) {
   return *this + delta;
 }
 
+Color::operator int32_t() {
+  int32_t result = 0;
+  uint8_t* components = reinterpret_cast<uint8_t*>(&result);
+
+  components[0] = r;
+  components[1] = g;
+  components[2] = b;
+  components[3] = a;
+
+  return result;
+}
+
 #ifdef SFML_ENGINE
 Color::operator sf::Color() const { return sf::Color(r, g, b, a); }
 #endif
@@ -52,10 +64,10 @@ Position::Position(const sf::Vector2f& sfpos)
 Position::operator sf::Vector2f() const { return sf::Vector2f(x, y); }
 #endif
 
-Position& Position::operator+=(const Position &other) {
-    this->x += other.x;
-    this->y += other.y;
-    return *this;
+Position& Position::operator+=(const Position& other) {
+  this->x += other.x;
+  this->y += other.y;
+  return *this;
 }
 
 /*--------------- TEXT -------------------------------------*/
@@ -101,7 +113,7 @@ Color Image::getPixel(int x, int y) {
       (pixels.data() + (y * size.width + x) * sizeof(Color)));
 }
 
-const uint8_t* Image::get_pixel_array() { return pixels.data(); }
+uint8_t* Image::get_pixel_array() { return pixels.data(); }
 
 Size Image::get_size() { return size; }
 
