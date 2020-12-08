@@ -70,6 +70,11 @@ Position& Position::operator+=(const Position& other) {
   return *this;
 }
 
+Position::operator PluginAPI::Position() const {
+  PluginAPI::Position plugin_adapter_pos = {x, y};
+  return plugin_adapter_pos;
+}
+
 /*--------------- TEXT -------------------------------------*/
 
 Text::Text() = default;
@@ -116,6 +121,16 @@ Color Image::getPixel(int x, int y) {
 uint8_t* Image::get_pixel_array() { return pixels.data(); }
 
 Size Image::get_size() { return size; }
+
+Image::operator PluginAPI::Canvas() {
+  PluginAPI::Canvas plugin_adapter_canvas = {};
+
+  plugin_adapter_canvas.height = size.height;
+  plugin_adapter_canvas.width = size.width;
+  plugin_adapter_canvas.pixels = pixels.data();
+
+  return plugin_adapter_canvas;
+}
 
 /*------------------------- TEXTURE -------------------------------*/
 Texture::Texture() = default;

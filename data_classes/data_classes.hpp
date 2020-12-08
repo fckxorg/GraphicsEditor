@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include "../plugin_api/api.hpp"
+
 #ifdef SFML_ENGINE
 #include <SFML/Graphics.hpp>
 #endif
@@ -59,6 +61,8 @@ struct Position {
 
   Position& operator+=(const Position& other);
 
+  operator PluginAPI::Position() const;
+
 #ifdef SFML_ENGINE
   explicit Position(const sf::Vector2f& sfpos);
 
@@ -95,9 +99,13 @@ class Image {
 
  public:
   Image(Size size, Color color);
+  
   void setPixel(int x, int y, Color color);
   Color getPixel(int x, int y);
+  
   uint8_t* get_pixel_array();
+
+  operator PluginAPI::Canvas();
 
   Size get_size();
 };

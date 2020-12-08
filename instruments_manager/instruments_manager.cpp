@@ -300,16 +300,6 @@ void InstrumentManager::start_applying(Image& canvas, Position pos) {
     return;
   }
 
-  PluginAPI::Canvas plugin_adapter_canvas = {};
-  PluginAPI::Position plugin_adapter_pos = {};
-
-  plugin_adapter_canvas.pixels = canvas.get_pixel_array();
-  plugin_adapter_canvas.width = canvas.get_size().width;
-  plugin_adapter_canvas.height = canvas.get_size().height;
-
-  plugin_adapter_pos.x = pos.x;
-  plugin_adapter_pos.y = pos.y;
-
   for (auto& property : plugins[current_instrument]->properties) {
     switch (property.first) {
       case PluginAPI::Property::TYPE::PRIMARY_COLOR: {
@@ -318,37 +308,48 @@ void InstrumentManager::start_applying(Image& canvas, Position pos) {
     }
   }
 
-  plugins[current_instrument]->start_apply(plugin_adapter_canvas,
-                                           plugin_adapter_pos);
+  plugins[current_instrument]->start_apply(canvas, pos);
 }
 
 void InstrumentManager::stop_applying(Image& canvas, Position pos) {
   application_started = false;
-  instruments[current_instrument]->deinit(canvas, color);
+
+  if (!plugin_active) {
+    instruments[current_instrument]->deinit(canvas, color);
+    return;
+  }
+
+  plugins[current_instrument]->stop_apply(canvas, pos);
 }
 
 void InstrumentManager::apply(Image& canvas, Position pos) {
-  switch (current_instrument) {
-    case ERASER: {
-      instruments[current_instrument]->apply(canvas, pos, last_point,
-                                             Color(255, 255, 255), thickness);
-      break;
+  if (!plugin_active) {
+    switch (current_instrument) {
+      case ERASER: {
+        instruments[current_instrument]->apply(canvas, pos, last_point,
+                                               Color(255, 255, 255), thickness);
+        break;
+      }
+
+      case CLEAR: {
+        instruments[current_instrument]->apply(canvas, pos, last_point,
+                                               Color(255, 255, 255), thickness);
+        break;
+      }
+
+      default: {
+        instruments[current_instrument]->apply(canvas, pos, last_point, color,
+                                               thickness);
+        break;
+      }
     }
 
-    case CLEAR: {
-      instruments[current_instrument]->apply(canvas, pos, last_point,
-                                             Color(255, 255, 255), thickness);
-      break;
-    }
+    last_point = pos;
 
-    default: {
-      instruments[current_instrument]->apply(canvas, pos, last_point, color,
-                                             thickness);
-      break;
-    }
+    return;
   }
 
-  last_point = pos;
+  plugins[current_instrument]->apply(canvas, pos);
 }
 
 bool InstrumentManager::is_applying() { return application_started; }
