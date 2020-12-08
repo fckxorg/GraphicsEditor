@@ -239,7 +239,6 @@ void Ellipse::deinit(Image& canvas, Color color) {
   clear_render_data();
 }
 
-
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
     COUNT);
 std::vector<void*> InstrumentManager::handles;
@@ -357,9 +356,16 @@ void InstrumentManager::get_plugins() {
 }
 
 void InstrumentManager::load_plugins() {
-    for(auto& plugin : plugins_info) {
-        void* handle = dlopen(plugin.lib_path.data(), RTLD_NOW);
-        dlclose(handle);
-    }   
+  for (auto& plugin : plugins_info) {
+    void* handle = dlopen(plugin.lib_path.data(), RTLD_NOW);
+    handles.push_back(handle);
+
+    PluginAPI::Plugin* (*get_plugin)() =
+        reinterpret_cast<PluginAPI::Plugin* (*)()>(dlsym(handle, "get_plugin"));
+
+    plugins.push_back(get_plugin());
+  }
 }
+
+
 
