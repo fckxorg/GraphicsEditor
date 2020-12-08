@@ -125,6 +125,7 @@ class InstrumentManager {
   static std::vector<PluginInfo> plugins_info;
 
   static void init();
+  static void deinit();
 
   static void start_applying(Position pos);
 

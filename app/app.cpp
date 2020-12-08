@@ -35,7 +35,8 @@ void App::init(Size size, const char* name) {
   open = true;
 }
 
-void App::deinit() { Renderer::deinit(); }
+void App::deinit() { Renderer::deinit(); 
+    InstrumentManager::deinit();}
 
 void App::set_root_window(std::unique_ptr<Window>& window) {
   root_window = std::move(window);

@@ -1,4 +1,5 @@
 #include "instruments_manager.hpp"
+#include <dlfcn.h>
 
 const int MAX_THICKNESS = 40;
 const int SPRAY_DENSITY = 20;
@@ -270,7 +271,18 @@ void InstrumentManager::init() {
       std::move(std::unique_ptr<AbstractInstrument>(new Ellipse()));
 
   get_plugins();
+  load_plugins();
   EventQueue::add_event(new Event(LOAD_PLUGINS));
+}
+
+void InstrumentManager::deinit() {
+    for(auto& plugin : plugins) {
+        plugin->deinit();
+    }
+
+    for(auto& handle : handles) {
+        dlclose(handle);
+    }
 }
 
 void InstrumentManager::start_applying(Position pos) {
@@ -356,14 +368,17 @@ void InstrumentManager::get_plugins() {
 }
 
 void InstrumentManager::load_plugins() {
-  for (auto& plugin : plugins_info) {
-    void* handle = dlopen(plugin.lib_path.data(), RTLD_NOW);
+  for (auto& lib_info : plugins_info) {
+    void* handle = dlopen(lib_info.lib_path.data(), RTLD_NOW);
     handles.push_back(handle);
 
     PluginAPI::Plugin* (*get_plugin)() =
         reinterpret_cast<PluginAPI::Plugin* (*)()>(dlsym(handle, "get_plugin"));
 
-    plugins.push_back(get_plugin());
+    auto plugin = get_plugin();
+    plugin->init();
+
+    plugins.push_back(plugin);
   }
 }
 
