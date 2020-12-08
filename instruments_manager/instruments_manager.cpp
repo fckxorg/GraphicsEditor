@@ -239,10 +239,14 @@ void Ellipse::deinit(Image& canvas, Color color) {
   clear_render_data();
 }
 
-bool InstrumentManager::application_started = false;
-Position InstrumentManager::last_point = Position(-1, -1);
+
 std::vector<std::unique_ptr<AbstractInstrument>> InstrumentManager::instruments(
     COUNT);
+std::vector<void*> InstrumentManager::handles;
+std::vector<PluginAPI::Plugin*> InstrumentManager::plugins;
+
+bool InstrumentManager::application_started = false;
+Position InstrumentManager::last_point = Position(-1, -1);
 std::vector<PluginInfo> InstrumentManager::plugins_info;
 int InstrumentManager::current_instrument = PENCIL;
 uint8_t InstrumentManager::thickness = 1;

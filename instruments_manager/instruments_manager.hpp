@@ -14,6 +14,7 @@
 #include "../subscription_manager/subscription_manager.hpp"
 #include "../window_base/window_base.hpp"
 #include "../event_queue/event_queue.hpp"
+#include "../plugin_api/api.hpp"
 
 class ToolbarListener : public Window {
  public:
@@ -108,8 +109,11 @@ class InstrumentManager {
  private:
   static bool application_started;
   static Position last_point;
-  static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
   static int current_instrument;
+
+  static std::vector<std::unique_ptr<AbstractInstrument>> instruments;
+  static std::vector<void*> handles;
+  static std::vector<PluginAPI::Plugin*> plugins;
 
   static uint8_t thickness;
   static Color color;
