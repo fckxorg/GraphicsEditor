@@ -6,6 +6,7 @@
 #include <random>
 #include <vector>
 #include <filesystem>
+#include <dlfcn.h>
 
 #include "../data_classes/data_classes.hpp"
 #include "../event/event.hpp"
@@ -114,6 +115,7 @@ class InstrumentManager {
   static Color color;
 
   static void get_plugins();
+  static void load_plugins();
 
  public:
   static std::vector<PluginInfo> plugins_info;

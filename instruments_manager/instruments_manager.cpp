@@ -352,3 +352,10 @@ void InstrumentManager::get_plugins() {
   }
 }
 
+void InstrumentManager::load_plugins() {
+    for(auto& plugin : plugins_info) {
+        void* handle = dlopen(plugin.lib_path.data(), RTLD_NOW);
+        dlclose(handle);
+    }   
+}
+
