@@ -302,7 +302,7 @@ void InstrumentManager::start_applying(Image& canvas, Position pos) {
 
   for (auto& property : plugins[current_instrument]->properties) {
     switch (property.first) {
-      case PluginAPI::Property::TYPE::PRIMARY_COLOR: {
+        case PluginAPI::TYPE::PRIMARY_COLOR: {
         property.second.int_value = color;
       }
     }
